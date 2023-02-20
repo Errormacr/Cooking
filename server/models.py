@@ -1,7 +1,7 @@
 import datetime
 from typing import Optional
 from pydantic import condecimal, EmailStr
-from sqlalchemy import  Column
+from sqlalchemy import Column
 from sqlalchemy.dialects.mysql import CHAR, ENUM, INTEGER, TINYINT, DECIMAL, TEXT, TIME, DATE
 from sqlmodel import Field, SQLModel, create_engine, UniqueConstraint, CheckConstraint
 
@@ -32,7 +32,7 @@ class Ingredient(SQLModel, table=True):
 class Step(SQLModel, table=True):
     __table_args__ = (UniqueConstraint("media"),)
     step_ID: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), default=None,
-                                   primary_key=True))
+                                                    primary_key=True))
     description: str = Field(sa_column=Column(TEXT(), nullable=False))
     timer: Optional[datetime.timedelta] = Field(sa_column=Column(TIME(), nullable=True), default=None)
     media: Optional[str] = Field(max_length=20)
@@ -48,7 +48,7 @@ class Tag(SQLModel, table=True):
 class User(SQLModel, table=True):
     __table_args__ = (UniqueConstraint("login"), UniqueConstraint("mail"),)
     user_ID: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
-                                   primary_key=True))
+                                                    primary_key=True))
     login: str = Field(max_length=50)
     password: str
     photo: str = Field(max_length=20)
@@ -62,14 +62,14 @@ class User(SQLModel, table=True):
 class Unit(SQLModel, table=True):
     __table_args__ = (UniqueConstraint("name"),)
     unit_ID: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
-                                   primary_key=True))
+                                                    primary_key=True))
     name: str = Field(max_length=20)
 
 
 class Recipe_ingredient(SQLModel, table=True):
     __table_args__ = (CheckConstraint("count>0"),)
     recipe_ID_ingredient: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
-                                                primary_key=True))
+                                                                 primary_key=True))
     recipe_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Recipe.recipe_ID")
     ingredient_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False),
                                foreign_key="Ingredient.ingredient_ID")
@@ -79,21 +79,21 @@ class Recipe_ingredient(SQLModel, table=True):
 
 class Recipe_tag(SQLModel, table=True):
     recipe_ID_tag: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
-                                         primary_key=True))
+                                                          primary_key=True))
     recipe_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Recipe.recipe_ID")
     tag_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Tag.tag_ID")
 
 
 class Favourite_recipe(SQLModel, table=True):
     favourite_ID: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
-                                        primary_key=True))
+                                                         primary_key=True))
     recipe_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Recipe.recipe_ID")
     unit_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Unit.unit_ID")
 
 
 class Score_recipe(SQLModel, table=True):
     Score_ID: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
-                                    primary_key=True))
+                                                     primary_key=True))
     recipe_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Recipe.recipe_ID")
     unit_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Unit.unit_ID")
     score: int = Field(sa_column=Column(TINYINT(unsigned=True), nullable=False))
