@@ -1,7 +1,7 @@
 import datetime
 from typing import Optional
 from pydantic import condecimal, EmailStr
-from sqlalchemy import Column
+from sqlalchemy import  Column
 from sqlalchemy.dialects.mysql import CHAR, ENUM, INTEGER, TINYINT, DECIMAL, TEXT, TIME, DATE
 from sqlmodel import Field, SQLModel, create_engine, UniqueConstraint, CheckConstraint
 
