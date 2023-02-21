@@ -1,9 +1,10 @@
 import datetime
 from typing import Optional
 from pydantic import condecimal, EmailStr
-from sqlalchemy import  Column
+from sqlalchemy import Column
 from sqlalchemy.dialects.mysql import CHAR, ENUM, INTEGER, TINYINT, DECIMAL, TEXT, TIME, DATE
 from sqlmodel import Field, SQLModel, create_engine, UniqueConstraint, CheckConstraint
+import config
 
 
 class Recipe(SQLModel, table=True):
@@ -100,7 +101,7 @@ class Score_recipe(SQLModel, table=True):
 
 
 sqlite_file_name = "database.db"
-sqlite_url = f"mysql+pymysql://root:pass@localhost:3306/Cooking"
+sqlite_url = f"mysql+pymysql://{config.USER}:{config.PASS}@{config.HOST}:{config.PORT}/{config.DB_Name}"
 
 engine = create_engine(sqlite_url, echo=True)
 
