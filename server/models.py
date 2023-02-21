@@ -1,110 +1,107 @@
-import datetime
-from typing import Optional
-from pydantic import condecimal, EmailStr
-from sqlalchemy import Column
-from sqlalchemy.dialects.mysql import CHAR, ENUM, INTEGER, TINYINT, DECIMAL, TEXT, TIME, DATE
-from sqlmodel import Field, SQLModel, create_engine, UniqueConstraint, CheckConstraint
-import config
+from sqlalchemy import MetaData, Table, Column, UniqueConstraint, CheckConstraint
+from sqlalchemy.dialects.mysql import INTEGER, DECIMAL, TINYINT, TEXT, TIME, DATE, ENUM, VARCHAR, NCHAR, BOOLEAN
 
+metadata = MetaData()
 
-class Recipe(SQLModel, table=True):
-    __tablename__ = 'Recipe'
-    __table_args__ = (UniqueConstraint("name"), UniqueConstraint("photo"), CheckConstraint('servings_cout>0'),)
-    recipe_ID: Optional[int] = Field(default=None, primary_key=True)
-    name: str = Field(max_length=100)
-    photo: str = Field(max_length=50)
-    servings_cout: int = Field(sa_column=Column(TINYINT(unsigned=True), nullable=False))
-    cook_time: datetime.timedelta = Field(sa_column=(TIME(timezone=False)))
-    rating: int = Field(sa_column=Column(INTEGER(unsigned=False), nullable=False))
-    recommend: Optional[str] = Field(sa_column=(TEXT()))
-    author: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="User.user_ID")
+Recipe = Table(
+    'Recipe',
+    metadata,
+    Column("recipe_ID", INTEGER(unsigned=True), primary_key=True),
+    Column("name", VARCHAR(length=100), nullable=False),
+    Column("photo", VARCHAR(length=50), nullable=False),
+    Column("servings_cout", TINYINT(unsigned=True), nullable=False),
+    Column("cook_time", TIME(), nullable=False),
+    Column("rating", INTEGER(unsigned=False), nullable=False),
+    Column("recommend", TEXT(), nullable=True),
+    Column("author", INTEGER(unsigned=True), nullable=False, foreign_key="User.user_ID"),
+    UniqueConstraint("name"),
+    UniqueConstraint("photo"),
+    CheckConstraint('servings_cout>0'), )
 
+Ingredient = Table(
+    'Ingredient',
+    metadata,
+    Column("ingredient_ID", INTEGER(unsigned=True), primary_key=True),
+    Column("name", VARCHAR(length=50), nullable=False),
+    Column("kkal", DECIMAL(unsigned=True, precision=6, scale=2), nullable=False),
+    Column("belki", DECIMAL(unsigned=True, precision=6, scale=2), nullable=False),
+    Column("zhiry", DECIMAL(unsigned=True, precision=6, scale=2), nullable=False),
+    Column("uglevody", DECIMAL(unsigned=True, precision=6, scale=2), nullable=False),
+    UniqueConstraint("name"), )
 
-class Ingredient(SQLModel, table=True):
-    __table_args__ = (UniqueConstraint("name"),)
-    ingredient_ID: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, primary_key=True))
-    name: str = Field(max_length=50)
-    kkal: float = Field(sa_column=Column(DECIMAL(unsigned=True), nullable=False))
-    belki: float = Field(sa_column=Column(DECIMAL(unsigned=True), nullable=False))
-    zhiry: float = Field(sa_column=Column(DECIMAL(unsigned=True), nullable=False))
-    uglevody: float = Field(sa_column=Column(DECIMAL(unsigned=True), nullable=False))
+Step = Table(
+    'Step',
+    metadata,
+    Column("step_ID", INTEGER(unsigned=True), primary_key=True),
+    Column("description", TEXT(), nullable=False),
+    Column("timer", TIME(), nullable=True, default=None),
+    Column("media", VARCHAR(length=20), nullable=True),
+    Column("recipe_ID", INTEGER(unsigned=True), foreign_key="Recipe.recipe_ID", nullable=False),
+    UniqueConstraint("media"), )
 
+Tag = Table(
+    'Tag',
+    metadata,
+    Column("tag_ID", INTEGER(unsigned=True), primary_key=True),
+    Column("name", VARCHAR(length=20), nullable=False),
+    UniqueConstraint("name"),
+)
 
-class Step(SQLModel, table=True):
-    __table_args__ = (UniqueConstraint("media"),)
-    step_ID: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), default=None,
-                                                    primary_key=True))
-    description: str = Field(sa_column=Column(TEXT(), nullable=False))
-    timer: Optional[datetime.timedelta] = Field(sa_column=Column(TIME(), nullable=True), default=None)
-    media: Optional[str] = Field(max_length=20)
-    recipe_ID: int = Field(foreign_key="Recipe.recipe_ID")
+User = Table(
+    'User',
+    metadata,
+    Column("user_ID", INTEGER(unsigned=True), primary_key=True),
+    Column("login", VARCHAR(length=50), nullable=False),
+    Column("hashed_password", NCHAR(length=1024), nullable=False),
+    Column("photo", VARCHAR(length=20), nullable=False),
+    Column("name", VARCHAR(length=40), nullable=False),
+    Column("s_name", VARCHAR(length=40), nullable=False),
+    Column("b_day", DATE(), nullable=False),
+    Column("gender", ENUM("М", "Ж"), nullable=False),
+    Column("email", VARCHAR(length=250), nullable=False),
+    Column("is_active", BOOLEAN(), nullable=False),
+    Column("is_superuser", BOOLEAN(), nullable=False),
+    Column("is_verified", BOOLEAN(), nullable=False),
+    UniqueConstraint("login", "email"),
+)
 
+Unit = Table(
+    'Unit',
+    metadata,
+    Column("unit_ID", INTEGER(unsigned=True), primary_key=True),
+    Column("name", VARCHAR(length=20), nullable=False),
+    UniqueConstraint("name"),
+)
+Recipe_ingredient = Table(
+    'Recipe_ingredient',
+    metadata,
+    Column("recipe_ID_ingredient", INTEGER(unsigned=True), primary_key=True),
+    Column("recipe_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Recipe.recipe_ID"),
+    Column("ingredient_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Ingredient.ingredient_ID"),
+    Column("count", DECIMAL(unsigned=True), nullable=False),
+    Column("unit_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Unit.unit_ID"),
+    CheckConstraint("count>0"),
+)
+Recipe_tag = Table(
+    'Recipe_tag',
+    metadata,
+    Column("recipe_ID_tag", INTEGER(unsigned=True), primary_key=True),
+    Column("recipe_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Recipe.recipe_ID"),
+    Column("tag_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Tag.tag_ID"),
+)
 
-class Tag(SQLModel, table=True):
-    __table_args__ = (UniqueConstraint("name"),)
-    tag_ID: Optional[int] = Field(default=None, primary_key=True)
-    name: str = Field(max_length=20)
-
-
-class User(SQLModel, table=True):
-    __table_args__ = (UniqueConstraint("login"), UniqueConstraint("email"),)
-    user_ID: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
-                                                    primary_key=True))
-    login: str = Field(max_length=50)
-    hashed_password: str = Field(max_length=1024)
-    photo: str = Field(max_length=20)
-    name: str = Field(max_length=40)
-    s_name: str = Field(max_length=40)
-    b_day: datetime.datetime = Field(sa_column=Column(DATE(), nullable=False))
-    gender: str = Field(sa_column=Column(ENUM("М", "Ж")))
-    email: EmailStr
-    is_active: bool
-    is_superuser: bool
-    is_verified: bool
-
-
-class Unit(SQLModel, table=True):
-    __table_args__ = (UniqueConstraint("name"),)
-    unit_ID: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
-                                                    primary_key=True))
-    name: str = Field(max_length=20)
-
-
-class Recipe_ingredient(SQLModel, table=True):
-    __table_args__ = (CheckConstraint("count>0"),)
-    recipe_ID_ingredient: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
-                                                                 primary_key=True))
-    recipe_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Recipe.recipe_ID")
-    ingredient_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False),
-                               foreign_key="Ingredient.ingredient_ID")
-    count: float = Field(sa_column=Column(DECIMAL(unsigned=True), nullable=False))
-    unit_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Unit.unit_ID")
-
-
-class Recipe_tag(SQLModel, table=True):
-    recipe_ID_tag: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
-                                                          primary_key=True))
-    recipe_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Recipe.recipe_ID")
-    tag_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Tag.tag_ID")
-
-
-class Favourite_recipe(SQLModel, table=True):
-    favourite_ID: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
-                                                         primary_key=True))
-    recipe_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Recipe.recipe_ID")
-    unit_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Unit.unit_ID")
-
-
-class Score_recipe(SQLModel, table=True):
-    Score_ID: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
-                                                     primary_key=True))
-    recipe_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Recipe.recipe_ID")
-    unit_ID: int = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False), foreign_key="Unit.unit_ID")
-    score: int = Field(sa_column=Column(TINYINT(unsigned=True), nullable=False))
-
-
-db_url = f"mysql+pymysql://{config.USER}:{config.PASS}@{config.HOST}:{config.PORT}/{config.DB_Name}"
-
-engine = create_engine(db_url, echo=True)
-
-SQLModel.metadata.create_all(engine)
+Favourite_recipe = Table(
+    'Favourite_recipe',
+    metadata,
+    Column("favourite_ID", INTEGER(unsigned=True), primary_key=True),
+    Column("recipe_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Recipe.recipe_ID"),
+    Column("user_ID", INTEGER(unsigned=True), nullable=False, foreign_key="User.user_ID"),
+)
+Score_recipe = Table(
+    'Score_recipe',
+    metadata,
+    Column("Score_ID", INTEGER(unsigned=True), primary_key=True),
+    Column("recipe_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Recipe.recipe_ID"),
+    Column("user_ID", INTEGER(unsigned=True), nullable=False, foreign_key="User.user_ID"),
+    Column("score", TINYINT(), nullable=False, ),
+)
