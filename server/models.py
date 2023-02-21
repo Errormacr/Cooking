@@ -47,17 +47,20 @@ class Tag(SQLModel, table=True):
 
 
 class User(SQLModel, table=True):
-    __table_args__ = (UniqueConstraint("login"), UniqueConstraint("mail"),)
+    __table_args__ = (UniqueConstraint("login"), UniqueConstraint("email"),)
     user_ID: Optional[int] = Field(sa_column=Column(INTEGER(unsigned=True), nullable=False, default=None,
                                                     primary_key=True))
     login: str = Field(max_length=50)
-    password: str
+    hashed_password: str = Field(max_length=1024)
     photo: str = Field(max_length=20)
     name: str = Field(max_length=40)
     s_name: str = Field(max_length=40)
     b_day: datetime.datetime = Field(sa_column=Column(DATE(), nullable=False))
     gender: str = Field(sa_column=Column(ENUM("М", "Ж")))
-    mail: EmailStr
+    email: EmailStr
+    is_active: bool
+    is_superuser: bool
+    is_verified: bool
 
 
 class Unit(SQLModel, table=True):
@@ -100,9 +103,8 @@ class Score_recipe(SQLModel, table=True):
     score: int = Field(sa_column=Column(TINYINT(unsigned=True), nullable=False))
 
 
-sqlite_file_name = "database.db"
-sqlite_url = f"mysql+pymysql://{config.USER}:{config.PASS}@{config.HOST}:{config.PORT}/{config.DB_Name}"
+db_url = f"mysql+pymysql://{config.USER}:{config.PASS}@{config.HOST}:{config.PORT}/{config.DB_Name}"
 
-engine = create_engine(sqlite_url, echo=True)
+engine = create_engine(db_url, echo=True)
 
 SQLModel.metadata.create_all(engine)
