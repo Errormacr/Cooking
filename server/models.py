@@ -1,4 +1,4 @@
-from sqlalchemy import MetaData, Table, Column, UniqueConstraint, CheckConstraint
+from sqlalchemy import MetaData, Table, Column, UniqueConstraint, CheckConstraint, ForeignKey
 from sqlalchemy.dialects.mysql import INTEGER, DECIMAL, TINYINT, TEXT, TIME, DATE, ENUM, VARCHAR, NCHAR, BOOLEAN
 
 metadata = MetaData()
@@ -13,7 +13,7 @@ Recipe = Table(
     Column("cook_time", TIME(), nullable=False),
     Column("rating", INTEGER(unsigned=False), nullable=False),
     Column("recommend", TEXT(), nullable=True),
-    Column("author", INTEGER(unsigned=True), nullable=False, foreign_key="User.user_ID"),
+    Column("author", INTEGER(unsigned=True), ForeignKey("User.user_ID"), nullable=False),
     UniqueConstraint("name"),
     UniqueConstraint("photo"),
     CheckConstraint('servings_cout>0'), )
@@ -36,7 +36,7 @@ Step = Table(
     Column("description", TEXT(), nullable=False),
     Column("timer", TIME(), nullable=True, default=None),
     Column("media", VARCHAR(length=20), nullable=True),
-    Column("recipe_ID", INTEGER(unsigned=True), foreign_key="Recipe.recipe_ID", nullable=False),
+    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID"), nullable=False),
     UniqueConstraint("media"), )
 
 Tag = Table(
@@ -52,7 +52,7 @@ User = Table(
     metadata,
     Column("user_ID", INTEGER(unsigned=True), primary_key=True),
     Column("login", VARCHAR(length=50), nullable=False),
-    Column("hashed_password", NCHAR(length=1024), nullable=False),
+    Column("hashed_password", TEXT(), nullable=False),
     Column("photo", VARCHAR(length=20), nullable=False),
     Column("name", VARCHAR(length=40), nullable=False),
     Column("s_name", VARCHAR(length=40), nullable=False),
@@ -76,32 +76,32 @@ Recipe_ingredient = Table(
     'Recipe_ingredient',
     metadata,
     Column("recipe_ID_ingredient", INTEGER(unsigned=True), primary_key=True),
-    Column("recipe_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Recipe.recipe_ID"),
-    Column("ingredient_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Ingredient.ingredient_ID"),
-    Column("count", DECIMAL(unsigned=True), nullable=False),
-    Column("unit_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Unit.unit_ID"),
+    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID"), nullable=False),
+    Column("ingredient_ID", INTEGER(unsigned=True), ForeignKey("Ingredient.ingredient_ID"), nullable=False),
+    Column("count", DECIMAL(unsigned=True, precision=5, scale=2), nullable=False),
+    Column("unit_ID", INTEGER(unsigned=True), ForeignKey("Unit.unit_ID"), nullable=False),
     CheckConstraint("count>0"),
 )
 Recipe_tag = Table(
     'Recipe_tag',
     metadata,
     Column("recipe_ID_tag", INTEGER(unsigned=True), primary_key=True),
-    Column("recipe_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Recipe.recipe_ID"),
-    Column("tag_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Tag.tag_ID"),
+    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID"), nullable=False),
+    Column("tag_ID", INTEGER(unsigned=True), ForeignKey("Tag.tag_ID"), nullable=False),
 )
 
 Favourite_recipe = Table(
     'Favourite_recipe',
     metadata,
     Column("favourite_ID", INTEGER(unsigned=True), primary_key=True),
-    Column("recipe_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Recipe.recipe_ID"),
-    Column("user_ID", INTEGER(unsigned=True), nullable=False, foreign_key="User.user_ID"),
+    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID"), nullable=False),
+    Column("user_ID", INTEGER(unsigned=True), ForeignKey("User.user_ID"), nullable=False),
 )
 Score_recipe = Table(
     'Score_recipe',
     metadata,
     Column("Score_ID", INTEGER(unsigned=True), primary_key=True),
-    Column("recipe_ID", INTEGER(unsigned=True), nullable=False, foreign_key="Recipe.recipe_ID"),
-    Column("user_ID", INTEGER(unsigned=True), nullable=False, foreign_key="User.user_ID"),
+    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID"), nullable=False),
+    Column("user_ID", INTEGER(unsigned=True), ForeignKey("User.user_ID"), nullable=False),
     Column("score", TINYINT(), nullable=False, ),
 )
