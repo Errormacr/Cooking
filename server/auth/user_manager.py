@@ -51,7 +51,6 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         user_dict["is_superuser"] = False
         user_dict["is_active"] = True
         user_dict["is_verified"] = False
-        print(user_dict)
         created_user = await self.user_db.create(user_dict)
 
         await self.on_after_register(created_user, request)
