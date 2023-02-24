@@ -13,7 +13,7 @@ Recipe = Table(
     Column("cook_time", TIME(), nullable=False),
     Column("rating", INTEGER(unsigned=False), nullable=False),
     Column("recommend", TEXT(), nullable=True),
-    Column("author", INTEGER(unsigned=True), ForeignKey("User.user_ID"), nullable=False),
+    Column("author", INTEGER(unsigned=True), ForeignKey("user.id"), nullable=False),
     UniqueConstraint("name"),
     UniqueConstraint("photo"),
     CheckConstraint('servings_cout>0'), )
@@ -48,21 +48,20 @@ Tag = Table(
 )
 
 User = Table(
-    'User',
+    'user',
     metadata,
-    Column("user_ID", INTEGER(unsigned=True), primary_key=True),
-    Column("login", VARCHAR(length=50), nullable=False),
+    Column("id", INTEGER(unsigned=True), primary_key=True),
+    Column("login", VARCHAR(length=50), nullable=False, unique=True),
     Column("hashed_password", TEXT(), nullable=False),
     Column("photo", VARCHAR(length=20), nullable=False),
     Column("name", VARCHAR(length=40), nullable=False),
     Column("s_name", VARCHAR(length=40), nullable=False),
     Column("b_day", DATE(), nullable=False),
     Column("gender", ENUM("М", "Ж"), nullable=False),
-    Column("email", VARCHAR(length=250), nullable=False),
-    Column("is_active", BOOLEAN(), nullable=False),
-    Column("is_superuser", BOOLEAN(), nullable=False),
-    Column("is_verified", BOOLEAN(), nullable=False),
-    UniqueConstraint("login", "email"),
+    Column("email", VARCHAR(length=250), nullable=False, unique=True),
+    Column("is_active", BOOLEAN(), default=True, nullable=False),
+    Column("is_superuser", BOOLEAN(), default=False, nullable=False),
+    Column("is_verified", BOOLEAN(), default=False, nullable=False),
 )
 
 Unit = Table(
@@ -95,13 +94,13 @@ Favourite_recipe = Table(
     metadata,
     Column("favourite_ID", INTEGER(unsigned=True), primary_key=True),
     Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID"), nullable=False),
-    Column("user_ID", INTEGER(unsigned=True), ForeignKey("User.user_ID"), nullable=False),
+    Column("user_ID", INTEGER(unsigned=True), ForeignKey("user.id"), nullable=False),
 )
 Score_recipe = Table(
     'Score_recipe',
     metadata,
     Column("Score_ID", INTEGER(unsigned=True), primary_key=True),
     Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID"), nullable=False),
-    Column("user_ID", INTEGER(unsigned=True), ForeignKey("User.user_ID"), nullable=False),
+    Column("user_ID", INTEGER(unsigned=True), ForeignKey("user.id"), nullable=False),
     Column("score", TINYINT(), nullable=False, ),
 )

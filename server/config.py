@@ -1,13 +1,14 @@
-import configparser
-import os
+import keyring
+PORT = keyring.get_password('Cooking', 'PORT')
+HOST = keyring.get_password('Cooking', 'HOST')
+USER = keyring.get_password('Cooking', 'USER')
+PASS = keyring.get_password('Cooking', 'PASS')
+DB_Name = keyring.get_password('Cooking', 'DB_Name')
+SECRET = keyring.get_password('Cooking', 'SECRET')
+print(HOST)
 
-basedir = os.path.abspath(os.getcwd())
-config = configparser.ConfigParser()
-config.read(basedir+r'\server\config.ini')
-topsecret = config['topsecret']
-PORT = topsecret['port']
-HOST = topsecret['host']
-USER = topsecret['user']
-PASS = topsecret['pass']
-DB_Name = topsecret['db']
-SECRET = topsecret['secret']
+
+
+
+
+
