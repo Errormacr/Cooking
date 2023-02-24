@@ -1,8 +1,8 @@
-"""DB create
+"""User changes
 
-Revision ID: 7397c5e6de13
+Revision ID: 03823c80f162
 Revises: 
-Create Date: 2023-02-24 15:40:07.444806
+Create Date: 2023-02-24 19:50:43.807825
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = '7397c5e6de13'
+revision = '03823c80f162'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -44,11 +44,11 @@ def upgrade() -> None:
     sa.Column('id', mysql.INTEGER(unsigned=True), nullable=False),
     sa.Column('login', mysql.VARCHAR(length=50), nullable=False),
     sa.Column('hashed_password', mysql.TEXT(), nullable=False),
-    sa.Column('photo', mysql.VARCHAR(length=20), nullable=False),
-    sa.Column('name', mysql.VARCHAR(length=40), nullable=False),
-    sa.Column('s_name', mysql.VARCHAR(length=40), nullable=False),
-    sa.Column('b_day', sa.DATE(), nullable=False),
-    sa.Column('gender', mysql.ENUM('М', 'Ж'), nullable=False),
+    sa.Column('photo', mysql.VARCHAR(length=20), nullable=True),
+    sa.Column('name', mysql.VARCHAR(length=40), nullable=True),
+    sa.Column('s_name', mysql.VARCHAR(length=40), nullable=True),
+    sa.Column('b_day', sa.DATE(), nullable=True),
+    sa.Column('gender', mysql.ENUM('М', 'Ж'), nullable=True),
     sa.Column('email', mysql.VARCHAR(length=250), nullable=False),
     sa.Column('is_active', sa.BOOLEAN(), nullable=False),
     sa.Column('is_superuser', sa.BOOLEAN(), nullable=False),

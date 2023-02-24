@@ -7,10 +7,10 @@ from fastapi_users import schemas
 
 class UserRead(schemas.BaseUser[int]):
     login: str
-    name: str
-    s_name: str
-    b_day: datetime.datetime
-    gender: str
+    name: Optional[str] = None
+    s_name: Optional[str] = None
+    b_day: Optional[datetime.datetime] = None
+    gender: Optional[str] = None
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False
@@ -21,11 +21,6 @@ class UserRead(schemas.BaseUser[int]):
 
 class UserCreate(schemas.BaseUserCreate):
     login: str
-    photo: str
-    name: str
-    s_name: str
-    b_day: datetime.datetime
-    gender: str
     email: EmailStr
     password: str
     is_active: Optional[bool] = True

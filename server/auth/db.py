@@ -9,8 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.dialects.mysql import INTEGER, DECIMAL, TINYINT, TEXT, TIME, DATE, ENUM, VARCHAR, NCHAR, BOOLEAN
 
-DATABASE_URL = f"mysql+aiomysql://{USER}:{PASS}@localhost:{PORT}/{DB_Name}"
-print(DATABASE_URL)
+DATABASE_URL = f"mysql+aiomysql://{USER}:{PASS}@{HOST}:{PORT}/{DB_Name}"
+
 
 class Base(DeclarativeBase):
     pass
