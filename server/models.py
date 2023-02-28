@@ -58,7 +58,6 @@ User = Table(
     Column("s_name", VARCHAR(length=40)),
     Column("b_day", DATE()),
     Column("gender", ENUM("М", "Ж")),
-    Column("email", VARCHAR(length=250), nullable=False, unique=True),
     Column("is_active", BOOLEAN(), default=True, nullable=False),
     Column("is_superuser", BOOLEAN(), default=False, nullable=False),
     Column("is_verified", BOOLEAN(), default=False, nullable=False),

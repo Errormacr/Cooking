@@ -1,6 +1,5 @@
 import datetime
-
-from  pydantic import EmailStr
+from pydantic import EmailStr
 from typing import Optional
 from fastapi_users import schemas
 
@@ -30,3 +29,6 @@ class UserCreate(schemas.BaseUserCreate):
 
 class UserUpdate(schemas.BaseUserUpdate):
     pass
+
+
+

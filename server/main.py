@@ -1,15 +1,9 @@
-from fastapi import FastAPI
-from fastapi_users import FastAPIUsers
+from fastapi import FastAPI, Depends
 
-from auth.db import User
 from auth.shemas import UserRead, UserCreate
-from auth.user_manager import get_user_manager
 from auth.auth import auth_backend
-
-fastapi_users = FastAPIUsers[User, int](
-    get_user_manager,
-    [auth_backend],
-)
+from recipe.router import router as recipe_router
+from utils import fastapi_users
 
 app = FastAPI()
 app.include_router(
@@ -22,3 +16,4 @@ app.include_router(
     prefix="/auth",
     tags=["auth"],
 )
+app.include_router(recipe_router)

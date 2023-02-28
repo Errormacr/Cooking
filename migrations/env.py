@@ -1,6 +1,6 @@
 from logging.config import fileConfig
 from server.config import USER, HOST, PORT, PASS, DB_Name
-from server.models.models import metadata
+from server.models import metadata
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
