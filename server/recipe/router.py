@@ -55,6 +55,8 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
     query = select(Recipe_bd).where(Recipe_bd.c.recipe_ID == recipe_id)
     result = await session.execute(query)
     result = result.all()
+    if not result:
+        raise HTTPException(status_code=404,detail="Not found recipe")
     answer = [{
         "recipe_id": rec[0],
         'recipe_desc': {"name": rec[1], "photo": rec[2], "servings_cout": rec[3], "cook_time": rec[4],
@@ -105,6 +107,8 @@ async def create_step(recipe_id: int, user: User = Depends(current_user),
     stmt = select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id)
     author = await session.execute(stmt)
     author = author.all()
+    if not author:
+        raise HTTPException(status_code=404,detail="Not found recipe")
     if author[0][0] != user.id:
         raise HTTPException(status_code=400, detail="User not author")
     stmt = insert(Step_bd).values(description=step.description, timer=step.timer, media="", recipe_ID=recipe_id)
@@ -128,6 +132,8 @@ async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(), photo
     stmt = select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id)
     author = await session.execute(stmt)
     author = author.all()
+    if not author:
+        raise HTTPException(status_code=404,detail="Not found recipe")
     if author[0][0] != user.id:
         raise HTTPException(status_code=400, detail="User not author")
     stmt = update(Recipe_bd)
@@ -156,6 +162,8 @@ async def delete_recipe(recipe_id: int, user: User = Depends(current_user),
     stmt = select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id)
     author = await session.execute(stmt)
     author = author.all()
+    if not author:
+        raise HTTPException(status_code=404,detail="Not found recipe")
     if author[0][0] != user.id:
         raise HTTPException(status_code=400, detail="User not author")
     stmt = delete(Recipe_bd).where(Recipe_bd.c.recipe_ID == recipe_id)
