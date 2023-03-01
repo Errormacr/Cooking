@@ -13,7 +13,7 @@ Recipe = Table(
     Column("cook_time", TIME(), nullable=False),
     Column("rating", INTEGER(unsigned=False), nullable=False),
     Column("recommend", TEXT(), nullable=True),
-    Column("author", INTEGER(unsigned=True), ForeignKey("user.id"), nullable=False),
+    Column("author", INTEGER(unsigned=True), ForeignKey("user.id", ondelete="SET DEFAULT"), nullable=False),
     UniqueConstraint("name"),
     UniqueConstraint("photo"),
     CheckConstraint('servings_cout>0'), )
@@ -23,10 +23,11 @@ Ingredient = Table(
     metadata,
     Column("ingredient_ID", INTEGER(unsigned=True), primary_key=True),
     Column("name", VARCHAR(length=50), nullable=False),
-    Column("kkal", DECIMAL(unsigned=True, precision=6, scale=2), nullable=False),
-    Column("belki", DECIMAL(unsigned=True, precision=6, scale=2), nullable=False),
-    Column("zhiry", DECIMAL(unsigned=True, precision=6, scale=2), nullable=False),
-    Column("uglevody", DECIMAL(unsigned=True, precision=6, scale=2), nullable=False),
+    Column("unit_ID", INTEGER(unsigned=True), ForeignKey("Unit.unit_ID", ondelete="RESTRICT"), nullable=False),
+    Column("kkal", DECIMAL(precision=6, scale=2), nullable=False),
+    Column("belki", DECIMAL(precision=6, scale=2), nullable=False),
+    Column("zhiry", DECIMAL(precision=6, scale=2), nullable=False),
+    Column("uglevody", DECIMAL(precision=6, scale=2), nullable=False),
     UniqueConstraint("name"), )
 
 Step = Table(
@@ -36,7 +37,7 @@ Step = Table(
     Column("description", TEXT(), nullable=False),
     Column("timer", TIME(), nullable=True, default=None),
     Column("media", VARCHAR(length=20), nullable=True),
-    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID"), nullable=False),
+    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID", ondelete="CASCADE"), nullable=False),
     UniqueConstraint("media"), )
 
 Tag = Table(
@@ -74,32 +75,32 @@ Recipe_ingredient = Table(
     'Recipe_ingredient',
     metadata,
     Column("recipe_ID_ingredient", INTEGER(unsigned=True), primary_key=True),
-    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID"), nullable=False),
-    Column("ingredient_ID", INTEGER(unsigned=True), ForeignKey("Ingredient.ingredient_ID"), nullable=False),
-    Column("count", DECIMAL(unsigned=True, precision=5, scale=2), nullable=False),
-    Column("unit_ID", INTEGER(unsigned=True), ForeignKey("Unit.unit_ID"), nullable=False),
+    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID", ondelete="CASCADE"), nullable=False),
+    Column("ingredient_ID", INTEGER(unsigned=True), ForeignKey("Ingredient.ingredient_ID", ondelete="CASCADE"),
+           nullable=False),
+    Column("count", DECIMAL(precision=5, scale=2), nullable=False),
     CheckConstraint("count>0"),
 )
 Recipe_tag = Table(
     'Recipe_tag',
     metadata,
     Column("recipe_ID_tag", INTEGER(unsigned=True), primary_key=True),
-    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID"), nullable=False),
-    Column("tag_ID", INTEGER(unsigned=True), ForeignKey("Tag.tag_ID"), nullable=False),
+    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID", ondelete="CASCADE"), nullable=False),
+    Column("tag_ID", INTEGER(unsigned=True), ForeignKey("Tag.tag_ID", ondelete="CASCADE"), nullable=False),
 )
 
 Favourite_recipe = Table(
     'Favourite_recipe',
     metadata,
     Column("favourite_ID", INTEGER(unsigned=True), primary_key=True),
-    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID"), nullable=False),
-    Column("user_ID", INTEGER(unsigned=True), ForeignKey("user.id"), nullable=False),
+    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID", ondelete="CASCADE"), nullable=False),
+    Column("user_ID", INTEGER(unsigned=True), ForeignKey("user.id", ondelete="CASCADE"), nullable=False),
 )
 Score_recipe = Table(
     'Score_recipe',
     metadata,
     Column("Score_ID", INTEGER(unsigned=True), primary_key=True),
-    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID"), nullable=False),
-    Column("user_ID", INTEGER(unsigned=True), ForeignKey("user.id"), nullable=False),
+    Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID", ondelete="CASCADE"), nullable=False),
+    Column("user_ID", INTEGER(unsigned=True), ForeignKey("user.id", ondelete="CASCADE"), nullable=False),
     Column("score", TINYINT(), nullable=False, ),
 )

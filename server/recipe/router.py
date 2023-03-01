@@ -1,15 +1,14 @@
-import datetime
-import json
-from typing import List
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
-from fastapi_users import FastAPIUsers
-from auth.db import get_async_session, User
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, insert, update, delete
 from utils import fastapi_users
-from recipe.shemas import Recipe_create, Step, Recipe_update
-from models import Recipe as Recipe_bd, Recipe_tag, User, Step as Step_bd
+from auth.db import get_async_session, User as auth_user
+from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from sqlalchemy import select, insert, update, delete
+import json
+import datetime
+from typing import List
 from sqlalchemy.dialects.mysql import TIME
+from recipe.shemas import Recipe_create, Step, Recipe_update
+from models import Recipe as Recipe_bd, Recipe_tag, User, Step as Step_bd, Ingredient, Recipe_ingredient
 
 router = APIRouter(prefix="/recipes", tags=["recipes"])
 
@@ -56,7 +55,7 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
     result = await session.execute(query)
     result = result.all()
     if not result:
-        raise HTTPException(status_code=404,detail="Not found recipe")
+        raise HTTPException(status_code=404, detail="Not found recipe")
     answer = [{
         "recipe_id": rec[0],
         'recipe_desc': {"name": rec[1], "photo": rec[2], "servings_cout": rec[3], "cook_time": rec[4],
@@ -64,9 +63,9 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
     return answer
 
 
-@router.post("/",status_code=201)
+@router.post("/", status_code=201)
 async def create_recipe(photo: UploadFile, tag: List[int] = 0, recipe: Recipe_create = Depends(),
-                        user: User = Depends(current_user),
+                        user: auth_user = Depends(current_user),
                         session: AsyncSession = Depends(get_async_session)):
     if recipe.servings_cout <= 0:
         raise HTTPException(status_code=400, detail="servings <= 0")
@@ -100,15 +99,15 @@ async def create_recipe(photo: UploadFile, tag: List[int] = 0, recipe: Recipe_cr
     return recipe, r
 
 
-@router.post("/{recipe_id}/step",status_code=201)
-async def create_step(recipe_id: int, user: User = Depends(current_user),
+@router.post("/{recipe_id}/step", status_code=201)
+async def create_step(recipe_id: int, user: auth_user = Depends(current_user),
                       session: AsyncSession = Depends(get_async_session),
                       step: Step = Depends()):
     stmt = select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id)
     author = await session.execute(stmt)
     author = author.all()
     if not author:
-        raise HTTPException(status_code=404,detail="Not found recipe")
+        raise HTTPException(status_code=404, detail="Not found recipe")
     if author[0][0] != user.id:
         raise HTTPException(status_code=400, detail="User not author")
     stmt = insert(Step_bd).values(description=step.description, timer=step.timer, media="", recipe_ID=recipe_id)
@@ -125,15 +124,15 @@ async def create_step(recipe_id: int, user: User = Depends(current_user),
     f.close()
 
 
-@router.put("/{recipe_id}",status_code=201)
+@router.put("/{recipe_id}", status_code=201)
 async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(), photo: UploadFile = None,
-                        user: User = Depends(current_user),
+                        user: auth_user = Depends(current_user),
                         session: AsyncSession = Depends(get_async_session)):
     stmt = select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id)
     author = await session.execute(stmt)
     author = author.all()
     if not author:
-        raise HTTPException(status_code=404,detail="Not found recipe")
+        raise HTTPException(status_code=404, detail="Not found recipe")
     if author[0][0] != user.id:
         raise HTTPException(status_code=400, detail="User not author")
     stmt = update(Recipe_bd)
@@ -156,17 +155,43 @@ async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(), photo
     return recipe
 
 
-@router.delete("/{recipe_id}",status_code=204)
-async def delete_recipe(recipe_id: int, user: User = Depends(current_user),
+@router.delete("/{recipe_id}", status_code=204)
+async def delete_recipe(recipe_id: int, user: auth_user = Depends(current_user),
                         session: AsyncSession = Depends(get_async_session)):
     stmt = select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id)
     author = await session.execute(stmt)
     author = author.all()
     if not author:
-        raise HTTPException(status_code=404,detail="Not found recipe")
+        raise HTTPException(status_code=404, detail="Not found recipe")
     if author[0][0] != user.id:
         raise HTTPException(status_code=400, detail="User not author")
     stmt = delete(Recipe_bd).where(Recipe_bd.c.recipe_ID == recipe_id)
     await session.execute(stmt)
     await session.commit()
 
+
+@router.post("{recipe_id}/{ingredient_id}")
+async def create_recipe_ingredient_relation(ingredient_id: int, recipe_id: int, count: int,
+                                            user: auth_user = Depends(current_user),
+                                            session: AsyncSession = Depends(get_async_session)):
+    if count <= 0:
+        raise HTTPException(status_code="400", detail="Count <= 0")
+    stmt = select(Ingredient.c.ingredient_ID).where(Ingredient.c.ingredient_ID == ingredient_id)
+    ingredient = await session.execute(stmt)
+    ingredient = ingredient.all()
+    if not ingredient:
+        raise HTTPException(status_code=404, detail="Not found ingredient")
+    stmt = select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id)
+    recipe = await session.execute(stmt)
+    recipe = recipe.all()
+    if not recipe:
+        raise HTTPException(status_code=404, detail="Not found recipe")
+    if recipe[0][0] != user.id:
+        raise HTTPException(status_code=400, detail="User not author")
+    stmt = insert(Recipe_ingredient).values(recipe_ID=recipe_id,
+                                            ingredient_ID=ingredient_id,
+                                            count=count).returning(recipe_ID_ingredient)
+    result = await session.execute(stmt)
+    result = result.all()
+    await session.commit()
+    return dict(relation_id=result[0][0], recipe_ID=recipe_id, ingredient_ID=ingredient_id, count=count)
