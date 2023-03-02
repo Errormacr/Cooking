@@ -55,6 +55,7 @@ User = Table(
     Column("login", VARCHAR(length=50), nullable=False, unique=True),
     Column("hashed_password", TEXT(), nullable=False),
     Column("photo", VARCHAR(length=20)),
+    Column("email", VARCHAR(length=320)),
     Column("name", VARCHAR(length=40)),
     Column("s_name", VARCHAR(length=40)),
     Column("b_day", DATE()),
@@ -103,4 +104,5 @@ Score_recipe = Table(
     Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID", ondelete="CASCADE"), nullable=False),
     Column("user_ID", INTEGER(unsigned=True), ForeignKey("user.id", ondelete="CASCADE"), nullable=False),
     Column("score", TINYINT(), nullable=False, ),
+    UniqueConstraint("recipe_ID", "user_ID"),
 )

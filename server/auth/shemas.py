@@ -2,6 +2,7 @@ import datetime
 from pydantic import EmailStr
 from typing import Optional
 from fastapi_users import schemas
+from pydantic import BaseModel
 
 
 class UserRead(schemas.BaseUser[int]):
@@ -27,8 +28,10 @@ class UserCreate(schemas.BaseUserCreate):
     is_verified: Optional[bool] = False
 
 
-class UserUpdate(schemas.BaseUserUpdate):
-    pass
-
-
-
+class UserUpdate(BaseModel):
+    login: str = None
+    email: EmailStr = None
+    name: Optional[str] = None
+    s_name: Optional[str] = None
+    b_day: Optional[datetime.datetime] = None
+    gender: Optional[str] = None

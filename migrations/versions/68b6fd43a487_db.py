@@ -1,8 +1,8 @@
-"""DB Create
+"""Db
 
-Revision ID: 19ee4b6e4683
+Revision ID: 68b6fd43a487
 Revises: 
-Create Date: 2023-03-01 19:01:01.331881
+Create Date: 2023-03-02 12:20:31.962882
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = '19ee4b6e4683'
+revision = '68b6fd43a487'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -35,6 +35,7 @@ def upgrade() -> None:
     sa.Column('login', mysql.VARCHAR(length=50), nullable=False),
     sa.Column('hashed_password', mysql.TEXT(), nullable=False),
     sa.Column('photo', mysql.VARCHAR(length=20), nullable=True),
+    sa.Column('email', mysql.VARCHAR(length=320), nullable=True),
     sa.Column('name', mysql.VARCHAR(length=40), nullable=True),
     sa.Column('s_name', mysql.VARCHAR(length=40), nullable=True),
     sa.Column('b_day', sa.DATE(), nullable=True),
@@ -105,7 +106,8 @@ def upgrade() -> None:
     sa.Column('score', mysql.TINYINT(), nullable=False),
     sa.ForeignKeyConstraint(['recipe_ID'], ['Recipe.recipe_ID'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['user_ID'], ['user.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('Score_ID')
+    sa.PrimaryKeyConstraint('Score_ID'),
+    sa.UniqueConstraint('recipe_ID', 'user_ID')
     )
     op.create_table('Step',
     sa.Column('step_ID', mysql.INTEGER(unsigned=True), nullable=False),
