@@ -8,20 +8,29 @@ router = APIRouter(prefix="/ingredient", tags=["ingredient"])
 
 
 @router.get("/")
-async def get_ingredients(recipe_id: int, limit: int = 10, offset: int = 0,
+async def get_ingredients(recipe_id:int = None,limit: int = 10, offset: int = 0,
                           session: AsyncSession = Depends(get_async_session)):
-    query = select(Ingredient).offset(offset)
     if recipe_id:
-        query = query.where(Ingredient.c.recipe_ID == recipe_id)
-    if limit > 0:
-        query = query.limit(limit)
-    result = await session.execute(query)
-    result = result.all()
-    if not result:
-        raise HTTPException(status_code=404, detail="Can't find ingredients")
-    result = [{"id": rec[0], "name": rec[1], "unit_id": rec[2], "kkal": rec[3], "belki": rec[4], "zhiry": rec[5],
-               "uglevody": rec[6]} for rec in result]
-    return result
+        query = select(Recipe_ingredient)
+        if limit > 0:
+            query = query.limit(limit)
+        result = await session.execute(query)
+        result = result.all()
+        if not result:
+            raise HTTPException(status_code=404, detail="Can't find ingredients")
+        result = [{"id": rec[2], "count": rec[3]} for rec in result]
+        return result
+    else:
+        query = select(Ingredient).offset(offset)
+        if limit > 0:
+            query = query.limit(limit)
+        result = await session.execute(query)
+        result = result.all()
+        if not result:
+            raise HTTPException(status_code=404, detail="Can't find ingredients")
+        result = [{"id": rec[0], "name": rec[1], "unit_id": rec[2], "kkal": rec[3], "belki": rec[4], "zhiry": rec[5],
+                   "uglevody": rec[6]} for rec in result]
+        return result
 
 
 @router.get("/{ingredient_id}")
