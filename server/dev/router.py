@@ -16,7 +16,7 @@ router = APIRouter(prefix="/dev", tags=["dev"])
 current_user = fastapi_users.current_user()
 
 
-@router.post("/ingredient/", status_code=201)
+@router.post("/ingredient/", status_code=201,tags=["ingredient"])
 async def create_ingredient(ingredient: Ingredient_create, key: str,
                             session: AsyncSession = Depends(get_async_session)):
     if key != keyring.get_password("Cooking", "DEV"):
@@ -31,7 +31,7 @@ async def create_ingredient(ingredient: Ingredient_create, key: str,
     return ingredient
 
 
-@router.post("/unit/", status_code=201)
+@router.post("/unit/", status_code=201,tags=["unit"])
 async def create_unit(unit: str, key: str, session: AsyncSession = Depends(get_async_session)):
     if key != keyring.get_password("Cooking", "DEV"):
         raise HTTPException(status_code=400, detail="Wrong key")
@@ -46,7 +46,7 @@ async def create_unit(unit: str, key: str, session: AsyncSession = Depends(get_a
     return {"unit": unit}
 
 
-@router.post("/tag/", status_code=201)
+@router.post("/tag/", status_code=201,tags=["tag"])
 async def create_tag(tag: str, key: str, session: AsyncSession = Depends(get_async_session)):
     if key != keyring.get_password("Cooking", "DEV"):
         raise HTTPException(status_code=400, detail="Wrong key")
@@ -62,7 +62,7 @@ async def create_tag(tag: str, key: str, session: AsyncSession = Depends(get_asy
     return {"tag": tag}
 
 
-@router.delete("/tag/", status_code=204)
+@router.delete("/tag/", status_code=204,tags=["tag"])
 async def delete_tag(key: str, tag_id: int, session: AsyncSession = Depends(get_async_session)):
     if key != keyring.get_password("Cooking", "DEV"):
         raise HTTPException(status_code=400, detail={"Error": "Wrong key"})
@@ -73,7 +73,7 @@ async def delete_tag(key: str, tag_id: int, session: AsyncSession = Depends(get_
         return {"Error": "Data error"}
 
 
-@router.delete("/ingredient/", status_code=204)
+@router.delete("/ingredient/", status_code=204,tags=["ingredient"])
 async def delete_ingredient(key: str, ingredient_id: int, session: AsyncSession = Depends(get_async_session)):
     if key != keyring.get_password("Cooking", "DEV"):
         raise HTTPException(status_code=400, detail={"Error": "Wrong key"})
@@ -84,7 +84,7 @@ async def delete_ingredient(key: str, ingredient_id: int, session: AsyncSession 
         return {"Error": "Data error"}
 
 
-@router.delete("/unit/", status_code=204)
+@router.delete("/unit/", status_code=204,tags=["unit"])
 async def delete_unit(key: str, unit_id: int, session: AsyncSession = Depends(get_async_session)):
     if key != keyring.get_password("Cooking", "DEV"):
         raise HTTPException(status_code=400, detail={"Error": "Wrong key"})

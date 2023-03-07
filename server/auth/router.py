@@ -1,21 +1,33 @@
 from auth.db import get_async_session, User as auth_user
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, Response
 from sqlalchemy import select, insert, update, delete
 from models import User, Favourite_recipe, Score_recipe
 from utils import fastapi_users
 from auth.shemas import UserUpdate
 
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter(prefix="/users")
 
 current_user = fastapi_users.current_user()
 
 
-@router.get("/{user_id}")
-async def get_user(user_id: int, session: AsyncSession = Depends(get_async_session)):
-    query = select(User).where(User.c.id == user_id)
-    result = await session.execute(query)
-    result = result.all()
+@router.get("/", tags=["users"])
+async def get_user(user_id: int = None, user_name: str = None, user_email: str = None,
+                   session: AsyncSession = Depends(get_async_session)):
+    if user_id:
+        query = select(User).where(User.c.id == user_id)
+        result = await session.execute(query)
+        result = result.all()
+    elif user_name:
+        query = select(User).where(User.c.login == user_name)
+        result = await session.execute(query)
+        result = result.all()
+    elif user_email:
+        query = select(User).where(User.c.email == user_email)
+        result = await session.execute(query)
+        result = result.all()
+    else:
+        raise HTTPException(status_code=400, detail={"error": "type id, login or mail"})
     if not result:
         raise HTTPException(status_code=404, detail="Can't find user")
     result = {"id": result[0][0], "login": result[0][1], "photo": result[0][3], "email": result[0][4],
@@ -24,11 +36,32 @@ async def get_user(user_id: int, session: AsyncSession = Depends(get_async_sessi
     return result
 
 
-@router.put("/{user_id}", status_code=201)
-async def update_user(user_id: int, photo: UploadFile = None, user_req: UserUpdate = Depends(),
+@router.get("/photo", tags=["users"])
+async def get_user_photo(user_id: int = None, user_name: str = None, user_email: str = None):
+    if user_id:
+        with open(f"../photo/user/{user_id}_user_photo.jpg", "rb") as photo:
+            data = photo.read()
+            return Response(data, status_code=200, media_type="image/jpeg")
+
+    elif user_name:
+        query = select(User).where(User.c.login == user_name)
+        result = await session.execute(query)
+        result = result.all()[0][0]
+    elif user_email:
+        query = select(User).where(User.c.email == user_email)
+        result = await session.execute(query)
+        result = result.all()[0][0]
+    else:
+        raise HTTPException(status_code=400, detail={"error": "type id, login or mail"})
+    with open(f"../photo/user/{result}_user_photo.jpg", "rb") as photo:
+        data = photo.read()
+        return Response(data, status_code=200, media_type="image/jpeg")
+
+
+@router.put("", status_code=201, tags=["users"])
+async def update_user(photo: UploadFile = None, user_req: UserUpdate = Depends(),
                       user: auth_user = Depends(current_user), session: AsyncSession = Depends(get_async_session)):
-    if user_id != user.id:
-        raise HTTPException(status_code=400, detail="User don't have permission")
+    b = False
     stmt = update(User)
     if photo is not None:
         cont = await photo.read()
@@ -37,8 +70,11 @@ async def update_user(user_id: int, photo: UploadFile = None, user_req: UserUpda
         f.close()
     for key, value in user_req.__dict__.items():
         if value is not None:
+            b = True
             stmt = stmt.values({key: value})
-    await session.execute(stmt)
+    if b:
+        stmt = stmt.where(User.c.id == user.id)
+        await session.execute(stmt)
     try:
         await session.commit()
         return user_req
@@ -48,7 +84,7 @@ async def update_user(user_id: int, photo: UploadFile = None, user_req: UserUpda
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
 
 
-@router.get("/{user_id}/favourite")
+@router.get("/{user_id}/favourite", tags=["Favourite recipe"])
 async def get_fav_recipe_of_user(user_id: int, user: auth_user = Depends(current_user),
                                  session: AsyncSession = Depends(get_async_session)):
     if user_id != user.id:
@@ -62,7 +98,7 @@ async def get_fav_recipe_of_user(user_id: int, user: auth_user = Depends(current
     return result
 
 
-@router.post("/{user_id}/favourite", status_code=201)
+@router.post("/{user_id}/favourite", status_code=201, tags=["Favourite recipe"])
 async def create_fav_recipe_of_user(user_id: int, recipe_id: int, user: auth_user = Depends(current_user),
                                     session: AsyncSession = Depends(get_async_session)):
     if user_id != user.id:
@@ -77,7 +113,7 @@ async def create_fav_recipe_of_user(user_id: int, recipe_id: int, user: auth_use
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
 
 
-@router.delete("/{user_id}/favourite", status_code=204)
+@router.delete("/{user_id}/favourite", status_code=204, tags=["Favourite recipe"])
 async def delete_fav_recipe_of_user(user_id: int, recipe_id: int, user: auth_user = Depends(current_user),
                                     session: AsyncSession = Depends(get_async_session)):
     if user_id != user.id:
@@ -93,7 +129,7 @@ async def delete_fav_recipe_of_user(user_id: int, recipe_id: int, user: auth_use
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
 
 
-@router.post("/{user_id}/score", status_code=201)
+@router.post("/{user_id}/score", status_code=201, tags=["Score"])
 async def post_score(user_id: int, recipe_id: int, score: int, user: auth_user = Depends(current_user),
                      session: AsyncSession = Depends(get_async_session)):
     if user_id != user.id:
@@ -108,7 +144,8 @@ async def post_score(user_id: int, recipe_id: int, score: int, user: auth_user =
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
 
 
-@router.get("/score/")
+
+@router.get("/score/", tags=["Score"])
 async def get_score_of_recipe(recipe_id: int, session: AsyncSession = Depends(get_async_session)):
     query = select(Score_recipe).where(Score_recipe.c.recipe_ID == recipe_id)
     result = await session.execute(query)
@@ -121,7 +158,7 @@ async def get_score_of_recipe(recipe_id: int, session: AsyncSession = Depends(ge
     return result
 
 
-@router.delete("/{user_id}/score/", status_code=204)
+@router.delete("/{user_id}/score/", status_code=204, tags=["Score"])
 async def get_score_of_recipe(user_id: int, recipe_id: int, user: auth_user = Depends(current_user),
                               session: AsyncSession = Depends(get_async_session)):
     if user_id == user.id:
