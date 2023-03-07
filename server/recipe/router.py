@@ -1,20 +1,21 @@
 from utils import fastapi_users
 from auth.db import get_async_session, User as auth_user
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, Header, Response
 from sqlalchemy import select, insert, update, delete, exc
 import json
 import datetime
+from pathlib import Path
 from typing import List
 from recipe.shemas import Recipe_create, Step, Recipe_update
 from models import Recipe as Recipe_bd, Recipe_tag, User, Step as Step_bd, Ingredient, Recipe_ingredient
 
-router = APIRouter(prefix="/recipes", tags=["recipes"])
+router = APIRouter(prefix="/recipes")
 
 current_user = fastapi_users.current_user()
 
 
-@router.get("/")
+@router.get("/", tags=["recipe"])
 async def get_recipe(tag: int = None, author: int = None, author_name: str = None,
                      less_cook_time: datetime.timedelta = None, more_cook_time: datetime.timedelta = 0,
                      name: str = None,
@@ -48,7 +49,7 @@ async def get_recipe(tag: int = None, author: int = None, author_name: str = Non
     return answer
 
 
-@router.get("/{recipe_id}")
+@router.get("/{recipe_id}", tags=["recipe"])
 async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_async_session)):
     query = select(Recipe_bd).where(Recipe_bd.c.recipe_ID == recipe_id)
     result = await session.execute(query)
@@ -62,7 +63,7 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
     return answer
 
 
-@router.post("/", status_code=201)
+@router.post("/", status_code=201, tags=["recipe"])
 async def create_recipe(photo: UploadFile, tag: List[int] = 0, recipe: Recipe_create = Depends(),
                         user: auth_user = Depends(current_user),
                         session: AsyncSession = Depends(get_async_session)):
@@ -101,8 +102,21 @@ async def create_recipe(photo: UploadFile, tag: List[int] = 0, recipe: Recipe_cr
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
     return recipe, r
 
+@router.get("/photo/{recipe_id}",tags=["recipe"])
+async def get_recipe_photo(recipe_id:int):
+    photo_path = Path(f"../photo/recipe/{recipe_id}_recipe_photo.jpg")
+    with open(photo_path, "rb") as photo:
+        data = photo.read()
+        return Response(data, status_code=200, media_type="image/jpeg")
+@router.get("/{step_id}_media/", tags=["step"])
+async def get_media_step(step_id: int):
+    video_path = Path(f"../media/{step_id}_media.mp4")
+    with open(video_path, "rb") as video:
+        data =video.read()
+        return Response(data, status_code=200,  media_type="video/mp4")
 
-@router.post("/{recipe_id}/step", status_code=201)
+
+@router.post("/{recipe_id}/step", status_code=201, tags=["step"])
 async def create_step(recipe_id: int, user: auth_user = Depends(current_user),
                       session: AsyncSession = Depends(get_async_session),
                       step: Step = Depends()):
@@ -131,7 +145,7 @@ async def create_step(recipe_id: int, user: auth_user = Depends(current_user),
     f.close()
 
 
-@router.delete("/{recipe_id}/tag", status_code=204)
+@router.delete("/{recipe_id}/tag", status_code=204, tags=["tag recipe"])
 async def delete_tag_recipe(recipe_id: int, tag_id: int, user: auth_user = Depends(current_user),
                             session: AsyncSession = Depends(get_async_session)):
     stmt = select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id)
@@ -149,9 +163,9 @@ async def delete_tag_recipe(recipe_id: int, tag_id: int, user: auth_user = Depen
         raise HTTPException(status_code=400, detail={"error": "tag error data"})
 
 
-@router.delete("/{recipe_id}/ingredient", status_code=204)
+@router.delete("/{recipe_id}/ingredient", status_code=204, tags=["ingredient recipe"])
 async def delete_ingredient_recipe(recipe_id: int, ingredient_id: int, user: auth_user = Depends(current_user),
-                            session: AsyncSession = Depends(get_async_session)):
+                                   session: AsyncSession = Depends(get_async_session)):
     stmt = select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id)
     author = await session.execute(stmt)
     author = author.all()
@@ -168,9 +182,9 @@ async def delete_ingredient_recipe(recipe_id: int, ingredient_id: int, user: aut
         raise HTTPException(status_code=400, detail={"error": "ingredient error data"})
 
 
-@router.delete("/{recipe_id}/step", status_code=204)
+@router.delete("/{recipe_id}/step", status_code=204, tags=["step"])
 async def delete_step_recipe(recipe_id: int, step_id: int, user: auth_user = Depends(current_user),
-                            session: AsyncSession = Depends(get_async_session)):
+                             session: AsyncSession = Depends(get_async_session)):
     stmt = select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id)
     author = await session.execute(stmt)
     author = author.all()
@@ -187,7 +201,7 @@ async def delete_step_recipe(recipe_id: int, step_id: int, user: auth_user = Dep
         raise HTTPException(status_code=400, detail={"error": "step error data"})
 
 
-@router.post("/{recipe_id}/tag", status_code=201)
+@router.post("/{recipe_id}/tag", status_code=201, tags=["tag recipe"])
 async def create_tag_recipe(recipe_id: int, tag_id: int, user: auth_user = Depends(current_user),
                             session: AsyncSession = Depends(get_async_session)):
     stmt = select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id)
@@ -207,7 +221,7 @@ async def create_tag_recipe(recipe_id: int, tag_id: int, user: auth_user = Depen
         raise HTTPException(status_code=400, detail={"error": "tag error data (duplicate)"})
 
 
-@router.put("/{recipe_id}", status_code=201)
+@router.put("/{recipe_id}", status_code=201, tags=["recipe"])
 async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(),
                         photo: UploadFile = None,
                         user: auth_user = Depends(current_user),
@@ -238,7 +252,7 @@ async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(),
     return recipe
 
 
-@router.delete("/{recipe_id}", status_code=204)
+@router.delete("/{recipe_id}", status_code=204, tags=["recipe"])
 async def delete_recipe(recipe_id: int, user: auth_user = Depends(current_user),
                         session: AsyncSession = Depends(get_async_session)):
     stmt = select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id)
@@ -258,7 +272,7 @@ async def delete_recipe(recipe_id: int, user: auth_user = Depends(current_user),
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
 
 
-@router.post("{recipe_id}/{ingredient_id}", status_code=201)
+@router.post("{recipe_id}/{ingredient_id}", status_code=201, tags=["ingredient recipe"])
 async def create_recipe_ingredient_relation(ingredient_id: int, recipe_id: int, count: int,
                                             user: auth_user = Depends(current_user),
                                             session: AsyncSession = Depends(get_async_session)):
@@ -284,7 +298,7 @@ async def create_recipe_ingredient_relation(ingredient_id: int, recipe_id: int, 
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
 
 
-@router.get("/{recipe_id}/steps")
+@router.get("/{recipe_id}/steps", tags=["step"])
 async def get_steps_of_recipe(recipe_id: int, session: AsyncSession = Depends(get_async_session)):
     query = select(Step_bd).where(Step_bd.c.recipe_ID == recipe_id)
     result = await session.execute(query)
