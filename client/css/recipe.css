@@ -1,3 +1,28 @@
 .recipe-img {
     width: 100%;
 }
+
+.recipe-info {
+    margin-top: 60px;
+    margin-bottom: 50px;
+}
+
+.info-block {
+    border-radius: 15px;
+    background-color: #61b030;
+    /* height: 100px; */
+}
+
+.info-category {
+    margin: 0;
+    padding-top: 12px;
+    color: #fff;
+}
+
+.info-value-block {
+    border-radius: 15px;
+    margin: 12px 0;
+    padding: 21px 0;
+    background-color: #fff;
+    height: 50px;
+}
