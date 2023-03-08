@@ -67,7 +67,7 @@ async def delete_tag(key: str, tag_id: int, session: AsyncSession = Depends(get_
     if key != keyring.get_password("Cooking", "DEV"):
         raise HTTPException(status_code=400, detail={"Error": "Wrong key"})
     try:
-        await delete(Tag).where(Tag.c.tag_ID == tag_id)
+        await session.execute(delete(Tag).where(Tag.c.tag_ID == tag_id))
         await session.commit()
     except exc.DataError:
         return {"Error": "Data error"}
@@ -78,7 +78,7 @@ async def delete_ingredient(key: str, ingredient_id: int, session: AsyncSession 
     if key != keyring.get_password("Cooking", "DEV"):
         raise HTTPException(status_code=400, detail={"Error": "Wrong key"})
     try:
-        await delete(Ingredient).where(Ingredient.c.tag_ID == ingredient_id)
+        await session.execute( delete(Ingredient).where(Ingredient.c.tag_ID == ingredient_id))
         await session.commit()
     except exc.DataError:
         return {"Error": "Data error"}
@@ -89,7 +89,7 @@ async def delete_unit(key: str, unit_id: int, session: AsyncSession = Depends(ge
     if key != keyring.get_password("Cooking", "DEV"):
         raise HTTPException(status_code=400, detail={"Error": "Wrong key"})
     try:
-        await delete(Unit).where(Unit.c.unit_ID == unit_id)
+        await session.execute( delete(Unit).where(Unit.c.unit_ID == unit_id))
         await session.commit()
     except exc.DataError:
         return {"Error": "Data error"}

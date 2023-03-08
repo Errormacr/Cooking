@@ -5,6 +5,7 @@ from sqlalchemy import select, insert, update, delete
 from models import User, Favourite_recipe, Score_recipe
 from utils import fastapi_users
 from auth.shemas import UserUpdate
+from sqlalchemy import exc
 
 router = APIRouter(prefix="/users")
 
@@ -85,10 +86,8 @@ async def update_user(photo: UploadFile = None, user_req: UserUpdate = Depends()
 
 
 @router.get("/{user_id}/favourite", tags=["Favourite recipe"])
-async def get_fav_recipe_of_user(user_id: int, user: auth_user = Depends(current_user),
+async def get_fav_recipe_of_user(user_id: int,
                                  session: AsyncSession = Depends(get_async_session)):
-    if user_id != user.id:
-        raise HTTPException(status_code=400, detail="User don't have permission")
     query = select(Favourite_recipe).where(Favourite_recipe.c.user_ID == user_id)
     result = await session.execute(query)
     result = result.all()
@@ -98,12 +97,10 @@ async def get_fav_recipe_of_user(user_id: int, user: auth_user = Depends(current
     return result
 
 
-@router.post("/{user_id}/favourite", status_code=201, tags=["Favourite recipe"])
-async def create_fav_recipe_of_user(user_id: int, recipe_id: int, user: auth_user = Depends(current_user),
+@router.post("/favourite", status_code=201, tags=["Favourite recipe"])
+async def create_fav_recipe_of_user(recipe_id: int, user: auth_user = Depends(current_user),
                                     session: AsyncSession = Depends(get_async_session)):
-    if user_id != user.id:
-        raise HTTPException(status_code=400, detail="User don't have permission")
-    await session.execute(insert(Favourite_recipe).values(user_ID=user_id, recipe_ID=recipe_id))
+    await session.execute(insert(Favourite_recipe).values(user_ID=user.id, recipe_ID=recipe_id))
     try:
         await session.commit()
         return {"user_id": user_id, "recipe_id": recipe_id}
@@ -113,13 +110,11 @@ async def create_fav_recipe_of_user(user_id: int, recipe_id: int, user: auth_use
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
 
 
-@router.delete("/{user_id}/favourite", status_code=204, tags=["Favourite recipe"])
-async def delete_fav_recipe_of_user(user_id: int, recipe_id: int, user: auth_user = Depends(current_user),
+@router.delete("/favourite", status_code=204, tags=["Favourite recipe"])
+async def delete_fav_recipe_of_user(recipe_id: int, user: auth_user = Depends(current_user),
                                     session: AsyncSession = Depends(get_async_session)):
-    if user_id != user.id:
-        raise HTTPException(status_code=400, detail="User don't have permission")
     stmt = delete(Favourite_recipe).where(
-        Favourite_recipe.c.user_ID == user_id and Favourite_recipe.c.recipe_ID == recipe_id)
+        Favourite_recipe.c.user_ID == user.id and Favourite_recipe.c.recipe_ID == recipe_id)
     await session.execute(stmt)
     try:
         await session.commit()
@@ -129,20 +124,18 @@ async def delete_fav_recipe_of_user(user_id: int, recipe_id: int, user: auth_use
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
 
 
-@router.post("/{user_id}/score", status_code=201, tags=["Score"])
-async def post_score(user_id: int, recipe_id: int, score: int, user: auth_user = Depends(current_user),
+@router.post("/score/", status_code=201, tags=["Score"])
+async def post_score(recipe_id: int, score: int, user: auth_user = Depends(current_user),
                      session: AsyncSession = Depends(get_async_session)):
-    if user_id != user.id:
-        raise HTTPException(status_code=400, detail="User don't have permission")
-    await session.execute(insert(Score_recipe).values(user_ID=user_id, recipe_ID=recipe_id, score=score))
     try:
+        await session.execute(insert(Score_recipe).values(user_ID=user.id, recipe_ID=recipe_id, score=score))
         await session.commit()
-        return {"user_id": user_id, "recipe_id": recipe_id, "score": score}
+
     except exc.IntegrityError:
         raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
     except exc.DataError:
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
-
+    return {"user_id": user.id, "recipe_id": recipe_id, "score": score}
 
 
 @router.get("/score/", tags=["Score"])
@@ -158,18 +151,36 @@ async def get_score_of_recipe(recipe_id: int, session: AsyncSession = Depends(ge
     return result
 
 
-@router.delete("/{user_id}/score/", status_code=204, tags=["Score"])
-async def get_score_of_recipe(user_id: int, recipe_id: int, user: auth_user = Depends(current_user),
-                              session: AsyncSession = Depends(get_async_session)):
-    if user_id == user.id:
-        stmt = delete(Score_recipe).where(
-            Score_recipe.c.user_ID == user_id and Score_recipe.c.recipe_ID == recipe_id)
+@router.delete("/score/", status_code=204, tags=["Score"])
+async def delete_score_of_recipe(recipe_id: int, user: auth_user = Depends(current_user),
+                                 session: AsyncSession = Depends(get_async_session)):
+    stmt = delete(Score_recipe).where(
+        Score_recipe.c.user_ID == user.id and Score_recipe.c.recipe_ID == recipe_id)
+    try:
         await session.execute(stmt)
-        try:
-            await session.commit()
-        except exc.IntegrityError:
-            raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
-        except exc.DataError:
-            raise HTTPException(status_code=400, detail={"Error": "Data error"})
-        return
-    raise HTTPException(status_code=400, detail="User don't have permission")
+        await session.commit()
+    except exc.IntegrityError:
+        raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
+    except exc.DataError:
+        raise HTTPException(status_code=400, detail={"Error": "Data error"})
+    return
+
+
+@router.put("/score/", tags=['Score'])
+async def update_score(recipe_id: int, score: int, user: auth_user = Depends(current_user),
+                       session: AsyncSession = Depends(get_async_session)):
+    query = select(Score_recipe).where(Score_recipe.c.recipe_ID == recipe_id and Score_recipe.c.user_ID == user.id)
+    result = await session.execute(query)
+    result = result.all()
+    if not result:
+        raise HTTPException(status_code=404, detail={"Error": "Can't find this score"})
+    stmt = update(Score_recipe).where(
+        Score_recipe.c.user_ID == user.id and Score_recipe.c.recipe_ID == recipe_id).values(score=score)
+    try:
+        await session.execute(stmt)
+        await session.commit()
+    except exc.IntegrityError:
+        raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
+    except exc.DataError:
+        raise HTTPException(status_code=400, detail={"Error": "Data error"})
+    return {"user_ID": user.id, "recipe_ID": recipe_id, "score": score}
