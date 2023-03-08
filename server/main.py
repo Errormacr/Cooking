@@ -7,6 +7,7 @@ from tag.router import router as tag_router
 from ingredients.router import router as ingredient_router
 from auth.router import router as user_router
 from dev.router import router as dev_router
+from unit.router import router as unit_router
 from utils import fastapi_users
 
 app = FastAPI()
@@ -25,3 +26,4 @@ app.include_router(tag_router)
 app.include_router(ingredient_router)
 app.include_router(user_router)
 app.include_router(dev_router)
+app.include_router(unit_router)

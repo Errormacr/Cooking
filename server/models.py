@@ -10,11 +10,10 @@ Recipe = Table(
     Column("name", VARCHAR(length=100), nullable=False),
     Column("photo", VARCHAR(length=50), nullable=False),
     Column("servings_cout", TINYINT(unsigned=True), nullable=False),
-    Column("cook_time", TIME(), nullable=False),
+    Column("cook_time", INTEGER(unsigned=True), nullable=False),
     Column("rating", INTEGER(unsigned=False), nullable=False),
     Column("recommend", TEXT(), nullable=True),
     Column("author", INTEGER(unsigned=True), ForeignKey("user.id", ondelete="SET DEFAULT"), nullable=False),
-    UniqueConstraint("name"),
     UniqueConstraint("photo"),
     CheckConstraint('servings_cout>0'), )
 
@@ -35,7 +34,7 @@ Step = Table(
     metadata,
     Column("step_ID", INTEGER(unsigned=True), primary_key=True),
     Column("description", TEXT(), nullable=False),
-    Column("timer", TIME(), nullable=True, default=None),
+    Column("timer", INTEGER(unsigned=True), nullable=True, default=None),
     Column("media", VARCHAR(length=20), nullable=True),
     Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID", ondelete="CASCADE"), nullable=False),
     UniqueConstraint("media"), )

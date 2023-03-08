@@ -1,7 +1,7 @@
 from utils import fastapi_users
 from auth.db import get_async_session, User as auth_user
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, Header, Response
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, Header, Response, Form
 from sqlalchemy import select, insert, update, delete, exc
 import json
 import datetime
@@ -17,7 +17,7 @@ current_user = fastapi_users.current_user()
 
 @router.get("/", tags=["recipe"])
 async def get_recipe(tag: int = None, author: int = None, author_name: str = None,
-                     less_cook_time: datetime.timedelta = None, more_cook_time: datetime.timedelta = 0,
+                     less_cook_time: int = None, more_cook_time: int = 0,
                      name: str = None,
                      offset: int = 0, limit: int = 10,
                      session: AsyncSession = Depends(get_async_session)):
@@ -42,6 +42,8 @@ async def get_recipe(tag: int = None, author: int = None, author_name: str = Non
     query = query.offset(offset).limit(limit)
     result = await session.execute(query)
     result = result.all()
+    if not result:
+        raise HTTPException(status_code=404,detail="Can't found recipe")
     answer = [{
         "recipe_id": rec[0],
         'recipe_desc': {"name": rec[1], "photo": rec[2], "servings_cout": rec[3], "cook_time": rec[4],
@@ -64,7 +66,7 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
 
 
 @router.post("/", status_code=201, tags=["recipe"])
-async def create_recipe(photo: UploadFile, tag: List[int] = 0, recipe: Recipe_create = Depends(),
+async def create_recipe(photo: UploadFile, tag: List[int or None] = list([0]), recipe: Recipe_create = Depends(),
                         user: auth_user = Depends(current_user),
                         session: AsyncSession = Depends(get_async_session)):
     if recipe.servings_cout <= 0:
@@ -90,7 +92,10 @@ async def create_recipe(photo: UploadFile, tag: List[int] = 0, recipe: Recipe_cr
     cont = await photo.read()
     f.write(cont)
     f.close()
-    tag.remove(0)
+    try:
+        tag.remove(0)
+    except:
+        pass
     for i in tag:
         stmt = insert(Recipe_tag).values(recipe_ID=r, tag_ID=i)
         await session.execute(stmt)
@@ -102,18 +107,21 @@ async def create_recipe(photo: UploadFile, tag: List[int] = 0, recipe: Recipe_cr
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
     return recipe, r
 
-@router.get("/photo/{recipe_id}",tags=["recipe"])
-async def get_recipe_photo(recipe_id:int):
+
+@router.get("/photo/{recipe_id}", tags=["recipe"])
+async def get_recipe_photo(recipe_id: int):
     photo_path = Path(f"../photo/recipe/{recipe_id}_recipe_photo.jpg")
     with open(photo_path, "rb") as photo:
         data = photo.read()
         return Response(data, status_code=200, media_type="image/jpeg")
+
+
 @router.get("/{step_id}_media/", tags=["step"])
 async def get_media_step(step_id: int):
     video_path = Path(f"../media/{step_id}_media.mp4")
     with open(video_path, "rb") as video:
-        data =video.read()
-        return Response(data, status_code=200,  media_type="video/mp4")
+        data = video.read()
+        return Response(data, status_code=200, media_type="video/mp4")
 
 
 @router.post("/{recipe_id}/step", status_code=201, tags=["step"])

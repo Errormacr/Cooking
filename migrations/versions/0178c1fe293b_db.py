@@ -1,8 +1,8 @@
 """Db
 
-Revision ID: 68b6fd43a487
+Revision ID: 0178c1fe293b
 Revises: 
-Create Date: 2023-03-02 12:20:31.962882
+Create Date: 2023-03-08 11:58:19.645182
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = '68b6fd43a487'
+revision = '0178c1fe293b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -63,14 +63,13 @@ def upgrade() -> None:
     sa.Column('name', mysql.VARCHAR(length=100), nullable=False),
     sa.Column('photo', mysql.VARCHAR(length=50), nullable=False),
     sa.Column('servings_cout', mysql.TINYINT(unsigned=True), nullable=False),
-    sa.Column('cook_time', mysql.TIME(), nullable=False),
+    sa.Column('cook_time', mysql.INTEGER(unsigned=True), nullable=False),
     sa.Column('rating', mysql.INTEGER(), nullable=False),
     sa.Column('recommend', mysql.TEXT(), nullable=True),
     sa.Column('author', mysql.INTEGER(unsigned=True), nullable=False),
     sa.CheckConstraint('servings_cout>0'),
     sa.ForeignKeyConstraint(['author'], ['user.id'], ondelete='SET DEFAULT'),
     sa.PrimaryKeyConstraint('recipe_ID'),
-    sa.UniqueConstraint('name'),
     sa.UniqueConstraint('photo')
     )
     op.create_table('Favourite_recipe',
@@ -112,7 +111,7 @@ def upgrade() -> None:
     op.create_table('Step',
     sa.Column('step_ID', mysql.INTEGER(unsigned=True), nullable=False),
     sa.Column('description', mysql.TEXT(), nullable=False),
-    sa.Column('timer', mysql.TIME(), nullable=True),
+    sa.Column('timer', mysql.INTEGER(unsigned=True), nullable=True),
     sa.Column('media', mysql.VARCHAR(length=20), nullable=True),
     sa.Column('recipe_ID', mysql.INTEGER(unsigned=True), nullable=False),
     sa.ForeignKeyConstraint(['recipe_ID'], ['Recipe.recipe_ID'], ondelete='CASCADE'),
