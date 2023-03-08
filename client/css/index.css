@@ -95,6 +95,11 @@
     padding-bottom: 100px;
 }
 
+.recipe-link {
+    text-decoration: none;
+    color: #144f2b;
+}
+
 /* body {
     background-image: url(../img/index/jumbotron_background.png);
     background-size: cover;
