@@ -43,7 +43,7 @@ Tag = Table(
     'Tag',
     metadata,
     Column("tag_ID", INTEGER(unsigned=True), primary_key=True),
-    Column("name", VARCHAR(length=20), nullable=False),
+    Column("name", VARCHAR(150), nullable=False),
     UniqueConstraint("name"),
 )
 
@@ -78,8 +78,8 @@ Recipe_ingredient = Table(
     Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID", ondelete="CASCADE"), nullable=False),
     Column("ingredient_ID", INTEGER(unsigned=True), ForeignKey("Ingredient.ingredient_ID", ondelete="CASCADE"),
            nullable=False),
-    Column("count", DECIMAL(precision=5, scale=2), nullable=False),
-    CheckConstraint("count>0"),
+    Column("count", DECIMAL(precision=8, scale=2), nullable=False),
+    CheckConstraint("count>=0"),
 )
 Recipe_tag = Table(
     'Recipe_tag',
