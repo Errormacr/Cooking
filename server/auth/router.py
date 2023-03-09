@@ -38,25 +38,37 @@ async def get_user(user_id: int = None, user_name: str = None, user_email: str =
 
 
 @router.get("/photo", tags=["users"])
-async def get_user_photo(user_id: int = None, user_name: str = None, user_email: str = None):
+async def get_user_photo(user_id: int = None, user_name: str = None, user_email: str = None,
+                         session: AsyncSession = Depends(get_async_session)):
     if user_id:
-        with open(f"../photo/user/{user_id}_user_photo.jpg", "rb") as photo:
-            data = photo.read()
-            return Response(data, status_code=200, media_type="image/jpeg")
-
+        try:
+            with open(f"../photo/user/{user_id}_user_photo.jpg", "rb") as photo:
+                data = photo.read()
+                return Response(data, status_code=200, media_type="image/jpeg")
+        except:
+            raise HTTPException(status_code=404, detail="can't find photo")
     elif user_name:
         query = select(User).where(User.c.login == user_name)
         result = await session.execute(query)
-        result = result.all()[0][0]
+        result = result.all()
+        if not result:
+            raise HTTPException(status_code=404, detail="can't find user")
+        result = result[0][0]
     elif user_email:
         query = select(User).where(User.c.email == user_email)
         result = await session.execute(query)
-        result = result.all()[0][0]
+        result = result.all()
+        if not result:
+            raise HTTPException(status_code=404, detail="can't find user")
+        result = result[0][0]
     else:
         raise HTTPException(status_code=400, detail={"error": "type id, login or mail"})
-    with open(f"../photo/user/{result}_user_photo.jpg", "rb") as photo:
-        data = photo.read()
-        return Response(data, status_code=200, media_type="image/jpeg")
+    try:
+        with open(f"../photo/user/{result}_user_photo.jpg", "rb") as photo:
+            data = photo.read()
+            return Response(data, status_code=200, media_type="image/jpeg")
+    except:
+        raise HTTPException(status_code=404, detail="can't find photo")
 
 
 @router.put("", status_code=201, tags=["users"])
@@ -66,9 +78,14 @@ async def update_user(photo: UploadFile = None, user_req: UserUpdate = Depends()
     stmt = update(User)
     if photo is not None:
         cont = await photo.read()
-        f = open(f"../photo/user/{user_id}_user_photo.jpg", "wb")
+        try:
+            f = open(f"../photo/user/{user_id}_user_photo.jpg", "wb")
+        except:
+            raise HTTPException(status_code=404, detail="can't find photo")
         f.write(cont)
         f.close()
+    if user_req.gender not in ('Ж', 'М'):
+        raise HTTPException(status_code=400, detail="gender must be M or Ж")
     for key, value in user_req.__dict__.items():
         if value is not None:
             b = True
@@ -100,10 +117,10 @@ async def get_fav_recipe_of_user(user_id: int,
 @router.post("/favourite", status_code=201, tags=["Favourite recipe"])
 async def create_fav_recipe_of_user(recipe_id: int, user: auth_user = Depends(current_user),
                                     session: AsyncSession = Depends(get_async_session)):
-    await session.execute(insert(Favourite_recipe).values(user_ID=user.id, recipe_ID=recipe_id))
     try:
+        await session.execute(insert(Favourite_recipe).values(user_ID=user.id, recipe_ID=recipe_id))
         await session.commit()
-        return {"user_id": user_id, "recipe_id": recipe_id}
+        return {"user_id": user.id, "recipe_id": recipe_id}
     except exc.IntegrityError:
         raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
     except exc.DataError:

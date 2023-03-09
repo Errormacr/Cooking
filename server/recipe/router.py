@@ -1,7 +1,7 @@
 from utils import fastapi_users
 from auth.db import get_async_session, User as auth_user
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, Header, Response, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, Header, Response, Form, Request
 from sqlalchemy import select, insert, update, delete, exc
 import json
 import datetime
@@ -9,6 +9,10 @@ from pathlib import Path
 from typing import List
 from recipe.shemas import Recipe_create, Step, Recipe_update
 from models import Recipe as Recipe_bd, Recipe_tag, User, Step as Step_bd, Ingredient, Recipe_ingredient
+
+
+
+
 
 router = APIRouter(prefix="/recipes")
 
@@ -48,7 +52,7 @@ async def get_recipe(tag: int = None, author: int = None, author_name: str = Non
         "recipe_id": rec[0],
         'recipe_desc': {"name": rec[1], "photo": rec[2], "servings_cout": rec[3], "cook_time": rec[4],
                         "rating": rec[5], "recommend": rec[6], "author": rec[7]}} for rec in result]
-    return Response(answer, media_type='application/json')
+    return answer
 
 
 @router.get("/{recipe_id}", tags=["recipe"])
