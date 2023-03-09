@@ -1,4 +1,7 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Response, Request
+
+from starlette.middleware import Middleware
+from starlette.middleware.cors import CORSMiddleware
 
 from auth.shemas import UserRead, UserCreate
 from auth.auth import auth_backend
@@ -10,7 +13,22 @@ from dev.router import router as dev_router
 from unit.router import router as unit_router
 from utils import fastapi_users
 
-app = FastAPI()
+
+middleware = [
+    Middleware(
+        CORSMiddleware,
+        allow_origins=['*'],
+        allow_credentials=True,
+        allow_methods=['*'],
+        allow_headers=['*']
+    )
+]
+app = FastAPI(middleware=middleware)
+
+
+
+
+
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
     prefix="/auth/jwt",

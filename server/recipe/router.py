@@ -1,7 +1,7 @@
 from utils import fastapi_users
 from auth.db import get_async_session, User as auth_user
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, Header, Response, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, Header, Response, Form, Request
 from sqlalchemy import select, insert, update, delete, exc
 import json
 import datetime
@@ -9,6 +9,10 @@ from pathlib import Path
 from typing import List
 from recipe.shemas import Recipe_create, Step, Recipe_update
 from models import Recipe as Recipe_bd, Recipe_tag, User, Step as Step_bd, Ingredient, Recipe_ingredient
+
+
+
+
 
 router = APIRouter(prefix="/recipes")
 
@@ -43,7 +47,7 @@ async def get_recipe(tag: int = None, author: int = None, author_name: str = Non
     result = await session.execute(query)
     result = result.all()
     if not result:
-        raise HTTPException(status_code=404,detail="Can't found recipe")
+        raise HTTPException(status_code=404, detail="Can't found recipe")
     answer = [{
         "recipe_id": rec[0],
         'recipe_desc': {"name": rec[1], "photo": rec[2], "servings_cout": rec[3], "cook_time": rec[4],
@@ -110,18 +114,24 @@ async def create_recipe(photo: UploadFile, tag: List[int or None] = list([0]), r
 
 @router.get("/photo/{recipe_id}", tags=["recipe"])
 async def get_recipe_photo(recipe_id: int):
-    photo_path = Path(f"../photo/recipe/{recipe_id}_recipe_photo.jpg")
-    with open(photo_path, "rb") as photo:
-        data = photo.read()
-        return Response(data, status_code=200, media_type="image/jpeg")
+    try:
+        photo_path = Path(f"../photo/recipe/{recipe_id}_recipe_photo.jpg")
+        with open(photo_path, "rb") as photo:
+            data = photo.read()
+            return Response(data, status_code=200, media_type="image/jpeg")
+    except:
+        raise HTTPException(status_code=404, detail="Can't find photo")
 
 
 @router.get("/{step_id}_media/", tags=["step"])
 async def get_media_step(step_id: int):
-    video_path = Path(f"../media/{step_id}_media.mp4")
-    with open(video_path, "rb") as video:
-        data = video.read()
-        return Response(data, status_code=200, media_type="video/mp4")
+    try:
+        video_path = Path(f"../media/{step_id}_media.mp4")
+        with open(video_path, "rb") as video:
+            data = video.read()
+            return Response(data, status_code=200, media_type="video/mp4")
+    except:
+        raise HTTPException(status_code=404, detail="Can't find media")
 
 
 @router.post("/{recipe_id}/step", status_code=201, tags=["step"])
@@ -281,7 +291,7 @@ async def delete_recipe(recipe_id: int, user: auth_user = Depends(current_user),
 
 
 @router.post("{recipe_id}/{ingredient_id}", status_code=201, tags=["ingredient recipe"])
-async def create_recipe_ingredient_relation(ingredient_id: int, recipe_id: int, count: int,
+async def create_recipe_ingredient_relation(ingredient_id: int, recipe_id: int, count: float,
                                             user: auth_user = Depends(current_user),
                                             session: AsyncSession = Depends(get_async_session)):
     if count <= 0:
