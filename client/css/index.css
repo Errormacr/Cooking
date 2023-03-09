@@ -65,7 +65,9 @@
 }
 
 .recipe-card-img {
+    object-fit: cover;
     width: 100%;
+    max-height: 70%;
     border-radius: 36px 36px 0 0;
 }
 

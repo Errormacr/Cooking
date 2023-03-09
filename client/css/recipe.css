@@ -10,7 +10,6 @@
 .info-block {
     border-radius: 15px;
     background-color: #61b030;
-    /* height: 100px; */
 }
 
 .info-category {
@@ -25,4 +24,65 @@
     padding: 21px 0;
     background-color: #fff;
     height: 50px;
+}
+
+.servings-fix {
+    padding-left: 8px;
+}
+
+.sign {
+    font-size: 36px;
+    font-weight: 700px;
+    margin: 0;
+    padding: 0 9px;
+}
+
+.servings-block {
+    border-radius: 15px;
+    box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
+    padding: 6px 16px;
+}
+
+.servings {
+    margin: 0;
+    font-size: 36px;
+}
+
+.ingredient {
+    padding-bottom: 40px;
+    padding-left: 50px;
+}
+
+.ingredient-data {
+    margin: 0;
+}
+
+.steps-block {
+    border-radius: 30px;
+    box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
+    padding: 14px 46px;
+}
+
+.recommendations-block {
+    padding: 16px 0 46px;
+}
+
+.recommendations {
+    padding-left: 50px;
+}
+
+.tag-block {
+    border-radius: 15px;
+    box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
+    padding: 10px 30px;
+    margin: 10px 20px;
+    z-index: 1;
+}
+
+.tag {
+    margin: 0;
+}
+
+.recipe {
+    padding-bottom: 90px;
 }
