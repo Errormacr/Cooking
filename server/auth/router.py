@@ -2,7 +2,7 @@ from auth.db import get_async_session, User as auth_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, Response
 from sqlalchemy import select, insert, update, delete
-from models import User, Favourite_recipe, Score_recipe
+from models import User, Favourite_recipe, Score_recipe, Recipe, Tag, Recipe_tag
 from utils import fastapi_users
 from auth.shemas import UserUpdate
 from sqlalchemy import exc
@@ -15,20 +15,21 @@ current_user = fastapi_users.current_user()
 @router.get("/", tags=["users"])
 async def get_user(user_id: int = None, user_name: str = None, user_email: str = None,
                    session: AsyncSession = Depends(get_async_session)):
+    if not user_id and not user_email and not user_name:
+        raise HTTPException(status_code=400, detail={"error": "type id, login or mail"})
     if user_id:
         query = select(User).where(User.c.id == user_id)
         result = await session.execute(query)
         result = result.all()
-    elif user_name:
+        print(result)
+    if result == [] and user_name:
         query = select(User).where(User.c.login == user_name)
         result = await session.execute(query)
         result = result.all()
-    elif user_email:
+    if not result and user_email:
         query = select(User).where(User.c.email == user_email)
         result = await session.execute(query)
         result = result.all()
-    else:
-        raise HTTPException(status_code=400, detail={"error": "type id, login or mail"})
     if not result:
         raise HTTPException(status_code=404, detail="Can't find user")
     result = {"id": result[0][0], "login": result[0][1], "photo": result[0][3], "email": result[0][4],
@@ -40,29 +41,29 @@ async def get_user(user_id: int = None, user_name: str = None, user_email: str =
 @router.get("/photo", tags=["users"])
 async def get_user_photo(user_id: int = None, user_name: str = None, user_email: str = None,
                          session: AsyncSession = Depends(get_async_session)):
+    if not user_id and not user_email and user_name:
+        raise HTTPException(status_code=400, detail={"error": "type id, login or mail"})
     if user_id:
         try:
             with open(f"../photo/user/{user_id}_user_photo.jpg", "rb") as photo:
                 data = photo.read()
                 return Response(data, status_code=200, media_type="image/jpeg")
         except:
-            raise HTTPException(status_code=404, detail="can't find photo")
-    elif user_name:
+            pass
+    if user_name:
         query = select(User).where(User.c.login == user_name)
         result = await session.execute(query)
         result = result.all()
-        if not result:
-            raise HTTPException(status_code=404, detail="can't find user")
-        result = result[0][0]
-    elif user_email:
+
+    if not result and user_email:
         query = select(User).where(User.c.email == user_email)
         result = await session.execute(query)
         result = result.all()
-        if not result:
-            raise HTTPException(status_code=404, detail="can't find user")
-        result = result[0][0]
-    else:
-        raise HTTPException(status_code=400, detail={"error": "type id, login or mail"})
+    if user_id and not result:
+        raise HTTPException(status_code=404, detail="can't find photo")
+    if not result:
+        raise HTTPException(status_code=404, detail="can't find user")
+    result = result[0][0]
     try:
         with open(f"../photo/user/{result}_user_photo.jpg", "rb") as photo:
             data = photo.read()
@@ -105,13 +106,33 @@ async def update_user(photo: UploadFile = None, user_req: UserUpdate = Depends()
 @router.get("/{user_id}/favourite", tags=["Favourite recipe"])
 async def get_fav_recipe_of_user(user_id: int,
                                  session: AsyncSession = Depends(get_async_session)):
-    query = select(Favourite_recipe).where(Favourite_recipe.c.user_ID == user_id)
+    query = select(Favourite_recipe.c.recipe_ID).where(Favourite_recipe.c.user_ID == user_id)
     result = await session.execute(query)
     result = result.all()
     if not result:
         raise HTTPException(status_code=404, detail="Can't find favourite recipe")
-    result = [{"recipe_ID": rec[1], "user_ID": rec[2]} for rec in result]
-    return result
+    ans = []
+    for rec in result:
+        query = select(Recipe).where(Recipe.c.recipe_ID == rec[0])
+        result_recipe = await session.execute(query)
+        result_recipe = result_recipe.all()
+        query = select(Recipe_tag.c.tag_ID).where(Recipe_tag.c.recipe_ID == rec[0])
+        result_tag = await session.execute(query)
+        result_tag = result_tag.all()
+        tags = []
+        for tag in result_tag:
+            query = select(Tag.c.name).where(Tag.c.tag_ID == tag[0])
+            result_tag_name = await session.execute(query)
+            result_tag_name = result_tag_name.all()
+            tags.append(result_tag_name[0][0])
+        ans.append({
+            "recipe_id": result_recipe[0][0],
+            'recipe_desc': {"name": result_recipe[0][1], "photo": result_recipe[0][2],
+                            "servings_cout": result_recipe[0][3], "cook_time": result_recipe[0][4],
+                            "rating": result_recipe[0][5], "recommend": result_recipe[0][6],
+                            "author": result_recipe[0][7]},
+            "tags": tags})
+    return ans
 
 
 @router.post("/favourite", status_code=201, tags=["Favourite recipe"])

@@ -46,31 +46,10 @@ async def create_unit(unit: str, key: str, session: AsyncSession = Depends(get_a
     return {"unit": unit}
 
 
-@router.post("/tag/", status_code=201,tags=["tag"])
-async def create_tag(tag: str, key: str, session: AsyncSession = Depends(get_async_session)):
-    if key != keyring.get_password("Cooking", "DEV"):
-        raise HTTPException(status_code=400, detail="Wrong key")
-    if len(tag) > 20:
-        raise HTTPException(status_code=400, detail={"Error": "Data error"})
-    try:
-        await session.execute(insert(Tag).values(name=tag))
-        await session.commit()
-    except exc.IntegrityError:
-        raise HTTPException(status_code=400, detail={"Error": "Diplicate"})
-    except exc.DataError:
-        raise HTTPException(status_code=400, detail={"Error": "Data error"})
-    return {"tag": tag}
 
 
-@router.delete("/tag/", status_code=204,tags=["tag"])
-async def delete_tag(key: str, tag_id: int, session: AsyncSession = Depends(get_async_session)):
-    if key != keyring.get_password("Cooking", "DEV"):
-        raise HTTPException(status_code=400, detail={"Error": "Wrong key"})
-    try:
-        await session.execute(delete(Tag).where(Tag.c.tag_ID == tag_id))
-        await session.commit()
-    except exc.DataError:
-        return {"Error": "Data error"}
+
+
 
 
 @router.delete("/ingredient/", status_code=204,tags=["ingredient"])
