@@ -232,13 +232,15 @@ async def create_recipe(photo: UploadFile, tag: str = None,
     cont = await photo.read()
     f.write(cont)
     f.close()
-    for i in tag:
-        stmt = insert(Recipe_tag).values(recipe_ID=r, tag_ID=int(i))
-        await session.execute(stmt)
-    for i in ingredients:
-        ingredient, count = i.split('-')
-        stmt = insert(Recipe_ingredient).values(recipe_ID=r, ingredient_ID=int(ingredient), count=float(count))
-        await session.execute(stmt)
+    if tag:
+        for i in tag:
+            stmt = insert(Recipe_tag).values(recipe_ID=r, tag_ID=int(i))
+            await session.execute(stmt)
+    if ingredients:
+        for i in ingredients:
+            ingredient, count = i.split('-')
+            stmt = insert(Recipe_ingredient).values(recipe_ID=r, ingredient_ID=int(ingredient), count=float(count))
+            await session.execute(stmt)
     try:
         await session.commit()
     except exc.IntegrityError:
