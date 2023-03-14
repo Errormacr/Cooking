@@ -1,9 +1,10 @@
-const server_url = 'https://31bb-178-141-127-143.eu.ngrok.io/';
+const server_url = 'https://dbd9-178-141-127-143.eu.ngrok.io/';
 
 var offset = 0;
 
 async function fetch_recipes (offset) {
-    const response = await fetch(server_url + 'recipes/?limit=6&offset=' + offset, {
+    const response = await fetch(server_url + 'recipes/get/?limit=6&offset=' + offset, {
+        method: 'POST',
         credentials: "include"
     });
     console.log(response);
@@ -16,7 +17,7 @@ async function fetch_recipes (offset) {
     var recipe_cards = [];
 
     recipes.forEach(recipe => {
-        var time = Number(recipe['recipe_desc']['cook_time']);
+        var time = Number(recipe['cook_time']);
         var hours = Math.floor(time / 3600);
         var minutes = time % 3600 / 60;
         
@@ -26,7 +27,7 @@ async function fetch_recipes (offset) {
 
         recipe_cards.push(
             {
-                name: recipe['recipe_desc']['name'],
+                name: recipe['name'],
                 time: time,
                 img_src: img_src
             }
