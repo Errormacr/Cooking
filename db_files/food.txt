@@ -1,6 +1,7 @@
 1
 Жареный картофель
-/photo/recipe/1_recipe_photo.jpg
+/photo/recipe/1_recipe_photo
+image/jpeg
 6
 00:30
 0
