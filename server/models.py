@@ -1,5 +1,5 @@
 from sqlalchemy import MetaData, Table, Column, UniqueConstraint, CheckConstraint, ForeignKey
-from sqlalchemy.dialects.mysql import INTEGER, DECIMAL, TINYINT, TEXT, TIME, DATE, ENUM, VARCHAR, NCHAR, BOOLEAN
+from sqlalchemy.dialects.mysql import INTEGER, DECIMAL, TINYINT, TEXT, DATE, ENUM, VARCHAR, BOOLEAN
 
 metadata = MetaData()
 
@@ -9,6 +9,7 @@ Recipe = Table(
     Column("recipe_ID", INTEGER(unsigned=True), primary_key=True),
     Column("name", VARCHAR(length=100), nullable=False),
     Column("photo", VARCHAR(length=50), nullable=False),
+    Column("photo_type", VARCHAR(length=20)),
     Column("servings_cout", TINYINT(unsigned=True), nullable=False),
     Column("cook_time", INTEGER(unsigned=True), nullable=False),
     Column("rating", INTEGER(unsigned=False), nullable=False),
@@ -36,8 +37,9 @@ Step = Table(
     Column("description", TEXT(), nullable=False),
     Column("timer", INTEGER(unsigned=True), nullable=True, default=None),
     Column("media", VARCHAR(length=20), nullable=True),
+    Column("media_type", VARCHAR(length=20)),
     Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID", ondelete="CASCADE"), nullable=False),
-    UniqueConstraint("media"), )
+    UniqueConstraint("media"),)
 
 Tag = Table(
     'Tag',
@@ -54,6 +56,7 @@ User = Table(
     Column("login", VARCHAR(length=50), nullable=False, unique=True),
     Column("hashed_password", TEXT(), nullable=False),
     Column("photo", VARCHAR(length=20)),
+    Column("photo_type", VARCHAR(length=20)),
     Column("email", VARCHAR(length=320)),
     Column("name", VARCHAR(length=40)),
     Column("s_name", VARCHAR(length=40)),
