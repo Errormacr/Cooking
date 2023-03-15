@@ -1,6 +1,6 @@
 1
 Жареный картофель
-ссылка
+/photo/recipe/1_recipe_photo.jpg
 6
 00:30
 0
@@ -8,7 +8,7 @@ NULL
 1
 2
 Брауни
-ссылка
+/photo/recipe/2_recipe_photo.jpg
 6
 00:40
 0
@@ -16,7 +16,7 @@ NULL
 1
 3
 Сырники из творога
-ссылка
+/photo/recipe/3_recipe_photo.jpg
 2
 00:30
 0
@@ -24,7 +24,7 @@ NULL
 1
 4
 Спагетти карбонара
-ссылка
+/photo/recipe/4_recipe_photo.jpg
 2
 00:20
 0
@@ -32,7 +32,7 @@ NULL
 1
 5
 Азу по-татарски
-ссылка
+/photo/recipe/5_recipe_photo.jpg
 4
 00:30
 0
@@ -40,7 +40,7 @@ NULL
 1
 6
 Сырный суп по-французски с курицей
-ссылка
+/photo/recipe/6_recipe_photo.jpg
 4
 01:00
 0
@@ -48,7 +48,7 @@ NULL
 1
 7
 Брусткетта с помидорами
-ссылка
+/photo/recipe/7_recipe_photo.jpg
 4
 00:10
 0
@@ -56,7 +56,7 @@ NULL
 1
 8
 Картофель "Айдахо"
-ссылка
+/photo/recipe/8_recipe_photo.jpg
 3
 01:00
 0
@@ -64,7 +64,7 @@ NULL
 1
 9
 Домашний рататуй
-ссылка
+/photo/recipe/9_recipe_photo.jpg
 4
 00:25
 0
@@ -72,7 +72,7 @@ NULL
 1
 10
 Томатный суп с морепродуктами
-ссылка
+/photo/recipe/10_recipe_photo.jpg
 5
 00:30
 0
@@ -80,7 +80,7 @@ NULL
 1
 11
 Гуакамоле
-ссылка
+/photo/recipe/11_recipe_photo.jpg
 4
 00:20
 0
@@ -88,7 +88,7 @@ NULL
 1
 12
 Оливье по-советски
-ссылка
+/photo/recipe/12_recipe_photo.jpg
 10
 01:00
 0
@@ -96,7 +96,7 @@ NULL
 1
 13
 Солянка
-ссылка
+/photo/recipe/13_recipe_photo.jpg
 4
 02:10
 0
@@ -104,7 +104,7 @@ NULL
 1
 14
 Луковый суп
-ссылка
+/photo/recipe/14_recipe_photo.jpg
 4
 00:45
 0
@@ -112,7 +112,7 @@ NULL
 1
 15
 Курица в кисло-сладком соусе по китайски
-ссылка
+/photo/recipe/15_recipe_photo.jpg
 4
 00:30
 0
@@ -120,7 +120,7 @@ NULL
 1
 16
 Картофель, запеченный в мундире
-ссылка
+/photo/recipe/16_recipe_photo.jpg
 4
 02:00
 0
@@ -128,7 +128,7 @@ NULL
 1
 17
 Тонкое тесто для пиццы
-ссылка
+/photo/recipe/17_recipe_photo.jpg
 4
 01:00
 0
@@ -136,7 +136,7 @@ NULL
 1
 18
 Греческий салат
-ссылка
+/photo/recipe/18_recipe_photo.jpg
 3
 00:10
 0
@@ -144,15 +144,15 @@ NULL
 1
 19
 Треска с помидорами
-ссылка
+/photo/recipe/19_recipe_photo.jpg
 6
 00:15
 0
 NULL
 1
 20
-Макароны, Запеченные с помидорами, под сыром
-ссылка
+Макароны, запеченные с помидорами, под сыром
+/photo/recipe/20_recipe_photo.jpg
 2
 00:20
 0
@@ -160,15 +160,15 @@ NULL
 1
 21
 Ризотто с шампиньонами
-ссылка
+/photo/recipe/21_recipe_photo.jpg
 4
 00:40
 0
 NULL
 1
 22
-Хек в зеленом ченочном соусе
-ссылка
+Хек в зеленом чесночном соусе
+/photo/recipe/22_recipe_photo.jpg
 2
 00:30
 0
@@ -176,7 +176,7 @@ NULL
 1
 23
 Тешеная свинина
-ссылка
+/photo/recipe/23_recipe_photo.jpg
 4
 02:00
 0
@@ -184,7 +184,7 @@ NULL
 1
 24
 Весенний салат с куриной грудкой
-ссылка
+/photo/recipe/24_recipe_photo.jpg
 8
 00:40
 0
@@ -192,7 +192,7 @@ NULL
 1
 25
 Оякодон
-ссылка
+/photo/recipe/25_recipe_photo.jpg
 1
 00:30
 0
@@ -200,7 +200,7 @@ NULL
 1
 26
 Салат из красной фасоли с творожным сыром
-ссылка
+/photo/recipe/26_recipe_photo.jpg
 4
 00:07
 0
@@ -208,7 +208,7 @@ NULL
 1
 27
 Классичсекая шарлотка
-ссылка
+/photo/recipe/27_recipe_photo.jpg
 12
 00:35
 0
@@ -216,7 +216,7 @@ NULL
 1
 28
 Лазанья классическая с мясом
-ссыдка
+/photo/recipe/28_recipe_photo.jpg
 6
 00:40
 0
@@ -224,7 +224,7 @@ NULL
 1
 29
 Курица "Пикассо"
-ссылка
+/photo/recipe/29_recipe_photo.jpg
 4
 00:45
 0
@@ -232,7 +232,7 @@ NULL
 1
 30
 Американские блины
-ссылка
+/photo/recipe/30_recipe_photo.jpg
 10
 00:20
 0
