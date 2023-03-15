@@ -39,6 +39,8 @@
 .info-block {
     border-radius: 15px;
     background-color: #61b030;
+    box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
+    margin-bottom: 20px;
 }
 
 .info-category {
@@ -103,9 +105,14 @@
 .tag-block {
     border-radius: 15px;
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
+    transition: 0.5s;
     padding: 10px 30px;
     margin: 10px 20px;
     z-index: 1;
+}
+
+.tag-block:hover {
+    box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.6);
 }
 
 .tag {
@@ -114,4 +121,22 @@
 
 .recipe {
     padding-bottom: 90px;
+}
+
+.center-fix {
+    padding: 0 8px;
+}
+
+@media screen and (width < 576px) {
+    .ingredient {
+        padding-left: 0;
+    }
+
+    .recommendations {
+        padding-left: 0;
+    }
+
+    .btn {
+        padding: 12px 40px;
+    }
 }
