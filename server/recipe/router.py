@@ -220,25 +220,29 @@ async def create_recipe(photo: UploadFile, tag: str = None,
 
     stmt = insert(Recipe_bd).values(name=recipe.name, servings_cout=recipe.servings_cout,
                                     cook_time=recipe.cook_time,
-                                    recommend=recipe.recommend, photo=f"/photo/recipe/0_recipe_photo.jpg", rating=0,
+                                    recommend=recipe.recommend, photo=f"/photo/recipe/0_recipe_photo.jpg",
+                                    photo_type="qswdsa", rating=0,
                                     author=user.id)
 
     await session.execute(stmt)
     result = await session.execute(select(Recipe_bd.c.recipe_ID))
     r = max([i[0] for i in result.all()])
-    stmt = update(Recipe_bd).where(Recipe_bd.c.recipe_ID == r).values(photo=f"/photo/recipe/{r}_recipe_photo.jpg")
+    stmt = update(Recipe_bd).where(Recipe_bd.c.recipe_ID == r).values(photo=f"/photo/recipe/{r}_recipe_photo",
+                                                                      photo_type=photo.content_type)
     await session.execute(stmt)
-    f = open(f"../photo/recipe/{r}_recipe_photo.jpg", "wb")
+    f = open(f"../photo/recipe/{r}_recipe_photo", "wb")
     cont = await photo.read()
     f.write(cont)
     f.close()
-    for i in tag:
-        stmt = insert(Recipe_tag).values(recipe_ID=r, tag_ID=int(i))
-        await session.execute(stmt)
-    for i in ingredients:
-        ingredient, count = i.split('-')
-        stmt = insert(Recipe_ingredient).values(recipe_ID=r, ingredient_ID=int(ingredient), count=float(count))
-        await session.execute(stmt)
+    if tag:
+        for i in tag:
+            stmt = insert(Recipe_tag).values(recipe_ID=r, tag_ID=int(i))
+            await session.execute(stmt)
+    if ingredients:
+        for i in ingredients:
+            ingredient, count = i.split('-')
+            stmt = insert(Recipe_ingredient).values(recipe_ID=r, ingredient_ID=int(ingredient), count=float(count))
+            await session.execute(stmt)
     try:
         await session.commit()
     except exc.IntegrityError:
@@ -249,12 +253,16 @@ async def create_recipe(photo: UploadFile, tag: str = None,
 
 
 @router.get("/photo/{recipe_id}", tags=["recipe"])
-async def get_recipe_photo(recipe_id: int):
+async def get_recipe_photo(recipe_id: int, session: AsyncSession = Depends(get_async_session)):
     try:
-        photo_path = Path(f"../photo/recipe/{recipe_id}_recipe_photo.jpg")
+        photo_path = Path(f"../photo/recipe/{recipe_id}_recipe_photo")
+        result = await session.execute(select(Recipe_bd.c.photo_type).where(Recipe_bd.c.recipe_ID == recipe_id))
+        result = result.all()
+        if not result:
+            raise HTTPException(status_code=404, detail="Can't find photo")
         with open(photo_path, "rb") as photo:
             data = photo.read()
-            return Response(data, status_code=200, media_type="image/jpeg")
+            return Response(data, status_code=200, media_type=result[0][0])
     except:
         raise HTTPException(status_code=404, detail="Can't find photo")
 
@@ -262,10 +270,14 @@ async def get_recipe_photo(recipe_id: int):
 @router.get("/{step_id}_media/", tags=["step"])
 async def get_media_step(step_id: int):
     try:
-        video_path = Path(f"../media/{step_id}_media.mp4")
+        video_path = Path(f"../media/{step_id}_media")
+        result = await session.execute(select(Step_bd.c.media_type).where(Step_bd.c.recipe_ID == step_id))
+        result = result.all()
+        if not result:
+            raise HTTPException(status_code=404, detail="Can't find media")
         with open(video_path, "rb") as video:
             data = video.read()
-            return Response(data, status_code=200, media_type="video/mp4")
+            return Response(data, status_code=200, media_type=result[0][0])
     except:
         raise HTTPException(status_code=404, detail="Can't find media")
 
@@ -285,7 +297,8 @@ async def create_step(recipe_id: int, user: auth_user = Depends(current_user),
     await session.execute(stmt)
     result = await session.execute(select(Step_bd.c.step_ID))
     r = max([i[0] for i in result.all()])
-    stmt = update(Step_bd).where(Step_bd.c.step_ID == r).values(media=f"/media/{r}_step.mp4")
+    stmt = update(Step_bd).where(Step_bd.c.step_ID == r).values(media=f"/media/{r}_step",
+                                                                media_type=step.media.content_type)
     await session.execute(stmt)
     try:
         await session.commit()
@@ -293,7 +306,7 @@ async def create_step(recipe_id: int, user: auth_user = Depends(current_user),
         raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
     except exc.DataError:
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
-    f = open(f"../media/{r}_step.mp4", "wb")
+    f = open(f"../media/{r}_step", "wb")
     cont = await step.media.read()
     f.write(cont)
     f.close()
@@ -387,22 +400,28 @@ async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(),
         raise HTTPException(status_code=404, detail="Not found recipe")
     if author[0][0] != user.id:
         raise HTTPException(status_code=400, detail="User not author")
-    stmt = update(Recipe_bd)
-    for key, value in recipe.__dict__.items():
-        if value is not None:
-            stmt = stmt.values({key: value})
-    try:
-        await session.execute(stmt)
-        await session.commit()
-    except exc.IntegrityError:
-        raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
-    except exc.DataError:
-        raise HTTPException(status_code=400, detail={"Error": "Data error"})
+    if recipe.name or recipe.servings_cout or recipe.cook_time or recipe.recommend:
+        print(recipe)
+        stmt = update(Recipe_bd)
+        for key, value in recipe.__dict__.items():
+            if value is not None:
+                stmt = stmt.values({key: value})
+        try:
+            await session.execute(stmt)
+            await session.commit()
+        except exc.IntegrityError:
+            raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
+        except exc.DataError:
+            raise HTTPException(status_code=400, detail={"Error": "Data error"})
     if photo is not None:
-        f = open(f"../photo/recipe/{recipe_id}_recipe_photo.jpg", "wb")
+        f = open(f"../photo/recipe/{recipe_id}_recipe_photo", "wb")
         cont = await photo.read()
+        await session.execute(
+            update(Recipe_bd).where(Recipe_bd.c.recipe_ID == recipe_id).values(photo_type=photo.content_type))
+        await session.commit()
         f.write(cont)
         f.close()
+
     return recipe
 
 

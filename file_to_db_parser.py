@@ -1,4 +1,5 @@
 import pymysql
+from requests import post
 from server.config import HOST, PORT, DB_Name, USER, PASS
 
 connection = pymysql.connect(host=HOST,
@@ -18,9 +19,10 @@ def fill_recipe(connection):
                 break
             name = file.readline().replace('\n', '')
             try:
-                s = int(s)
+                phot = open(f'photo/recipe/{s}_recipe_photo.jpg','rb')
             except:
-                pass
+                phot = open(f'photo/recipe/1_recipe_photo.jpg', 'rb')
+            files = {'photo':phot}
             pathPhoto = f'../photo/recipe/{s}_recipe_photo.jpg'
             s = file.readline()
             servings = int(file.readline())
@@ -30,6 +32,8 @@ def fill_recipe(connection):
             s = file.readline()
             author = int(file.readline())
             if s:
+                url = f'http://localhost:8000/recipes/?name={name}&servings_cout={servings}&cook_time={time}'
+                post(url,files=files)
                 sql = "insert into Recipe(name,photo,servings_cout,cook_time,rating,author) values (%s,%s,%s,%s,%s,%s)"
                 with connection.cursor() as curs:
 

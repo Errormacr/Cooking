@@ -1,8 +1,8 @@
-"""'DB'
+"""media
 
-Revision ID: ea5a75b0ebed
+Revision ID: e348c07dbeaf
 Revises: 
-Create Date: 2023-03-09 13:00:02.937571
+Create Date: 2023-03-15 19:24:53.285290
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = 'ea5a75b0ebed'
+revision = 'e348c07dbeaf'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -35,6 +35,7 @@ def upgrade() -> None:
     sa.Column('login', mysql.VARCHAR(length=50), nullable=False),
     sa.Column('hashed_password', mysql.TEXT(), nullable=False),
     sa.Column('photo', mysql.VARCHAR(length=20), nullable=True),
+    sa.Column('photo_type', mysql.VARCHAR(length=20), nullable=True),
     sa.Column('email', mysql.VARCHAR(length=320), nullable=True),
     sa.Column('name', mysql.VARCHAR(length=40), nullable=True),
     sa.Column('s_name', mysql.VARCHAR(length=40), nullable=True),
@@ -62,6 +63,7 @@ def upgrade() -> None:
     sa.Column('recipe_ID', mysql.INTEGER(unsigned=True), nullable=False),
     sa.Column('name', mysql.VARCHAR(length=100), nullable=False),
     sa.Column('photo', mysql.VARCHAR(length=50), nullable=False),
+    sa.Column('photo_type', mysql.VARCHAR(length=20), nullable=True),
     sa.Column('servings_cout', mysql.TINYINT(unsigned=True), nullable=False),
     sa.Column('cook_time', mysql.INTEGER(unsigned=True), nullable=False),
     sa.Column('rating', mysql.INTEGER(), nullable=False),
@@ -113,6 +115,7 @@ def upgrade() -> None:
     sa.Column('description', mysql.TEXT(), nullable=False),
     sa.Column('timer', mysql.INTEGER(unsigned=True), nullable=True),
     sa.Column('media', mysql.VARCHAR(length=20), nullable=True),
+    sa.Column('media_type', mysql.VARCHAR(length=20), nullable=True),
     sa.Column('recipe_ID', mysql.INTEGER(unsigned=True), nullable=False),
     sa.ForeignKeyConstraint(['recipe_ID'], ['Recipe.recipe_ID'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('step_ID'),

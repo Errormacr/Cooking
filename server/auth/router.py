@@ -45,9 +45,12 @@ async def get_user_photo(user_id: int = None, user_name: str = None, user_email:
         raise HTTPException(status_code=400, detail={"error": "type id, login or mail"})
     if user_id:
         try:
-            with open(f"../photo/user/{user_id}_user_photo.jpg", "rb") as photo:
-                data = photo.read()
-                return Response(data, status_code=200, media_type="image/jpeg")
+            with open(f"../photo/user/{user_id}_user_photo", "rb") as photo:
+                result = await session.execute(select(User.c.photo_type).where(User.c.id == user_id))
+                result = result.all()
+                if result:
+                    data = photo.read()
+                    return Response(data, status_code=200, media_type=result[0][0])
         except:
             pass
     if user_name:
@@ -65,9 +68,14 @@ async def get_user_photo(user_id: int = None, user_name: str = None, user_email:
         raise HTTPException(status_code=404, detail="can't find user")
     result = result[0][0]
     try:
-        with open(f"../photo/user/{result}_user_photo.jpg", "rb") as photo:
-            data = photo.read()
-            return Response(data, status_code=200, media_type="image/jpeg")
+        with open(f"../photo/user/{result}_user_photo", "rb") as photo:
+            result_type = await session.execute(select(User.c.photo_type).where(User.c.id == user_id))
+            result_type = result_type.all()
+            if result_type:
+                data = photo.read()
+                return Response(data, status_code=200, media_type=result_type[0][0])
+            else:
+                raise HTTPException(status_code=404, detail="can't find photo")
     except:
         raise HTTPException(status_code=404, detail="can't find photo")
 
@@ -80,10 +88,11 @@ async def update_user(photo: UploadFile = None, user_req: UserUpdate = Depends()
     if photo is not None:
         cont = await photo.read()
         try:
-            f = open(f"../photo/user/{user_id}_user_photo.jpg", "wb")
+            f = open(f"../photo/user/{user_id}_user_photo", "wb")
         except:
             raise HTTPException(status_code=404, detail="can't find photo")
         f.write(cont)
+        await session.execute(update(User).where(User.c.id == user.id).values(photo_type=photo.content_type))
         f.close()
     if user_req.gender not in ('Ж', 'М'):
         raise HTTPException(status_code=400, detail="gender must be M or Ж")

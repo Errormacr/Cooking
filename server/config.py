@@ -1,13 +1,11 @@
-import keyring
-PORT = keyring.get_password('Cooking', 'PORT')
-HOST = keyring.get_password('Cooking', 'HOST')
-USER = keyring.get_password('Cooking', 'USER')
-PASS = keyring.get_password('Cooking', 'PASS')
-DB_Name = keyring.get_password('Cooking', 'DB_Name')
-SECRET = keyring.get_password('Cooking', 'SECRET')
-
-
-
-
-
+import os
+from dotenv import load_dotenv
+load_dotenv()
+PORT = os.environ.get('PORT')
+HOST = os.environ.get('HOST')
+USER = os.environ.get('USER')
+PASS = os.environ.get('PASS')
+DB_Name = os.environ.get('DB_Name')
+SECRET = os.environ.get('SECRET')
+KEY = os.environ.get('DEV')
 
