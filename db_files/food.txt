@@ -9,7 +9,8 @@ NULL
 1
 2
 Брауни
-/photo/recipe/2_recipe_photo.jpg
+/photo/recipe/2_recipe_photo
+image/jpeg
 6
 00:40
 0
@@ -17,7 +18,8 @@ NULL
 1
 3
 Сырники из творога
-/photo/recipe/3_recipe_photo.jpg
+/photo/recipe/3_recipe_photo
+image/jpeg
 2
 00:30
 0
@@ -25,7 +27,8 @@ NULL
 1
 4
 Спагетти карбонара
-/photo/recipe/4_recipe_photo.jpg
+/photo/recipe/4_recipe_photo
+image/jpeg
 2
 00:20
 0
@@ -33,7 +36,8 @@ NULL
 1
 5
 Азу по-татарски
-/photo/recipe/5_recipe_photo.jpg
+/photo/recipe/5_recipe_photo
+image/jpeg
 4
 00:30
 0
@@ -41,7 +45,8 @@ NULL
 1
 6
 Сырный суп по-французски с курицей
-/photo/recipe/6_recipe_photo.jpg
+/photo/recipe/6_recipe_photo
+image/jpeg
 4
 01:00
 0
@@ -49,7 +54,8 @@ NULL
 1
 7
 Брусткетта с помидорами
-/photo/recipe/7_recipe_photo.jpg
+/photo/recipe/7_recipe_photo
+image/jpeg
 4
 00:10
 0
@@ -57,7 +63,8 @@ NULL
 1
 8
 Картофель "Айдахо"
-/photo/recipe/8_recipe_photo.jpg
+/photo/recipe/8_recipe_photo
+image/jpeg
 3
 01:00
 0
@@ -65,7 +72,8 @@ NULL
 1
 9
 Домашний рататуй
-/photo/recipe/9_recipe_photo.jpg
+/photo/recipe/9_recipe_photo
+image/jpeg
 4
 00:25
 0
@@ -73,7 +81,8 @@ NULL
 1
 10
 Томатный суп с морепродуктами
-/photo/recipe/10_recipe_photo.jpg
+/photo/recipe/10_recipe_photo
+image/jpeg
 5
 00:30
 0
@@ -81,7 +90,8 @@ NULL
 1
 11
 Гуакамоле
-/photo/recipe/11_recipe_photo.jpg
+/photo/recipe/11_recipe_photo
+image/jpeg
 4
 00:20
 0
@@ -89,7 +99,8 @@ NULL
 1
 12
 Оливье по-советски
-/photo/recipe/12_recipe_photo.jpg
+/photo/recipe/12_recipe_photo
+image/jpeg
 10
 01:00
 0
@@ -97,7 +108,8 @@ NULL
 1
 13
 Солянка
-/photo/recipe/13_recipe_photo.jpg
+/photo/recipe/13_recipe_photo
+image/jpeg
 4
 02:10
 0
@@ -105,7 +117,8 @@ NULL
 1
 14
 Луковый суп
-/photo/recipe/14_recipe_photo.jpg
+/photo/recipe/14_recipe_photo
+image/jpeg
 4
 00:45
 0
@@ -113,7 +126,8 @@ NULL
 1
 15
 Курица в кисло-сладком соусе по китайски
-/photo/recipe/15_recipe_photo.jpg
+/photo/recipe/15_recipe_photo
+image/jpeg
 4
 00:30
 0
@@ -121,7 +135,8 @@ NULL
 1
 16
 Картофель, запеченный в мундире
-/photo/recipe/16_recipe_photo.jpg
+/photo/recipe/16_recipe_photo
+image/jpeg
 4
 02:00
 0
@@ -129,7 +144,8 @@ NULL
 1
 17
 Тонкое тесто для пиццы
-/photo/recipe/17_recipe_photo.jpg
+/photo/recipe/17_recipe_photo
+image/jpeg
 4
 01:00
 0
@@ -137,7 +153,8 @@ NULL
 1
 18
 Греческий салат
-/photo/recipe/18_recipe_photo.jpg
+/photo/recipe/18_recipe_photo
+image/jpeg
 3
 00:10
 0
@@ -145,7 +162,8 @@ NULL
 1
 19
 Треска с помидорами
-/photo/recipe/19_recipe_photo.jpg
+/photo/recipe/19_recipe_photo
+image/jpeg
 6
 00:15
 0
@@ -153,7 +171,8 @@ NULL
 1
 20
 Макароны, запеченные с помидорами, под сыром
-/photo/recipe/20_recipe_photo.jpg
+/photo/recipe/20_recipe_photo
+image/jpeg
 2
 00:20
 0
@@ -161,7 +180,8 @@ NULL
 1
 21
 Ризотто с шампиньонами
-/photo/recipe/21_recipe_photo.jpg
+/photo/recipe/21_recipe_photo
+image/jpeg
 4
 00:40
 0
@@ -169,7 +189,8 @@ NULL
 1
 22
 Хек в зеленом чесночном соусе
-/photo/recipe/22_recipe_photo.jpg
+/photo/recipe/22_recipe_photo
+image/jpeg
 2
 00:30
 0
@@ -177,7 +198,8 @@ NULL
 1
 23
 Тешеная свинина
-/photo/recipe/23_recipe_photo.jpg
+/photo/recipe/23_recipe_photo
+image/jpeg
 4
 02:00
 0
@@ -185,7 +207,8 @@ NULL
 1
 24
 Весенний салат с куриной грудкой
-/photo/recipe/24_recipe_photo.jpg
+/photo/recipe/24_recipe_photo
+image/jpeg
 8
 00:40
 0
@@ -193,7 +216,8 @@ NULL
 1
 25
 Оякодон
-/photo/recipe/25_recipe_photo.jpg
+/photo/recipe/25_recipe_photo
+image/jpeg
 1
 00:30
 0
@@ -201,7 +225,8 @@ NULL
 1
 26
 Салат из красной фасоли с творожным сыром
-/photo/recipe/26_recipe_photo.jpg
+/photo/recipe/26_recipe_photo
+image/jpeg
 4
 00:07
 0
@@ -209,7 +234,8 @@ NULL
 1
 27
 Классичсекая шарлотка
-/photo/recipe/27_recipe_photo.jpg
+/photo/recipe/27_recipe_photo
+image/jpeg
 12
 00:35
 0
@@ -217,7 +243,8 @@ NULL
 1
 28
 Лазанья классическая с мясом
-/photo/recipe/28_recipe_photo.jpg
+/photo/recipe/28_recipe_photo
+image/jpeg
 6
 00:40
 0
@@ -225,7 +252,8 @@ NULL
 1
 29
 Курица "Пикассо"
-/photo/recipe/29_recipe_photo.jpg
+/photo/recipe/29_recipe_photo
+image/jpeg
 4
 00:45
 0
@@ -233,7 +261,8 @@ NULL
 1
 30
 Американские блины
-/photo/recipe/30_recipe_photo.jpg
+/photo/recipe/30_recipe_photo
+image/jpeg
 10
 00:20
 0
