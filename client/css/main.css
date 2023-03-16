@@ -29,12 +29,14 @@ input:focus {
 }
 
 .logo {
+    text-decoration: none;
     color: #fff;
     font-weight: 700;
     font-size: 32px;
 }
 
 .searchbar {
+    margin: 0;
     background-color: #fff;
     max-width: 520px;
     padding: 0.375rem 1rem;
