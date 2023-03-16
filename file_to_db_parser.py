@@ -9,8 +9,29 @@ connection = pymysql.connect(host=HOST,
                              database=DB_Name)
 
 
+def fill_user():
+    with open("db_files/user.txt", 'r', encoding='utf-8') as file:
+        s = True
+        while s:
+            try:
+                s = int(file.readline())
+            except:
+                break
+            login = file.readline().replace('\n', '')
+            password = file.readline().replace('\n', '')
+            mail = file.readline().replace('\n', '')
+            user = {"email": mail,
+                    "password": password,
+                    "is_active": 1,
+                    "is_superuser":0,
+                    "is_verified": 0,
+                    "login": login}
+            req = post('http://127.0.0.1:8000/auth/register', json=dict(user))
+            print(req.content)
+
+
 def fill_recipe(connection):
-    with open("db_files/food.txt", 'r',encoding='utf-8') as file:
+    with open("db_files/food.txt", 'r', encoding='utf-8') as file:
         s = True
         while s:
             try:
@@ -18,13 +39,9 @@ def fill_recipe(connection):
             except:
                 break
             name = file.readline().replace('\n', '')
-            try:
-                phot = open(f'photo/recipe/{s}_recipe_photo.jpg','rb')
-            except:
-                phot = open(f'photo/recipe/1_recipe_photo.jpg', 'rb')
-            files = {'photo':phot}
             pathPhoto = f'../photo/recipe/{s}_recipe_photo.jpg'
-            s = file.readline()
+            file.readline()
+            photo_type = file.readline().replace('\n', '')
             servings = int(file.readline())
             h, m = file.readline().split(':')
             time = int(h) * 60 * 60 + int(m) * 60
@@ -32,18 +49,14 @@ def fill_recipe(connection):
             s = file.readline()
             author = int(file.readline())
             if s:
-                url = f'http://localhost:8000/recipes/?name={name}&servings_cout={servings}&cook_time={time}'
-                post(url,files=files)
-                sql = "insert into Recipe(name,photo,servings_cout,cook_time,rating,author) values (%s,%s,%s,%s,%s,%s)"
+                sql = "insert into Recipe(name,photo,photo_type,servings_cout,cook_time,rating,author) values (%s,%s,%s,%s,%s,%s,%s)"
                 with connection.cursor() as curs:
-
-                    curs.execute(sql, (name, pathPhoto, servings, time, 0, author))
+                    curs.execute(sql, (name, pathPhoto, photo_type, servings, time, 0, author))
                     connection.commit()
 
 
-
 def fill_unit(conn):
-    with open("db_files/CI.txt", 'r',encoding='utf-8') as file:
+    with open("db_files/CI.txt", 'r', encoding='utf-8') as file:
         s = True
         while s:
             try:
@@ -60,8 +73,9 @@ def fill_unit(conn):
                     except:
                         pass
 
+
 def fill_tag(conn):
-    with open("db_files/tag.txt", 'r',encoding='utf-8') as file:
+    with open("db_files/tag.txt", 'r', encoding='utf-8') as file:
         s = True
         while s:
             try:
@@ -76,8 +90,9 @@ def fill_tag(conn):
                     curs.execute(sql, name)
                     conn.commit()
 
+
 def fill_ingredient(conn):
-    with open("db_files/ingridient.txt", 'r',encoding='utf-8') as file:
+    with open("db_files/ingridient.txt", 'r', encoding='utf-8') as file:
         s = True
         while s:
             try:
@@ -97,8 +112,9 @@ def fill_ingredient(conn):
                     curs.execute(sql, (name, kkal, b, z, u, ci))
                     conn.commit()
 
+
 def fill_step(conn):
-    with open("db_files/shag.txt", 'r',encoding='utf-8') as file:
+    with open("db_files/shag.txt", 'r', encoding='utf-8') as file:
         s = True
         while s:
             try:
@@ -108,22 +124,23 @@ def fill_step(conn):
             desc = file.readline().replace('\n', '')
             timer = file.readline()
             try:
-                h,m = timer.split(':')
-                timer = int(h)*60*60+int(m)*60
+                h, m = timer.split(':')
+                timer = int(h) * 60 * 60 + int(m) * 60
             except:
                 timer = None
             path = f'media/{s}_step.mp4'
+            media_type = file.readline().replace('\n', '')
             file.readline()
             recipe_id = int(file.readline())
             if s:
-                sql = "insert into Step (description,timer,media,recipe_ID) VALUES (%s,%s,%s,%s)"
+                sql = "insert into Step (description,timer,media,media_type,recipe_ID) VALUES (%s,%s,%s,%s,%s)"
                 with connection.cursor() as curs:
-
-                    curs.execute(sql, (desc,timer,path,recipe_id))
+                    curs.execute(sql, (desc, timer, path, media_type, recipe_id))
                     conn.commit()
 
+
 def fill_recipe_tag(conn):
-    with open("db_files/food_tag.txt", 'r',encoding='utf-8') as file:
+    with open("db_files/food_tag.txt", 'r', encoding='utf-8') as file:
         s = True
         while s:
             try:
@@ -135,11 +152,12 @@ def fill_recipe_tag(conn):
             if s:
                 sql = "insert into Recipe_tag(recipe_ID,tag_ID) VALUES (%s,%s)"
                 with connection.cursor() as curs:
-                    curs.execute(sql, (rec,tag))
+                    curs.execute(sql, (rec, tag))
                     conn.commit()
 
+
 def fill_recipe_ingredient(conn):
-    with open("db_files/foog_ingrid.txt", 'r',encoding='utf-8') as file:
+    with open("db_files/foog_ingrid.txt", 'r', encoding='utf-8') as file:
         s = True
         while s:
             try:
@@ -149,11 +167,46 @@ def fill_recipe_ingredient(conn):
 
             rec = int(file.readline())
             ingr = int(file.readline())
-            print((rec,ingr))
             coun = float(file.readline())
             if s:
                 sql = f'INSERT INTO Recipe_ingredient (recipe_ID, ingredient_ID, count) VALUES ({rec}, {ingr}, {coun})'
-                print(sql)
+                with connection.cursor() as curs:
+                    curs.execute(sql)
+                    conn.commit()
+
+
+def fill_fav_rec(conn):
+    with open("db_files/favourite_recipe.txt", 'r', encoding='utf-8') as file:
+        s = True
+        while s:
+            try:
+                s = int(file.readline())
+            except:
+                break
+
+            rec = int(file.readline())
+            user = int(file.readline())
+            if s:
+                sql = f'INSERT INTO Favourite_recipe (recipe_ID, user_ID) VALUES ({rec}, {user})'
+                with connection.cursor() as curs:
+                    curs.execute(sql)
+                    conn.commit()
+
+
+def fill_recipe_score(conn):
+    with open("db_files/score_recipe.txt", 'r', encoding='utf-8') as file:
+        s = True
+        while s:
+            try:
+                s = int(file.readline())
+            except:
+                break
+
+            rec = int(file.readline())
+            user = int(file.readline())
+            score = float(file.readline())
+            if s:
+                sql = f'INSERT INTO Score_recipe (recipe_ID, user_ID, score) VALUES ({rec}, {user}, {score})'
                 with connection.cursor() as curs:
                     curs.execute(sql)
                     conn.commit()
@@ -161,9 +214,12 @@ def fill_recipe_ingredient(conn):
 
 while True:
     try:
-        ch = int(input("1 fill recipe\n2 fill unit\n3 fill ingredient\n4 fill step\n5 fill tag\n6 fill recipe tag\n7 fill recipe ingredient\n"))
+        ch = int(input(
+            "0 fill user\n1 fill recipe\n2 fill unit\n3 fill ingredient\n4 fill step\n5 fill tag\n6 fill recipe tag\n7 fill recipe ingredient\n8 fill favourite recipe\n9 fill recipe score\n10 fill all\n"))
     except:
-        ch = 0
+        ch = -5
+    if ch == 0:
+        fill_user()
     if ch == 1:
         fill_recipe(connection)
     if ch == 2:
@@ -178,4 +234,18 @@ while True:
         fill_recipe_tag(connection)
     if ch == 7:
         fill_recipe_ingredient(connection)
-
+    if ch == 8:
+        fill_fav_rec(connection)
+    if ch == 9:
+        fill_recipe_score(connection)
+    if ch == 10:
+        fill_user()
+        fill_recipe(connection)
+        fill_unit(connection)
+        fill_ingredient(connection)
+        fill_step(connection)
+        fill_tag(connection)
+        fill_recipe_tag(connection)
+        fill_recipe_ingredient(connection)
+        fill_fav_rec(connection)
+        fill_recipe_score(connection)
