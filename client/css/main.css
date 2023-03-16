@@ -143,3 +143,28 @@ input, select {
     text-decoration: none;
     color: #144f2b;
 }
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type='number'],
+input[type="number"]:hover,
+input[type="number"]:focus {
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
+.sign {
+    font-size: 36px;
+    font-weight: 700px;
+    margin: 0;
+    padding: 0 9px;
+}
+
+@media screen and (width < 576px) {
+    .btn {
+        padding: 12px 40px;
+    }
+}

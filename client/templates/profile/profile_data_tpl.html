@@ -7,6 +7,7 @@
                 id="firstname"
                 type="text"
                 placeholder="Иван"
+                autocomplete="off"
             /><br />
 
             <label for="lastname">Фамилия</label><br />
@@ -15,18 +16,19 @@
                 id="lastname"
                 type="text"
                 placeholder="Иванов"
+                autocomplete="off"
             /><br />
 
-            <label for="date_of_birth">Дата рождения</label
-            ><br />
+            <label for="date_of_birth">Дата рождения</label><br />
             <input
                 name="date_of_birth"
                 id="date_of_birth"
                 type="date"
+                autocomplete="off"
             /><br />
 
             <label for="sex">Пол</label><br />
-            <select name="sex" id="sex">
+            <select name="sex" id="sex" autocomplete="off">
                 <option>Мужской</option>
                 <option>Женский</option></select
             ><br />
@@ -37,14 +39,13 @@
                 id="email"
                 type="email"
                 placeholder="example@mail.com"
+                autocomplete="off"
             />
         </form>
     </div>
 </div>
 <div class="row center-xs">
     <div class="submit-container col-xs">
-        <button class="btn" form="profile_data" type="button">
-            Сохранить
-        </button>
+        <button class="btn" form="profile_data" type="button">Сохранить</button>
     </div>
 </div>

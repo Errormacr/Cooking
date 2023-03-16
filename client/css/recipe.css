@@ -61,13 +61,6 @@
     padding-left: 8px;
 }
 
-.sign {
-    font-size: 36px;
-    font-weight: 700px;
-    margin: 0;
-    padding: 0 9px;
-}
-
 .servings-block {
     border-radius: 15px;
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
@@ -134,9 +127,5 @@
 
     .recommendations {
         padding-left: 0;
-    }
-
-    .btn {
-        padding: 12px 40px;
     }
 }

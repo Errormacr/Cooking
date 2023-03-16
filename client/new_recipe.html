@@ -44,7 +44,170 @@
                         <h1>Добавление рецепта</h1>
                     </div>
                 </div>
-                
+                <form id="profile_data" action="#">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label for="recipe_photo"
+                                >Фотография готового блюда</label
+                            ><br />
+                            <input
+                                name="recipe_photo"
+                                id="recipe_photo"
+                                type="file"
+                                accept="image/*"
+                                placeholder="Загрузить фото"
+                            /><br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label for="name">Название рецепта</label><br />
+                            <input
+                                name="name"
+                                id="name"
+                                type="text"
+                                placeholder='Торт "Сникерс"'
+                                autocomplete="off"
+                            /><br />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label>Время приготовления</label><br />
+
+                            <div class="square-row row">
+                                <div
+                                    class="col-lg-2 col-md-3 col-sm-4 col-xs-5 start-sm center-xs"
+                                >
+                                    <input
+                                        class="square-input"
+                                        name="hours"
+                                        id="hours"
+                                        type="number"
+                                        min="0"
+                                        max="99"
+                                        value="0"
+                                        step="1"
+                                        autocomplete="off"
+                                    />
+                                    <label>часов</label>
+                                </div>
+                                <div
+                                    class="col-lg-2 col-md-3 col-sm-4 col-xs-5 start-sm center-xs"
+                                >
+                                    <input
+                                        class="square-input"
+                                        name="minutes"
+                                        id="minutes"
+                                        type="number"
+                                        min="0"
+                                        max="59"
+                                        value="0"
+                                        step="1"
+                                        autocomplete="off"
+                                    />
+                                    <label>минут</label>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label>Количество порций</label><br />
+                            <div class="square-row row middle-xs">
+                                <div
+                                    class="col-lg-2 col-md-3 col-sm-4 col-xs-6"
+                                >
+                                    <div class="row middle-xs">
+                                        <label class="sign">-</label>
+                                        <input
+                                            class="square-input"
+                                            name="servings"
+                                            id="servings"
+                                            type="number"
+                                            min="1"
+                                            max="99"
+                                            value="1"
+                                            step="1"
+                                            readonly
+                                            autocomplete="off"
+                                        />
+                                        <label class="sign">+</label>
+                                        <br />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label>Ингредиенты</label><br />
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <input
+                                        class="ingredient-name"
+                                        name="ingredient"
+                                        type="text"
+                                        list="ingredients_list"
+                                        placeholder="Мука"
+                                        autocomplete="off"
+                                    />
+                                    <datalist id="ingredients_list">
+                                        <option value="Мука"></option>
+                                        <option value="Мясо"></option>
+                                        <option value="Манка"></option>
+                                    </datalist>
+                                </div>
+                                <div class="col-sm-5 col-xs-6">
+                                    <input
+                                        class="ingredient-data"
+                                        name="quantity"
+                                        type="number"
+                                        min="0"
+                                        step="0.1"
+                                        autocomplete="off"
+                                        placeholder="Количество"
+                                    />
+                                </div>
+                                <div class="col-sm-5 col-xs-6 col-sm-offset-2">
+                                    <input
+                                        class="ingredient-data"
+                                        name="unit"
+                                        type="text"
+                                        list="units_list"
+                                        placeholder="Ед. изм."
+                                        autocomplete="off"
+                                    />
+                                    <datalist id="units_list">
+                                        <option value="грамм"></option>
+                                        <option value="по вкусу"></option>
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="row start-sm center-xs">
+                                <div class="col-xs">
+                                    <button class="btn">
+                                        Добавить ингредиент
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="row center-xs">
+                    <div class="submit-container col-xs">
+                        <button
+                            class="btn btn-bold"
+                            form="profile_data"
+                            type="button"
+                        >
+                            Опубликовать рецепт
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
         <footer></footer>
