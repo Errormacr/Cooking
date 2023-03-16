@@ -10,7 +10,7 @@ NULL
 2
 Брауни
 /photo/recipe/2_recipe_photo
-image/jpeg
+image/png
 6
 00:40
 0
