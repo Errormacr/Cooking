@@ -48,3 +48,13 @@
 .submit-container {
     margin-bottom: 100px;
 }
+
+.favourite-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 9px 8px 3px;
+    border-radius: 15px;
+    background-color: #fff;
+    z-index: 1;
+}

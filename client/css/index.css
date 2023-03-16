@@ -52,54 +52,8 @@
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.6);
 }
 
-.recipe-card {
-    height: 360px;
-    border-radius: 36px;
-    box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
-    margin-bottom: 45px;
-    transition: 0.5s;
-}
-
-.recipe-card:hover {
-    box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.4);
-}
-
-.recipe-card-img {
-    object-fit: cover;
-    width: 100%;
-    max-height: 70%;
-    border-radius: 36px 36px 0 0;
-}
-
-.recipe-card-name {
-    margin: 0;
-    padding: 10px 30px;
-}
-
-.recipe-card-info {
-    position: relative;
-}
-
-.recipe-card-time-block {
-    position: absolute;
-    top: -60px;
-    right: 7px;
-    background-color: #fff;
-    border-radius: 23px;
-    padding: 7px 25px;
-}
-
-.recipe-card-time {
-    margin: 0;
-}
-
 .recipes {
     padding-bottom: 100px;
-}
-
-.recipe-link {
-    text-decoration: none;
-    color: #144f2b;
 }
 
 /* body {
