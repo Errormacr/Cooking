@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-xs-12">
+        <form id="profile_data" action="#">
+            <label for="firstname">Имя</label><br />
+            <input
+                name="firstname"
+                id="firstname"
+                type="text"
+                placeholder="Иван"
+            /><br />
+
+            <label for="lastname">Фамилия</label><br />
+            <input
+                name="lastname"
+                id="lastname"
+                type="text"
+                placeholder="Иванов"
+            /><br />
+
+            <label for="date_of_birth">Дата рождения</label
+            ><br />
+            <input
+                name="date_of_birth"
+                id="date_of_birth"
+                type="date"
+            /><br />
+
+            <label for="sex">Пол</label><br />
+            <select name="sex" id="sex">
+                <option>Мужской</option>
+                <option>Женский</option></select
+            ><br />
+
+            <label for="email">Почта</label><br />
+            <input
+                name="email"
+                id="email"
+                type="email"
+                placeholder="example@mail.com"
+            />
+        </form>
+    </div>
+</div>
+<div class="row center-xs">
+    <div class="submit-container col-xs">
+        <button class="btn" form="profile_data" type="button">
+            Сохранить
+        </button>
+    </div>
+</div>
