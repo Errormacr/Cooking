@@ -1,7 +1,8 @@
 1
 cat14
 546372
-/photo/user/1_user_photo.jpg
+/photo/user/1_user_photo
+image/jpeg
 Cat
 Black
 17.09.2014
@@ -10,7 +11,8 @@ cat@list.ru
 2
 dog12
 1234
-/photo/user/2_user_photo.jpg
+/photo/user/2_user_photo
+image/jpeg
 Dog
 White
 23.12.2019
@@ -19,7 +21,8 @@ dog@mil.ru
 3
 duck27
 0987
-/photo/user/3_user_photo.jpg
+/photo/user/3_user_photo
+image/jpeg
 Duck
 Yellow
 04.05.2020
