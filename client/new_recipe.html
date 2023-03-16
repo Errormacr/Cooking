@@ -32,7 +32,7 @@
             referrerpolicy="no-referrer"
         ></script>
         <script src="js/main.js"></script>
-        <!-- <script src="js/new_recipe.js"></script> -->
+        <script src="js/new_recipe.js"></script>
         <title>Cooking - Профиль</title>
     </head>
     <body>
@@ -121,7 +121,7 @@
                                     class="col-lg-2 col-md-3 col-sm-4 col-xs-6"
                                 >
                                     <div class="row middle-xs">
-                                        <label class="sign">-</label>
+                                        <label id="decr_servings" onclick="on_decr_serv_click()" class="sign">-</label>
                                         <input
                                             class="square-input"
                                             name="servings"
@@ -134,7 +134,7 @@
                                             readonly
                                             autocomplete="off"
                                         />
-                                        <label class="sign">+</label>
+                                        <label id="incr_servings" onclick="on_incr_serv_click()" class="sign">+</label>
                                         <br />
                                     </div>
                                 </div>
@@ -151,7 +151,7 @@
 
                             <div class="row">
                                 <div class="col-md-5">
-                                    <button class="btn add-btn">
+                                    <button id="add_ingredient" onclick="on_add_ingr_click()" class="btn add-btn" type="button">
                                         Добавить ингредиент
                                     </button>
                                 </div>
@@ -170,7 +170,7 @@
 
                     <div class="row">
                         <div class="col-md-5 col-xs">
-                            <button class="btn add-btn">Добавить шаг</button>
+                            <button id="add_step" onclick="on_add_step_click()" class="btn add-btn" type="button">Добавить шаг</button>
                         </div>
                     </div>
                     <br>
@@ -182,13 +182,13 @@
 
                     <div class="row">
                         <div class="col-md-5 col-xs">
-                            <button class="btn add-btn">Добавить рекомендации</button>
+                            <button id="add_rec" onclick="on_add_rec_click()" class="btn add-btn" type="button">Добавить рекомендации</button>
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-md-5 col-xs">
-                            <button class="btn add-btn">Добавить тег</button>
+                            <button class="btn add-btn" type="button">Добавить тег</button>
                         </div>
                     </div>
                 </form>

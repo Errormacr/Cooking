@@ -28,3 +28,7 @@
 .add-btn {
     width: 100%;
 }
+
+#recommendations {
+    margin-bottom: 0;
+}

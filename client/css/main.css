@@ -180,6 +180,7 @@ input[type="number"]:focus {
     font-weight: 700px;
     margin: 0;
     padding: 0 9px;
+    cursor: pointer;
 }
 
 @media screen and (width < 576px) {
