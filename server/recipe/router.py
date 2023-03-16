@@ -297,7 +297,7 @@ async def create_step(recipe_id: int, user: auth_user = Depends(current_user),
     await session.execute(stmt)
     result = await session.execute(select(Step_bd.c.step_ID))
     r = max([i[0] for i in result.all()])
-    stmt = update(Step_bd).where(Step_bd.c.step_ID == r).values(media=f"/media/{r}_step",
+    stmt = update(Step_bd).where(Step_bd.c.step_ID == r).values(media=f"/media/{r}_media",
                                                                 media_type=step.media.content_type)
     await session.execute(stmt)
     try:
