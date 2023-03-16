@@ -34,7 +34,7 @@ async function fetch_recipes (offset) {
         )
     });
 
-    recipe_cards_container.loadTemplate('templates/recipe_card_tpl.html', recipe_cards, {
+    recipe_cards_container.loadTemplate('templates/index/recipe_card_tpl.html', recipe_cards, {
         append: true
     });
 }
