@@ -44,7 +44,7 @@
                         <h1>Добавление рецепта</h1>
                     </div>
                 </div>
-                <form id="profile_data" action="#">
+                <form id="recipe_data" action="#">
                     <div class="row">
                         <div class="col-xs-12">
                             <label for="recipe_photo"
@@ -144,55 +144,51 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <label>Ингредиенты</label><br />
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <input
-                                        class="ingredient-name"
-                                        name="ingredient"
-                                        type="text"
-                                        list="ingredients_list"
-                                        placeholder="Мука"
-                                        autocomplete="off"
-                                    />
-                                    <datalist id="ingredients_list">
-                                        <option value="Мука"></option>
-                                        <option value="Мясо"></option>
-                                        <option value="Манка"></option>
-                                    </datalist>
-                                </div>
-                                <div class="col-sm-5 col-xs-6">
-                                    <input
-                                        class="ingredient-data"
-                                        name="quantity"
-                                        type="number"
-                                        min="0"
-                                        step="0.1"
-                                        autocomplete="off"
-                                        placeholder="Количество"
-                                    />
-                                </div>
-                                <div class="col-sm-5 col-xs-6 col-sm-offset-2">
-                                    <input
-                                        class="ingredient-data"
-                                        name="unit"
-                                        type="text"
-                                        list="units_list"
-                                        placeholder="Ед. изм."
-                                        autocomplete="off"
-                                    />
-                                    <datalist id="units_list">
-                                        <option value="грамм"></option>
-                                        <option value="по вкусу"></option>
-                                    </datalist>
-                                </div>
+                            
+                            <div id="ingredients_container">
+                        
                             </div>
-                            <div class="row start-sm center-xs">
-                                <div class="col-xs">
-                                    <button class="btn">
+
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <button class="btn add-btn">
                                         Добавить ингредиент
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs">
+                            <h2>Пошаговое приготовление</h2>
+                        </div>
+                    </div>
+                    
+                    <div id="steps_container">
+                        
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 col-xs">
+                            <button class="btn add-btn">Добавить шаг</button>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div id="recommendations_container">
+                        
+                    </div>
+                    
+
+                    <div class="row">
+                        <div class="col-md-5 col-xs">
+                            <button class="btn add-btn">Добавить рекомендации</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-5 col-xs">
+                            <button class="btn add-btn">Добавить тег</button>
                         </div>
                     </div>
                 </form>

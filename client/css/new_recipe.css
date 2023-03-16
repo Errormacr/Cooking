@@ -9,6 +9,10 @@
     margin: 20px 0 40px;
 }
 
+.timer-row {
+    margin-bottom: 40px;
+}
+
 .ingredient-name {
     margin-bottom: 0;
 }
@@ -19,4 +23,8 @@
 
 .submit-container {
     margin: 70px 0 100px;
+}
+
+.add-btn {
+    width: 100%;
 }
