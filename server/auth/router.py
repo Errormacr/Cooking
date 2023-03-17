@@ -21,7 +21,6 @@ async def get_user(user_id: int = None, user_name: str = None, user_email: str =
         query = select(User).where(User.c.id == user_id)
         result = await session.execute(query)
         result = result.all()
-        print(result)
     if result == [] and user_name:
         query = select(User).where(User.c.login == user_name)
         result = await session.execute(query)
@@ -32,9 +31,9 @@ async def get_user(user_id: int = None, user_name: str = None, user_email: str =
         result = result.all()
     if not result:
         raise HTTPException(status_code=404, detail="Can't find user")
-    result = {"id": result[0][0], "login": result[0][1], "photo": result[0][3], "email": result[0][4],
-              "name": result[0][5], "s_name": result[0][6], "b_day": result[0][7], "gender": result[0][8],
-              "is_active": result[0][9], "is_superuser": result[0][10], "is_verified": result[0][11]}
+    result = {"id": result[0][0], "login": result[0][1], "photo": result[0][3], "email": result[0][5],
+              "name": result[0][6], "s_name": result[0][7], "b_day": result[0][8], "gender": result[0][9],
+              "is_active": result[0][10], "is_superuser": result[0][11], "is_verified": result[0][12]}
     return result
 
 
@@ -93,6 +92,7 @@ async def update_user(photo: UploadFile = None, user_req: UserUpdate = Depends()
             raise HTTPException(status_code=404, detail="can't find photo")
         f.write(cont)
         await session.execute(update(User).where(User.c.id == user.id).values(photo_type=photo.content_type))
+        await session.commit()
         f.close()
     if user_req.gender not in ('Ж', 'М'):
         raise HTTPException(status_code=400, detail="gender must be M or Ж")
@@ -137,9 +137,9 @@ async def get_fav_recipe_of_user(user_id: int,
         ans.append({
             "recipe_id": result_recipe[0][0],
             'recipe_desc': {"name": result_recipe[0][1], "photo": result_recipe[0][2],
-                            "servings_cout": result_recipe[0][3], "cook_time": result_recipe[0][4],
-                            "rating": result_recipe[0][5], "recommend": result_recipe[0][6],
-                            "author": result_recipe[0][7]},
+                            "servings_cout": result_recipe[0][4], "cook_time": result_recipe[0][5],
+                            "rating": result_recipe[0][6], "recommend": result_recipe[0][7],
+                            "author": result_recipe[0][8]},
             "tags": tags})
     return ans
 

@@ -185,8 +185,8 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
             ingredients.append((resultIngr[0][1], resultUnit[0][0], j[3]))
     answer = [{
         "recipe_id": rec[0],
-        'recipe_desc': {"name": rec[1], "photo": rec[2], "servings_cout": rec[3], "cook_time": rec[4],
-                        "rating": rec[5], "recommend": rec[6], "author": rec[7]},
+        'recipe_desc': {"name": rec[1], "photo": rec[2],"photo_type":rec[3], "servings_cout": rec[4], "cook_time": rec[5],
+                        "rating": rec[6], "recommend": rec[7], "author": rec[8]},
         'tags': tags[rec[0]],
         'ingredients': ingredients,
         'belky': belky, 'zhiry': zhiry, 'uglevody': uglevody, 'kkal': kkal} for rec in result]
@@ -478,7 +478,7 @@ async def get_steps_of_recipe(recipe_id: int, session: AsyncSession = Depends(ge
     result = result.all()
     if not result:
         raise HTTPException(status_code=404, detail="Can't find steps")
-    result = [{"step_ID": rec[0], "description": rec[1], "timer": rec[2], "media": rec[3], "recipe_ID": rec[4]} for rec
+    result = [{"step_ID": rec[0], "description": rec[1], "timer": rec[2], "media": rec[3], "recipe_ID": rec[5]} for rec
               in result]
     return result
 
