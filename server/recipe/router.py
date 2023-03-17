@@ -117,7 +117,7 @@ async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: i
         tags[i[0]] = tags_rec
     answer = [{
         "recipe_id": rec[0],
-        "name": rec[1], "photo": rec[2],"photo_type":rec[3], "servings_cout": rec[4], "cook_time": rec[5],
+        "name": rec[1], "photo": rec[2], "photo_type": rec[3], "servings_cout": rec[4], "cook_time": rec[5],
         "rating": rec[6], "recommend": rec[7], "author": rec[8],
         'tags': tags[rec[0]]} for rec in result]
     if time_sort == 1:
@@ -481,3 +481,42 @@ async def get_steps_of_recipe(recipe_id: int, session: AsyncSession = Depends(ge
     result = [{"step_ID": rec[0], "description": rec[1], "timer": rec[2], "media": rec[3], "recipe_ID": rec[4]} for rec
               in result]
     return result
+
+
+@router.put("/step/{step_id}", status_code=201, tags=["step"])
+async def update_step_of_recipe(step_id: int, description: str = None,
+                                timer: int = None,
+                                media: UploadFile = None, user: auth_user = Depends(current_user),
+                                session: AsyncSession = Depends(get_async_session)):
+    if not description and not timer and not media:
+        raise HTTPException(status_code=400, detail="Not enough data")
+    recipe_id = await session.execute(select(Step_bd.c.recipe_ID).where(Step_bd.c.step_ID == step_id))
+    recipe_id = recipe_id.all()
+    if not recipe_id:
+        raise HTTPException(status_code=404, detail="Can't find step")
+    recipe_id = recipe_id[0][0]
+    print(recipe_id)
+    author = await session.execute(select(Recipe_bd.c.author).where(Recipe_bd.c.recipe_ID == recipe_id))
+    author = author.all()
+    if not author:
+        raise HTTPException(status_code=404, detail="Can't find recipe")
+    if author[0][0] != user.id:
+        raise HTTPException(status_code=400, detail="User not author of this step")
+    stmt = update(Step_bd).where(Step_bd.c.step_ID == step_id)
+    if description:
+        stmt = stmt.values(description=description)
+    if timer:
+        stmt = stmt.values(timer=timer)
+    if media:
+        media_file = open(f"../media/{step_id}_media", "wb")
+        cont = await media.read()
+        media_file.write(cont)
+        stmt = stmt.values(media_type=media.content_type)
+    try:
+        await session.execute(stmt)
+        await session.commit()
+    except exc.IntegrityError:
+        raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
+    except exc.DataError:
+        raise HTTPException(status_code=400, detail={"Error": "Data error"})
+    return {"decription":description,"timer":timer,"media":media}
