@@ -519,4 +519,4 @@ async def update_step_of_recipe(step_id: int, description: str = None,
         raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
     except exc.DataError:
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
-    return {"decription":description,"timer":timer,"media":media}
+    return {"decription": description, "timer": timer, "media": media}
