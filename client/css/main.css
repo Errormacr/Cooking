@@ -79,6 +79,7 @@ footer {
     border: none;
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
     transition: 0.5s;
+    cursor: pointer;
 }
 
 .btn:hover {
@@ -160,6 +161,7 @@ input[type="file"]::-webkit-file-upload-button {
 }
 input[type="file"] {
     color: transparent;
+    cursor: pointer;
 }
 
 
