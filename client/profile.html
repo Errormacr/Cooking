@@ -32,7 +32,7 @@
             referrerpolicy="no-referrer"
         ></script>
         <script src="js/main.js"></script>
-        <!-- <script src="js/profile.js"></script> -->
+        <script src="js/profile.js"></script>
         <title>Cooking - Профиль</title>
     </head>
     <body>
@@ -56,20 +56,33 @@
                     </div>
                 </div>
                 <div class="row middle-xs center-xs">
-                    <div class="menu col-xs-9">
+                    <div class="menu col-lg-9 col-xs-11">
                         <div class="row middle-xs">
-                            <div class="tab first active col-xs-4">
-                                <p class="tab-name">Профиль</p>
+                            <div
+                                id="profile_data"
+                                onclick="on_prof_data_click()"
+                                class="tab col-xs-4"
+                            >
+                                Профиль
                             </div>
-                            <div class="tab col-xs-4">
-                                <p class="tab-name">Избранные рецепты</p>
+                            <div
+                                id="favourite_recipes"
+                                onclick="on_fav_recipes_click()"
+                                class="tab col-xs-4"
+                            >
+                                Избранные рецепты
                             </div>
-                            <div class="tab last col-xs-4">
-                                <p class="tab-name">Мои рецепты</p>
+                            <div
+                                id="users_recipes"
+                                onclick="on_users_recipes_click()"
+                                class="tab col-xs-4"
+                            >
+                                Мои рецепты
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div id="profile_content_container"></div>
             </div>
         </section>

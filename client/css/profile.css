@@ -1,5 +1,5 @@
 .round-block {
-    background-color: #d9d9d9;
+    /* background-color: #d9d9d9; */
     border-radius: 100%;
     width: 100%;
     padding-top: 100%;
@@ -18,31 +18,17 @@
 }
 
 .menu {
-    padding-bottom: 40px;
+    margin-bottom: 40px;
+    padding: 18px 0;
+    background-color: #d9d9d9;
+    border-radius: 15px;
 }
 
 .tab {
-    background-color: #d9d9d9;
-    padding: 18px 0;
-    border-right: #9d9d9d solid 3px;
-}
-
-.first {
-    border-radius: 15px 0 0 15px;
-}
-
-.last {
-    border-radius: 0 15px 15px 0;
-    border-right: none;
-}
-
-.active {
-    background-color: #61b030;
-    color: #fff;
-}
-
-.tab-name {
-    margin: 0;
+    width: 100%;
+    margin-right: -6px;
+    display: inline-block;
+    cursor: pointer;
 }
 
 .submit-container {
