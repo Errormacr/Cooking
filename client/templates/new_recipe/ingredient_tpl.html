@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-xs-12">
+        <input
+            class="ingredient-name"
+            name="ingredient"
+            type="text"
+            list="ingredients_list"
+            placeholder="Мука"
+            autocomplete="off"
+        />
+        <datalist id="ingredients_list">
+            <option value="Мука"></option>
+            <option value="Мясо"></option>
+            <option value="Манка"></option>
+        </datalist>
+    </div>
+    <div class="col-sm-5 col-xs-6">
+        <input
+            class="ingredient-data"
+            name="quantity"
+            type="number"
+            min="0"
+            step="0.1"
+            autocomplete="off"
+            placeholder="Количество"
+        />
+    </div>
+    <div class="col-sm-5 col-xs-6 col-sm-offset-2">
+        <input
+            class="ingredient-data"
+            name="unit"
+            type="text"
+            list="units_list"
+            placeholder="Ед. изм."
+            autocomplete="off"
+        />
+        <datalist id="units_list">
+            <option value="грамм"></option>
+            <option value="по вкусу"></option>
+        </datalist>
+    </div>
+</div>

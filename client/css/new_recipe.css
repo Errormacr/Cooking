@@ -1,0 +1,34 @@
+.square-input {
+    margin: 0;
+    width: 40%;
+    padding: 10% 5%;
+    text-align: center;
+}
+
+.square-row {
+    margin: 20px 0 40px;
+}
+
+.timer-row {
+    margin-bottom: 40px;
+}
+
+.ingredient-name {
+    margin-bottom: 0;
+}
+
+.ingredient-data {
+    padding: calc(1% * 12/5) calc(3% * 12/5);
+}
+
+.submit-container {
+    margin: 70px 0 100px;
+}
+
+.add-btn {
+    width: 100%;
+}
+
+#recommendations {
+    margin-bottom: 0;
+}

@@ -19,6 +19,13 @@ h1 {
     font-weight: 400;
 }
 
+h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #000;
+    margin: 70px 0 40px;
+}
+
 input:focus {
     outline: none;
 }
@@ -72,6 +79,7 @@ footer {
     border: none;
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
     transition: 0.5s;
+    cursor: pointer;
 }
 
 .btn:hover {
@@ -86,7 +94,7 @@ label {
     color: #000;
 }
 
-input, select {
+input, select, textarea {
     box-sizing: border-box;
     width: 100%;
     margin: 20px 0 40px;
@@ -95,6 +103,10 @@ input, select {
     background-color: #f2f2f2;
     padding: 1% 3%;
     outline: none;
+}
+
+textarea {
+    resize:vertical;
 }
 
 .recipe-card {
@@ -142,4 +154,39 @@ input, select {
 .recipe-link {
     text-decoration: none;
     color: #144f2b;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    visibility: hidden;
+}
+input[type="file"] {
+    color: transparent;
+    cursor: pointer;
+}
+
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type='number'],
+input[type="number"]:hover,
+input[type="number"]:focus {
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
+.sign {
+    font-size: 36px;
+    font-weight: 700px;
+    margin: 0;
+    padding: 0 9px;
+    cursor: pointer;
+}
+
+@media screen and (width < 576px) {
+    .btn {
+        padding: 12px 40px;
+    }
 }
