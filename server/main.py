@@ -17,7 +17,7 @@ from utils import fastapi_users
 middleware = [
     Middleware(
         CORSMiddleware,
-        allow_origins=['*'],
+        allow_origins=['http://127.0.0.1:5500','http://cooking.ru.swtest.ru'],
         allow_credentials=True,
         allow_methods=['*'],
         allow_headers=['*']

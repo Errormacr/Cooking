@@ -117,8 +117,8 @@ async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: i
         tags[i[0]] = tags_rec
     answer = [{
         "recipe_id": rec[0],
-        "name": rec[1], "photo": rec[2], "servings_cout": rec[3], "cook_time": rec[4],
-        "rating": rec[5], "recommend": rec[6], "author": rec[7],
+        "name": rec[1], "photo": rec[2],"photo_type":rec[3], "servings_cout": rec[4], "cook_time": rec[5],
+        "rating": rec[6], "recommend": rec[7], "author": rec[8],
         'tags': tags[rec[0]]} for rec in result]
     if time_sort == 1:
         answer = sorted(answer, key=itemgetter('cook_time'))
