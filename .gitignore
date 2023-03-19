@@ -1,2 +1,7 @@
 .idea
 server/config.ini
+.env_docker
+docker-compose.yml
+server/.env
+docker/upgrade.sh
+server/__pycache__/config.cpython-310.pyc

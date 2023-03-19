@@ -1,4 +1,4 @@
-const server_url = 'https://dbd9-178-141-127-143.eu.ngrok.io/';
+const server_url = 'http://localhost:8000/';
 
 var offset = 0;
 
@@ -18,8 +18,8 @@ async function fetch_recipes (offset) {
 
     recipes.forEach(recipe => {
         var time = Number(recipe['cook_time']);
-        var hours = Math.floor(time / 3600);
-        var minutes = time % 3600 / 60;
+        var hours = Math.floor(time / 60);
+        var minutes = time % 60;
         
         time = (hours != 0 ? hours + ' ч' : "") + " " + (minutes != 0 ? minutes + ' мин' : "");
 
