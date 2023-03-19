@@ -65,4 +65,16 @@ function on_more_btn_click () {
 
 $('document').ready(function() {
     $('#more_btn').click();
+
+    $('#sort_btn').click(function(event) {
+        event.preventDefault();
+        if ($('.sort-menu').css('display') == 'none') {
+            $('.sort-menu').css('display', 'block');
+            $('.sort-menu').animate({opacity: 1}, 300);
+        } else {
+            $('.sort-menu').animate({opacity: 0}, 300, function() {
+                $('.sort-menu').css('display', 'none');
+            });
+        }
+    })
 });
