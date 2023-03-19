@@ -77,23 +77,28 @@
                         </a>
                     </div>
                 </div>
-                <div class="sort-menu-container row end-xs">
+                <div class="menu-container row end-xs">
                     <div class="sort-menu-block col-lg-4 col-md-5 start-xs">
                         <div class="sort-menu start-xs">
                             <p>Сортировать по:</p>
-                            <ul>
-                                <li>названию</li>
-                                <li>рейтингу</li>
-                                <li>времени приготовления</li> 
+                            <ul id="sortings">
+                                <li id="name_sort">названию</li>
+                                <li id="score_sort">рейтингу</li>
+                                <li id="time_sort">времени приготовления</li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div id="recipe-cards" class="row start-md center-xs">
-                </div>
+                <div id="recipe-cards" class="row start-md center-xs"></div>
                 <div class="row middle-xs center-xs">
                     <div class="col-xs">
-                        <button id="more_btn" onclick="on_more_btn_click()" class="btn">Читать еще</button>
+                        <button
+                            id="more_btn"
+                            onclick="on_more_btn_click()"
+                            class="btn"
+                        >
+                            Читать еще
+                        </button>
                     </div>
                 </div>
             </div>

@@ -3,12 +3,13 @@ const server_url = 'http://localhost:8000/';
 var params = new Map();
 params.set('offset', 0);
 params.set('name_sort', 0);
-params.set('score_sort', 1);
+params.set('score_sort', 0);
 params.set('time_sort', 0);
 
+var conditions = [' ↓', '  ', ' ↑']
 
 async function fetch_recipes (params) {
-    query = server_url + 'recipes/get/?limit=6';
+    let query = server_url + 'recipes/get/?limit=6';
 
     for (const [param, value] of params) {
         query += '&' + param + '=' + value;
@@ -23,22 +24,22 @@ async function fetch_recipes (params) {
 
     console.log(recipes);
 
-    var recipe_cards_container = $('#recipe-cards');
+    const recipe_cards_container = $('#recipe-cards');
 
-    var recipe_cards = [];
+    let recipe_cards = [];
 
     if (recipes['detail']) {
         $('#more_btn').hide();
     }
 
     recipes.forEach(recipe => {
-        var time = Number(recipe['cook_time']);
-        var hours = Math.floor(time / 3600);
-        var minutes = time % 3600 / 60;
+        let time = Number(recipe['cook_time']);
+        const hours = Math.floor(time / 3600);
+        const minutes = time % 3600 / 60;
         
         time = (hours != 0 ? hours + ' ч' : "") + " " + (minutes != 0 ? minutes + ' мин' : "");
 
-        var img_src = server_url + 'recipes/photo/' + recipe['recipe_id'];
+        const img_src = server_url + 'recipes/photo/' + recipe['recipe_id'];
 
         recipe_cards.push(
             {
@@ -60,7 +61,7 @@ async function fetch_recipes (params) {
 
 function on_more_btn_click () {
     fetch_recipes(params);
-    params.offset += 6;
+    params.set('offset', params.get('offset') + 6);
 }
 
 $('document').ready(function() {
@@ -76,5 +77,31 @@ $('document').ready(function() {
                 $('.sort-menu').css('display', 'none');
             });
         }
+    })
+
+
+    $('#sortings > li').click(function() {
+        sorting = $(this).attr('id');
+
+        let value = params.get(sorting);
+
+        if (value == 1)  {
+            value = -1;
+        } else {
+            value += 1;
+        }
+
+        params.set('name_sort', 0);
+        params.set('score_sort', 0);
+        params.set('time_sort', 0);
+
+        $('#name_sort').html($('#name_sort').html().slice(0, -1) + conditions[1]);
+        $('#score_sort').html($('#score_sort').html().slice(0, -1) + conditions[1]);
+        $('#time_sort').html($('#time_sort').html().slice(0, -1) + conditions[1]);
+
+        params.set(sorting, value);
+
+        $(this).html($(this).html().slice(0, -1) + conditions[value + 1]);
+        console.log(params.get(sorting));
     })
 });
