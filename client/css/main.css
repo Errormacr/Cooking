@@ -177,6 +177,9 @@ input[type="number"]:focus {
     -moz-appearance: textfield;
 }
 
+:focus {outline: none !important;}
+::-moz-focus-inner {border: 0px !important;}
+
 .sign {
     font-size: 36px;
     font-weight: 700px;
