@@ -8,4 +8,3 @@ PASS = os.environ.get('PASS')
 DB_Name = os.environ.get('DB_Name')
 SECRET = os.environ.get('SECRET')
 KEY = os.environ.get('DEV')
-

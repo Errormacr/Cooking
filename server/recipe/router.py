@@ -51,6 +51,18 @@ async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: i
         query = query.where(Recipe_bd.c.cook_time > more_cook_time)
     if name is not None:
         query = query.where(Recipe_bd.c.name.like("%" + name + "%"))
+    if time_sort == 1:
+        query = query.order_by(Recipe_bd.c.cook_time)
+    elif time_sort == -1:
+        query = query.order_by(Recipe_bd.c.cook_time.desc())
+    elif score_sort == 1:
+        query = query.order_by(Recipe_bd.c.rating)
+    elif score_sort == -1:
+        query = query.order_by(Recipe_bd.c.rating.desc())
+    elif name_sort == 1:
+        query = query.order_by(Recipe_bd.c.name)
+    elif name_sort == -1:
+        query = query.order_by(Recipe_bd.c.name.desc())
     query = query.offset(offset).limit(limit)
     result_rec = await session.execute(query)
     result_rec = result_rec.all()
@@ -120,18 +132,7 @@ async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: i
         "name": rec[1], "photo": rec[2], "photo_type": rec[3], "servings_cout": rec[4], "cook_time": rec[5],
         "rating": rec[6], "recommend": rec[7], "author": rec[8],
         'tags': tags[rec[0]]} for rec in result]
-    if time_sort == 1:
-        answer = sorted(answer, key=itemgetter('cook_time'))
-    elif time_sort == -1:
-        answer = sorted(answer, key=itemgetter('cook_time'), reverse=True)
-    elif score_sort == 1:
-        answer = sorted(answer, key=itemgetter('rating'))
-    elif score_sort == -1:
-        answer = sorted(answer, key=itemgetter('rating'), reverse=True)
-    elif name_sort == 1:
-        answer = sorted(answer, key=itemgetter('name'))
-    elif name_sort == -1:
-        answer = sorted(answer, key=itemgetter('name'), reverse=True)
+
     return answer
 
 
@@ -185,7 +186,8 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
             ingredients.append((resultIngr[0][1], resultUnit[0][0], j[3]))
     answer = [{
         "recipe_id": rec[0],
-        'recipe_desc': {"name": rec[1], "photo": rec[2],"photo_type":rec[3], "servings_cout": rec[4], "cook_time": rec[5],
+        'recipe_desc': {"name": rec[1], "photo": rec[2], "photo_type": rec[3], "servings_cout": rec[4],
+                        "cook_time": rec[5],
                         "rating": rec[6], "recommend": rec[7], "author": rec[8]},
         'tags': tags[rec[0]],
         'ingredients': ingredients,
