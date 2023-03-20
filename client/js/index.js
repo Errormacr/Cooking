@@ -108,5 +108,7 @@ $('document').ready(function() {
         params.set("offset", 6);
 
         console.log(params.get(sorting));
+
+        $('#more_btn').show();
     })
 });
