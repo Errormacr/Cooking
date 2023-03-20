@@ -45,7 +45,8 @@ async function fetch_recipes (params, append) {
             {
                 name: recipe['name'],
                 time: time,
-                img_src: img_src
+                img_src: img_src,
+                href: 'recipe.html?id=' + recipe['recipe_id']
             }
         )
     });
