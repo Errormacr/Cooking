@@ -8,7 +8,7 @@ params.set('time_sort', 0);
 
 var conditions = [' ↓', '  ', ' ↑']
 
-async function fetch_recipes (params) {
+async function fetch_recipes (params, append) {
     let query = server_url + 'recipes/get/?limit=6';
 
     for (const [param, value] of params) {
@@ -51,7 +51,7 @@ async function fetch_recipes (params) {
     });
 
     recipe_cards_container.loadTemplate('templates/index/recipe_card_tpl.html', recipe_cards, {
-        append: true
+        append: append
     });
 
     if (recipes.length < 6) {
@@ -60,7 +60,7 @@ async function fetch_recipes (params) {
 }
 
 function on_more_btn_click () {
-    fetch_recipes(params);
+    fetch_recipes(params, true);
     params.set('offset', params.get('offset') + 6);
 }
 
@@ -94,14 +94,19 @@ $('document').ready(function() {
         params.set('name_sort', 0);
         params.set('score_sort', 0);
         params.set('time_sort', 0);
-
-        $('#name_sort').html($('#name_sort').html().slice(0, -1) + conditions[1]);
-        $('#score_sort').html($('#score_sort').html().slice(0, -1) + conditions[1]);
-        $('#time_sort').html($('#time_sort').html().slice(0, -1) + conditions[1]);
+        
+        $('#sortings > li').each(function(index, element) {
+            $(element).html($(element).html().slice(0, -1) + conditions[1]);
+        })
 
         params.set(sorting, value);
 
         $(this).html($(this).html().slice(0, -1) + conditions[value + 1]);
+
+        params.set("offset", 0);
+        fetch_recipes(params, false);
+        params.set("offset", 6);
+
         console.log(params.get(sorting));
     })
 });
