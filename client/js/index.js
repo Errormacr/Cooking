@@ -183,12 +183,12 @@ async function fetch_filters () {
         postfix: ' мин',
         grid: true,
         onStart: function (data) {
-            params.set('more_cook_time', data.min * 60);
-            params.set('less_cook_time', data.max * 60);
+            params.set('more_cook_time', (data.min - 1) * 60);
+            params.set('less_cook_time', (data.max + 1) * 60);
         },
         onFinish: function (data) {
-            params.set('more_cook_time', data.from * 60);
-            params.set('less_cook_time', data.to * 60);
+            params.set('more_cook_time', (data.from - 1) * 60);
+            params.set('less_cook_time', (data.to + 1) * 60);
             reload_recipes();
         }
     });
@@ -217,6 +217,12 @@ function reload_recipes() {
     params.set("offset", 6);
 }
 
+function close_menus() {
+    $('.menu-block > div').each(function(index, element) {
+        $(element).css('display', 'none');
+    })
+}
+
 var conditions = [' ↓', '  ', ' ↑']
 
 $('document').ready(function() {
@@ -227,7 +233,9 @@ $('document').ready(function() {
 
     $('#filter_btn').click(function(event) {
         event.preventDefault();
+
         if ($('.filter-menu').css('display') == 'none') {
+            close_menus();
             $('.filter-menu').css('display', 'block');
             $('.filter-menu').animate({opacity: 1}, 300);
         } else {
@@ -239,7 +247,9 @@ $('document').ready(function() {
     
     $('#sort_btn').click(function(event) {
         event.preventDefault();
+
         if ($('.sort-menu').css('display') == 'none') {
+            close_menus();
             $('.sort-menu').css('display', 'block');
             $('.sort-menu').animate({opacity: 1}, 300);
         } else {
