@@ -27,7 +27,7 @@ async def create_ingredient(ingredient: Ingredient_create, key: str,
     except exc.DataError:
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
     except exc.IntegrityError:
-        raise HTTPException(status_code=400, detail={"Error": "Diplicate"})
+        raise HTTPException(status_code=400, detail={"Error": "Diplicate or other"})
     return ingredient
 
 

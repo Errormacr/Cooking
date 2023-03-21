@@ -2,7 +2,7 @@ from utils import fastapi_users
 from auth.db import get_async_session, User as auth_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, Header, Response, Form, Request
-from sqlalchemy import select, insert, update, delete, exc
+from sqlalchemy import select, insert, update, delete, exc, func
 from operator import itemgetter
 import json
 import datetime
@@ -18,7 +18,7 @@ current_user = fastapi_users.current_user()
 
 @router.post("/get/", tags=["recipe"])
 async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: int = None, time_sort: int = None,
-                     ingredients: List[int] = None, author: int = None,
+                     ingredients: List[int] = None, author: int = None,ot_raiting: int = None, do_raiting: int = None,
                      ot_kkal: float = None, ot_belki: float = None, ot_zhiry: float = None, ot_uglevody: float = None,
                      do_kkal: float = None, do_belki: float = None, do_zhiry: float = None, do_uglevody: float = None,
                      author_name: str = None,
@@ -45,6 +45,10 @@ async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: i
         query = query.where(Recipe_bd.c.author.in_(result))
     if author is not None:
         query = query.where(Recipe_bd.c.author == author)
+    if ot_raiting:
+        query = query.where(Recipe_bd.c.rating >= ot_raiting)
+    if do_raiting:
+        query = query.where(Recipe_bd.c.rating <= do_raiting)
     if less_cook_time is not None:
         query = query.where(Recipe_bd.c.cook_time < less_cook_time)
     if more_cook_time is not None:
