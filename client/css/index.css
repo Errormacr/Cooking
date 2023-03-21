@@ -56,9 +56,25 @@
     position: relative;
 }
 
-.sort-menu-block {
+.menu-block {
+    width: 100%;
     position: absolute;
     z-index: 10;
+}
+
+.filter-menu {
+    box-sizing: border-box;
+    background-color: #fff;
+    width: 100%;
+    box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
+    padding: 20px 20px 10px;
+    border-radius: 15px;
+    /* opacity: 0;
+    display: none; */
+}
+
+.filter-menu p {
+    margin: 10px 0;
 }
 
 .sort-menu {
@@ -68,7 +84,6 @@
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
     padding: 20px 20px 10px;
     border-radius: 15px;
-    /* position: relative; */
     opacity: 0;
     display: none;
 }
@@ -106,6 +121,19 @@
 
 .recipes {
     padding-bottom: 100px;
+}
+
+.irs--flat .irs-handle>i:first-child {
+    background-color: #61b030!important;
+}
+.irs--flat .irs-bar {
+    background-color: #61b030!important;
+}
+.irs--flat .irs-from, .irs--flat .irs-to, .irs--flat .irs-single {
+    background-color: #61b030!important;
+}
+.irs--flat .irs-from:before, .irs--flat .irs-to:before, .irs--flat .irs-single:before {
+    border-top-color: #61b030!important;
 }
 
 /* body {

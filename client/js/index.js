@@ -15,7 +15,7 @@ async function fetch_recipes (params, append) {
 
     const response = await fetch(query, {
         method: 'POST',
-        credentials: "include"
+        credentials: 'include'
     });
     console.log(response);
     const recipes = await response.json();
@@ -63,7 +63,7 @@ async function fetch_tags() {
 
     const response = await fetch(query, {
         method: 'GET',
-        credentials: "include"
+        credentials: 'include'
     });
     console.log(response);
     const tags = await response.json();
@@ -77,7 +77,7 @@ async function fetch_tags() {
     tags.forEach(tag => {
         tags_data.push(
             {
-                tag: '#' + tag["name"],
+                tag: '#' + tag['name'],
             }
         )
     });
@@ -92,9 +92,135 @@ function on_more_btn_click () {
     params.set('offset', params.get('offset') + 6);
 }
 
+async function fetch_filters () {
+    let query = server_url + 'recipesmin_max';
+
+    const response = await fetch(query, {
+        method: 'GET',
+        credentials: 'include'
+    });
+    console.log(response);
+    const limits = await response.json();
+
+    console.log(limits);
+
+    $('#kKal_filter').ionRangeSlider({
+        type: "double",
+        min: limits['min kkal'],
+        max: limits['max kkal'],
+        postfix: ' кКал',
+        grid: true,
+        step: 0.01,
+        onStart: function (data) {
+            params.set('ot_kkal', data.min);
+            params.set('do_kkal', data.max);
+        },
+        onFinish: function (data) {
+            params.set('ot_kkal', data.from);
+            params.set('do_kkal', data.to);
+            reload_recipes();
+        }
+    });
+
+    $('#belki_filter').ionRangeSlider({
+        type: "double",
+        min: limits['min belki'],
+        max: limits['max belki'],
+        postfix: ' г',
+        grid: true,
+        step: 0.01,
+        onStart: function (data) {
+            params.set('ot_belki', data.min);
+            params.set('do_belki', data.max);
+        },
+        onFinish: function (data) {
+            params.set('ot_belki', data.from);
+            params.set('do_belki', data.to);
+            reload_recipes();
+        }
+    });
+
+    $('#zhiry_filter').ionRangeSlider({
+        type: "double",
+        min: limits['min zhyri'],
+        max: limits['max zhyri'],
+        postfix: ' г',
+        grid: true,
+        step: 0.01,
+        onStart: function (data) {
+            params.set('ot_zhiry', data.min);
+            params.set('do_zhiry', data.max);
+        },
+        onFinish: function (data) {
+            params.set('ot_zhiry', data.from);
+            params.set('do_zhiry', data.to);
+            reload_recipes();
+        }
+    });
+
+    $('#uglevody_filter').ionRangeSlider({
+        type: "double",
+        min: limits['min uglevody'],
+        max: limits['max uglevody'],
+        postfix: ' г',
+        grid: true,
+        step: 0.01,
+        onStart: function (data) {
+            params.set('ot_uglevody', data.min);
+            params.set('do_uglevody', data.max);
+        },
+        onFinish: function (data) {
+            params.set('ot_uglevody', data.from);
+            params.set('do_uglevody', data.to);
+            reload_recipes();
+        }
+    });
+
+    $('#time_filter').ionRangeSlider({
+        type: "double",
+        min: limits['min time'] / 60,
+        max: limits['max time'] / 60,
+        postfix: ' мин',
+        grid: true,
+        onStart: function (data) {
+            params.set('more_cook_time', data.min * 60);
+            params.set('less_cook_time', data.max * 60);
+        },
+        onFinish: function (data) {
+            params.set('more_cook_time', data.from * 60);
+            params.set('less_cook_time', data.to * 60);
+            reload_recipes();
+        }
+    });
+
+    $('#rating_filter').ionRangeSlider({
+        type: "double",
+        min: limits['min rating'],
+        max: limits['max rating'],
+        grid: true,
+        onStart: function (data) {
+            params.set('ot_raiting', data.min);
+            params.set('do_raiting', data.max);
+        },
+        onFinish: function (data) {
+            params.set('ot_raiting', data.from);
+            params.set('do_raiting', data.to);
+            reload_recipes();
+        }
+    });
+}
+
+function reload_recipes() {
+    $('#more_btn').show();
+    params.set("offset", 0);
+    fetch_recipes(params, false);
+    params.set("offset", 6);
+}
+
 var conditions = [' ↓', '  ', ' ↑']
 
 $('document').ready(function() {
+    fetch_filters();
     fetch_tags();
     
     $('#more_btn').click();
@@ -135,12 +261,8 @@ $('document').ready(function() {
 
         $(this).html($(this).html().slice(0, -1) + conditions[value + 1]);
 
-        params.set("offset", 0);
-        fetch_recipes(params, false);
-        params.set("offset", 6);
+        reload_recipes();
 
         console.log(params.get(sorting));
-
-        $('#more_btn').show();
     })
 });
