@@ -177,12 +177,46 @@ input[type="number"]:focus {
     -moz-appearance: textfield;
 }
 
+:focus {outline: none !important;}
+::-moz-focus-inner {border: 0px !important;}
+
 .sign {
     font-size: 36px;
     font-weight: 700px;
     margin: 0;
     padding: 0 9px;
     cursor: pointer;
+}
+
+.horizontal-scroll {
+    padding: 30px 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.tag-block {
+    display: inline-block;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
+    transition: 0.5s;
+    padding: 10px 30px;
+    margin: 10px 20px;
+    z-index: 1;
+}
+
+.tag-block:hover {
+    box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.6);
+}
+
+.tag {
+    margin: 0;
 }
 
 @media screen and (width < 576px) {

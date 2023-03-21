@@ -6,8 +6,6 @@ params.set('name_sort', 0);
 params.set('score_sort', 0);
 params.set('time_sort', 0);
 
-var conditions = [' ↓', '  ', ' ↑']
-
 async function fetch_recipes (params, append) {
     let query = server_url + 'recipes/get/?limit=6';
 
@@ -45,7 +43,8 @@ async function fetch_recipes (params, append) {
             {
                 name: recipe['name'],
                 time: time,
-                img_src: img_src
+                img_src: img_src,
+                href: 'recipe.html?id=' + recipe['recipe_id']
             }
         )
     });
@@ -59,12 +58,45 @@ async function fetch_recipes (params, append) {
     }
 }
 
+async function fetch_tags() {
+    let query = server_url + 'tag';
+
+    const response = await fetch(query, {
+        method: 'GET',
+        credentials: "include"
+    });
+    console.log(response);
+    const tags = await response.json();
+
+    console.log(tags);
+
+    const tags_container = $('#tags_container');
+
+    let tags_data = [];
+
+    tags.forEach(tag => {
+        tags_data.push(
+            {
+                tag: '#' + tag["name"],
+            }
+        )
+    });
+
+    tags_container.loadTemplate('templates/main/tag_tpl.html', tags_data, {
+        append: true
+    });
+}
+
 function on_more_btn_click () {
     fetch_recipes(params, true);
     params.set('offset', params.get('offset') + 6);
 }
 
+var conditions = [' ↓', '  ', ' ↑']
+
 $('document').ready(function() {
+    fetch_tags();
+    
     $('#more_btn').click();
 
     $('#sort_btn').click(function(event) {
@@ -108,5 +140,7 @@ $('document').ready(function() {
         params.set("offset", 6);
 
         console.log(params.get(sorting));
+
+        $('#more_btn').show();
     })
 });
