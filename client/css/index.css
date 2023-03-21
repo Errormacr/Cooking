@@ -41,14 +41,22 @@
     width: 100%;
 }
 
-.sort-icon {
+.menu-btns-container a{
+    text-decoration: none;
+}
+
+.menu-btn {
+    margin-left: 10px;
+    display: inline-block;
+    background-color: #fff;
+    padding: 14px 14px 8px;
     margin-bottom: 40px;
     border-radius: 15px;
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
     transition: 0.5s;
 }
 
-.sort-icon:hover {
+.menu-btn:hover {
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.6);
 }
 
@@ -69,8 +77,8 @@
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
     padding: 20px 20px 10px;
     border-radius: 15px;
-    /* opacity: 0;
-    display: none; */
+    opacity: 0;
+    display: none;
 }
 
 .filter-menu p {

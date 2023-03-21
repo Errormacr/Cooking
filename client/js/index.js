@@ -225,6 +225,18 @@ $('document').ready(function() {
     
     $('#more_btn').click();
 
+    $('#filter_btn').click(function(event) {
+        event.preventDefault();
+        if ($('.filter-menu').css('display') == 'none') {
+            $('.filter-menu').css('display', 'block');
+            $('.filter-menu').animate({opacity: 1}, 300);
+        } else {
+            $('.filter-menu').animate({opacity: 0}, 300, function() {
+                $('.filter-menu').css('display', 'none');
+            });
+        }
+    })
+    
     $('#sort_btn').click(function(event) {
         event.preventDefault();
         if ($('.sort-menu').css('display') == 'none') {

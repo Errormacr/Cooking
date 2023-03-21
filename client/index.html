@@ -89,13 +89,22 @@
                     </div>
                 </div>
                 <div class="row middle-xs end-xs">
-                    <div class="col-xs end-xs">
+                    <div class="menu-btns-container col-xs end-xs">
+                        <a id="filter_btn" href="#">
+                            <div class="menu-btn">
+                                <img
+                                    src="img/index/filter_icon.png"
+                                    alt="filter_icon"
+                                />
+                            </div>
+                        </a>
                         <a id="sort_btn" href="#">
-                            <img
-                                class="sort-icon"
-                                src="img/index/sort_icon.png"
-                                alt="sort_icon"
-                            />
+                            <div class="menu-btn">
+                                <img
+                                    src="img/index/sort_icon.svg"
+                                    alt="sort_icon"
+                                />
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -103,26 +112,50 @@
                     <div class="menu-block col-lg-4 col-md-5 start-xs">
                         <div class="filter-menu start-xs">
                             <p>кКал:</p>
-                            <input id="kKal_filter" type="text" class="js-range-slider"/>
+                            <input
+                                id="kKal_filter"
+                                type="text"
+                                class="js-range-slider"
+                            />
                             <p>Белки:</p>
-                            <input id="belki_filter" type="text" class="js-range-slider"/>
+                            <input
+                                id="belki_filter"
+                                type="text"
+                                class="js-range-slider"
+                            />
                             <p>Жиры:</p>
-                            <input id="zhiry_filter" type="text" class="js-range-slider"/>
+                            <input
+                                id="zhiry_filter"
+                                type="text"
+                                class="js-range-slider"
+                            />
                             <p>Углеводы:</p>
-                            <input id="uglevody_filter" type="text" class="js-range-slider"/>
+                            <input
+                                id="uglevody_filter"
+                                type="text"
+                                class="js-range-slider"
+                            />
                             <p>Время приготовления:</p>
-                            <input id="time_filter" type="text" class="js-range-slider"/>
+                            <input
+                                id="time_filter"
+                                type="text"
+                                class="js-range-slider"
+                            />
                             <p>Рейтинг:</p>
-                            <input id="rating_filter" type="text" class="js-range-slider"/>
+                            <input
+                                id="rating_filter"
+                                type="text"
+                                class="js-range-slider"
+                            />
                         </div>
                     </div>
                     <div class="menu-block col-lg-4 col-md-5 start-xs">
                         <div class="sort-menu start-xs">
                             <p>Сортировать по:</p>
                             <ul id="sortings">
-                                <li id="name_sort">названию </li>
-                                <li id="score_sort">рейтингу </li>
-                                <li id="time_sort">времени приготовления </li>
+                                <li id="name_sort">названию</li>
+                                <li id="score_sort">рейтингу</li>
+                                <li id="time_sort">времени приготовления</li>
                             </ul>
                         </div>
                     </div>
