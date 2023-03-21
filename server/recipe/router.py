@@ -18,7 +18,7 @@ current_user = fastapi_users.current_user()
 
 @router.post("/get/", tags=["recipe"])
 async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: int = None, time_sort: int = None,
-                     ingredients: List[int] = None, author: int = None,ot_raiting: int = None, do_raiting: int = None,
+                     ingredients: List[int] = None, author: int = None, ot_raiting: int = None, do_raiting: int = None,
                      ot_kkal: float = None, ot_belki: float = None, ot_zhiry: float = None, ot_uglevody: float = None,
                      do_kkal: float = None, do_belki: float = None, do_zhiry: float = None, do_uglevody: float = None,
                      author_name: str = None,
@@ -526,3 +526,52 @@ async def update_step_of_recipe(step_id: int, description: str = None,
     except exc.DataError:
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
     return {"decription": description, "timer": timer, "media": media}
+
+
+@router.get("min_max/",tags=["recipe"])
+async def get_min_max_of_parametr(session: AsyncSession = Depends(get_async_session)):
+    kkal_min = 800000
+    kkal_max = 0
+    belki_min = 800000
+    belki_max = 0
+    zhyri_min = 800000
+    zhyri_max = 0
+    uglevody_min = 800000
+    uglevody_max = 0
+    time_min = 800000
+    time_max = 0
+    rating_min = 800000
+    rating_max = 0
+    result = await session.execute(select(Recipe_bd))
+    result = result.all()
+    for i in result:
+        kkal = 0
+        belki = 0
+        zhiry = 0
+        uglevody = 0
+        time_min = min(time_min, i[5])
+        time_max = max(time_max, i[5])
+        rating_min = min(rating_min, i[6])
+        rating_max = max(rating_max, i[6])
+        query = select(Recipe_ingredient).where(Recipe_ingredient.c.recipe_ID == i[0])
+        result_ingr_rec = await session.execute(query)
+        result_ingr_rec = result_ingr_rec.all()
+        for j in result_ingr_rec:
+            query = select(Ingredient).where(Ingredient.c.ingredient_ID == j[2])
+            result_ingr = await session.execute(query)
+            result_ingr = result_ingr.all()
+            kkal += result_ingr[0][3]
+            belki += result_ingr[0][4]
+            zhiry += result_ingr[0][5]
+            uglevody += result_ingr[0][6]
+        kkal_min = min(kkal_min, kkal)
+        kkal_max = max(kkal_max, kkal)
+        belki_min = min(belki_min, belki)
+        belki_max = max(belki_max, belki)
+        zhyri_min = min(zhyri_min, zhiry)
+        zhyri_max = max(zhyri_max, zhiry)
+        uglevody_min = min(uglevody_min, uglevody)
+        uglevody_max = max(uglevody_max, uglevody)
+    return {"min time": time_min, "max time": time_max, "min rating": rating_min, "max rating": rating_max,
+            "min kkal": kkal_min, "max kkal": kkal_max, "min belki": belki_min, "max belki": belki_max,
+            "min zhyri": zhyri_min, "max zhyri": zhyri_max, "min uglevody": uglevody_min, "max uglevody": uglevody_max}
