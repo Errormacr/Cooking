@@ -209,6 +209,7 @@ input[type="number"]:focus {
     padding: 10px 30px;
     margin: 10px 20px;
     z-index: 1;
+    cursor: pointer;
 }
 
 .tag-block:hover {

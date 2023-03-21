@@ -28,16 +28,6 @@ function on_users_recipes_click() {
     profile_content_container.loadTemplate('templates/profile/users_recipe_card_tpl.html');
 }
 
-$.urlParam = function(name){
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results==null){
-       return null;
-    }
-    else{
-       return results[1] || 0;
-    }
-}
-
 $('document').ready(function() {
     tab = $.urlParam('tab')
     if (tab == 1) {
