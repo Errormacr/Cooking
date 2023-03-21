@@ -75,14 +75,14 @@
     background-color: #fff;
     width: 100%;
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
-    padding: 20px 20px 10px;
+    padding: 10px 20px 20px;
     border-radius: 15px;
     opacity: 0;
     display: none;
 }
 
 .filter-menu p {
-    margin: 10px 0;
+    margin: 20px 0 10px;
 }
 
 .sort-menu {

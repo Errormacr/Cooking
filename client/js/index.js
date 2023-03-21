@@ -109,7 +109,6 @@ async function fetch_filters () {
         min: limits['min kkal'],
         max: limits['max kkal'],
         postfix: ' кКал',
-        grid: true,
         step: 0.01,
         onStart: function (data) {
             params.set('ot_kkal', data.min);
@@ -127,7 +126,6 @@ async function fetch_filters () {
         min: limits['min belki'],
         max: limits['max belki'],
         postfix: ' г',
-        grid: true,
         step: 0.01,
         onStart: function (data) {
             params.set('ot_belki', data.min);
@@ -145,7 +143,6 @@ async function fetch_filters () {
         min: limits['min zhyri'],
         max: limits['max zhyri'],
         postfix: ' г',
-        grid: true,
         step: 0.01,
         onStart: function (data) {
             params.set('ot_zhiry', data.min);
@@ -163,7 +160,6 @@ async function fetch_filters () {
         min: limits['min uglevody'],
         max: limits['max uglevody'],
         postfix: ' г',
-        grid: true,
         step: 0.01,
         onStart: function (data) {
             params.set('ot_uglevody', data.min);
@@ -181,7 +177,6 @@ async function fetch_filters () {
         min: limits['min time'] / 60,
         max: limits['max time'] / 60,
         postfix: ' мин',
-        grid: true,
         onStart: function (data) {
             params.set('more_cook_time', (data.min - 1) * 60);
             params.set('less_cook_time', (data.max + 1) * 60);
@@ -197,7 +192,6 @@ async function fetch_filters () {
         type: "double",
         min: limits['min rating'],
         max: limits['max rating'],
-        grid: true,
         onStart: function (data) {
             params.set('ot_raiting', data.min);
             params.set('do_raiting', data.max);
