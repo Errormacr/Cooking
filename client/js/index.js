@@ -1,4 +1,4 @@
-const server_url = 'http://localhost:8000/';
+const server_url = localStorage.getItem('server_url');
 
 var params = new Map();
 params.set('offset', 0);
