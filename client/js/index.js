@@ -49,7 +49,7 @@ async function fetch_recipes (params, append) {
         )
     });
 
-    recipe_cards_container.loadTemplate('templates/index/recipe_card_tpl.html', recipe_cards, {
+    recipe_cards_container.loadTemplate('templates/main/recipe_card_tpl.html', recipe_cards, {
         append: append
     });
 
@@ -78,6 +78,7 @@ async function fetch_tags() {
         tags_data.push(
             {
                 tag: '#' + tag['name'],
+                href: 'search.html?tag=' + tag['id']
             }
         )
     });
