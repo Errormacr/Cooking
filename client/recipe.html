@@ -40,13 +40,13 @@
         <section class="recipe">
             <div class="container">
                 <div class="row middle-xs center-xs">
-                    <div class="col-xs">
-                        <h1>Суп-пюре из кукурузы</h1>
+                    <div id="name_container" class="col-xs">
+                        
                     </div>
                 </div>
                 <div class="row middle-xs center-xs">
                     <div class="col-xs-12">
-                        <div class="recipe-img-block">
+                        <div id="img_container" class="recipe-img-block">
                             <div class="recipe-img-btn rating upvote">
                                 <img src="img/recipe/upvote.png" alt="upvote" />
                             </div>
@@ -62,105 +62,19 @@
                                     alt="favourite"
                                 />
                             </div>
-                            <img
-                                class="recipe-img"
-                                src="img/recipe/recipe_placeholder.png"
-                                alt="recipe_placeholder"
-                            />
+                            
                         </div>
                     </div>
                 </div>
                 <div class="recipe-info row middle-xs center-xs">
                     <div class="col-lg-9 col-md-10 col-xs-12">
-                        <div class="row">
-                            <div class="col-sm-3 col-xs-6">
-                                <div class="center-fix row center-xs">
-                                    <div
-                                        class="info-block col-xl-9 col-lg-10 col-sm col-xs-11 center-xs"
-                                    >
-                                        <div class="row center-xs">
-                                            <p class="info-category">Калории</p>
-                                        </div>
-                                        <div class="row center-xs">
-                                            <div
-                                                class="col-xl-8 col-lg-9 col-xs-11"
-                                            >
-                                                <div class="info-value-block">
-                                                    170.02 кКал
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3 col-xs-6">
-                                <div class="center-fix row center-xs">
-                                    <div
-                                        class="info-block col-xl-9 col-lg-10 col-sm col-xs-11 center-xs"
-                                    >
-                                        <div class="row center-xs">
-                                            <p class="info-category">Белки</p>
-                                        </div>
-                                        <div class="row center-xs">
-                                            <div
-                                                class="col-xl-8 col-lg-9 col-xs-11"
-                                            >
-                                                <div class="info-value-block">
-                                                    3.09 грамм
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3 col-xs-6">
-                                <div class="center-fix row center-xs">
-                                    <div
-                                        class="info-block col-xl-9 col-lg-10 col-sm col-xs-11 center-xs"
-                                    >
-                                        <div class="row center-xs">
-                                            <p class="info-category">Жиры</p>
-                                        </div>
-                                        <div class="row center-xs">
-                                            <div
-                                                class="col-xl-8 col-lg-9 col-xs-11"
-                                            >
-                                                <div class="info-value-block">
-                                                    10.48 грамм
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3 col-xs-6">
-                                <div class="center-fix row center-xs">
-                                    <div
-                                        class="info-block col-xl-9 col-lg-10 col-sm col-xs-11 center-xs"
-                                    >
-                                        <div class="row center-xs">
-                                            <p class="info-category">
-                                                Углеводы
-                                            </p>
-                                        </div>
-                                        <div class="row center-xs">
-                                            <div
-                                                class="col-xl-8 col-lg-9 col-xs-11"
-                                            >
-                                                <div class="info-value-block">
-                                                    16.38 грамм
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div id="info_container" class="row">
+                            
                         </div>
                     </div>
                 </div>
                 <div class="row start-xs">
-                    <div class="col-xs">
-                        <p>Время приготовления: 25 мин</p>
+                    <div id="time_container" class="col-xs">
                     </div>
                 </div>
                 <div class="row start-xs">
@@ -168,8 +82,7 @@
                         <div class="row middle-xs">
                             <p class="servings-fix">Порций:</p>
                             <p class="sign">-</p>
-                            <div class="servings-block">
-                                <p class="servings">2</p>
+                            <div id="recipe_servings_container" class="servings-block">
                             </div>
                             <p class="sign">+</p>
                         </div>
@@ -180,37 +93,8 @@
                         <p>Ингредиенты:</p>
                     </div>
                 </div>
-                <div class="ingredient">
-                    <div class="row middle-xs">
-                        <div class="col-lg-9 col-md-8 col-xs-7">
-                            <p class="ingredient-data">
-                                Кукуруза обжаренная обмасленная кукурузная
-                            </p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-xs-5 end-xs">
-                            <p class="ingredient-data">300 грамм</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="ingredient">
-                    <div class="row middle-xs">
-                        <div class="col-lg-9 col-md-8 col-xs-7">
-                            <p class="ingredient-data">Картофель</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-xs-5 end-xs">
-                            <p class="ingredient-data">13000 грамм</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="ingredient">
-                    <div class="row middle-xs">
-                        <div class="col-lg-9 col-md-8 col-xs-7">
-                            <p class="ingredient-data">Сливочное масло</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-xs-5 end-xs">
-                            <p class="ingredient-data">50 грамм</p>
-                        </div>
-                    </div>
+                <div id="ingredients_container">
+
                 </div>
                 <div class="row center-xs">
                     <div class="col-xs">
@@ -226,50 +110,18 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="steps-block">
-                            <p>
-                                1. Лук мелко порежьте. Картофель порежьте на
-                                небольшие части, кукурузу срежьте с плодоножки.
-                            </p>
-                            <p>
-                                2. Лук мелко порежьте. Картофель порежьте на
-                                небольшие части, кукурузу срежьте с плодоножки.
-                            </p>
+                        <div id="steps_container" class="steps-block">
                         </div>
                     </div>
                 </div>
                 <div class="row start-xs">
                     <div class="col-xs">
-                        <div class="recommendations-block">
-                            <p>Рекомендации:</p>
-                            <p class="recommendations">
-                                Используйте сливки с меньшей жирностью.
-                            </p>
+                        <div id="recommendations_container" class="recommendations-block">
+                            
                         </div>
                     </div>
                 </div>
-                <div class="row center-xs">
-                    <div class="tag-block">
-                        <p class="tag">#просто</p>
-                    </div>
-                    <div class="tag-block">
-                        <p class="tag">#за_30_минут</p>
-                    </div>
-                    <div class="tag-block">
-                        <p class="tag">#обед</p>
-                    </div>
-                    <div class="tag-block">
-                        <p class="tag">#кукуруза</p>
-                    </div>
-                    <div class="tag-block">
-                        <p class="tag">#тег</p>
-                    </div>
-                    <div class="tag-block">
-                        <p class="tag">#1</p>
-                    </div>
-                    <div class="tag-block">
-                        <p class="tag">#а</p>
-                    </div>
+                <div id="tags_container" class="row center-xs">
                 </div>
             </div>
         </section>
