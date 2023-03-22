@@ -8,8 +8,8 @@ async function fetch_recipe() {
     });
     console.log(recipes_response);
 
-    let recipe_info = await recipes_response.json();
-    recipe = recipe_info[0];
+    const recipe_info = await recipes_response.json();
+    const recipe = recipe_info[0];
     console.log(recipe);
 
 
@@ -34,7 +34,7 @@ async function fetch_recipe() {
     categories.set('zhiry', 'Жиры');
     categories.set('uglevody', 'Углеводы');
 
-    info_data = [];
+    let info_data = [];
 
     for (const [category, category_name] of categories) {
         info_data.push({
@@ -63,16 +63,21 @@ async function fetch_recipe() {
         count: recipe_desc['servings_cout']
     });
 
-    
+    // запись стандартного кол-ва порций для дальнейших расчетов
+    standard_servings = recipe_desc['servings_cout'];
 
     // загрузка шаблонов ингредиентов рецепта
-    ingredients_data = [];
+    let ingredients_data = [];
 
     recipe['ingredients'].forEach(ingredient => {
         ingredients_data.push({
             name: ingredient[0],
-            quantity: ingredient[2] + ' ' + ingredient[1]
+            quantity: ingredient[2],
+            unit: ingredient[1]
         });
+
+        // запись стандартного количества для дальнейших расчетов
+        standard_quantity.push(ingredient[2])
     });
 
     $('#ingredients_container').loadTemplate('templates/recipe/ingredient_tpl.html', ingredients_data);
@@ -89,7 +94,7 @@ async function fetch_recipe() {
 
     // загрузка шаблонов шагов рецепта
     let i = 1;
-    steps_data = [];
+    let steps_data = [];
     steps.forEach(step => {
         steps_data.push({
             step: i + '. ' + step['description']
@@ -101,7 +106,7 @@ async function fetch_recipe() {
 
     // загрузка шаблона рекомендаций рецепта
     if (recipe_desc['recommend']) {
-        $('#recommendations_container').loadTemplate('templates/recipe/ingredient_tpl.html', {
+        $('#recommendations_container').loadTemplate('templates/recipe/recommendations_tpl.html', {
             recommendations: recipe_desc['recommend']
         });
     }
@@ -117,7 +122,7 @@ async function fetch_recipe() {
     console.log(tags);
 
     // загрузка шаблонов тегов рецепта
-    tags_data = [];
+    let tags_data = [];
 
     tags.forEach(tag => {
         tags_data.push({
@@ -127,8 +132,42 @@ async function fetch_recipe() {
     })
 
     $('#tags_container').loadTemplate('templates/main/tag_tpl.html', tags_data);
-}
+};
+
+let standard_servings = 0;
+let standard_quantity = [];
 
 $('document').ready(function() {
     fetch_recipe();
+    
+    // обработка нажатий изменения кол-ва порций
+    $('#servings > p.sign').click(function() {
+        let servings = $('.servings').html();
+        const sign = $(this).html();
+
+        if (sign == '+') {
+            if (servings < 99) {
+                servings++;
+            }
+        } else if (sign == '-') {
+            if (servings > 1) {
+                servings--;
+            }
+        }
+
+        $('.servings').html(servings);
+        
+        $('span[name*="quantity"]').each(function(index, element) {
+            let quantity = $(element).html();
+
+            const part = Math.round(standard_quantity[index] / standard_servings);
+            if (sign == '+') {
+                quantity = Number(quantity) + part;
+            } else if (sign == '-') {
+                quantity = Number(quantity) - part;
+            }
+
+            $(element).html(Math.round(quantity));
+        })
+    })
 });
