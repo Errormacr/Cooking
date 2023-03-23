@@ -95,7 +95,7 @@
     padding-left: 50px;
 }
 
-.recipe {
+.section-padding {
     padding-bottom: 90px;
 }
 
@@ -111,4 +111,23 @@
     .recommendations {
         padding-left: 0;
     }
+}
+
+.timer-block {
+    background-color: #61b030;
+    border-radius: 15px;
+    padding: 12px 0;
+    margin-bottom: 70px;
+}
+
+.timer {
+    margin: 0;
+    color: #fff;
+    font-size: 60px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.btn-container {
+    margin-top: 20px;
 }

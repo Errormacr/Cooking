@@ -94,6 +94,10 @@ footer {
     font-weight: 700;
 }
 
+.btn-wide {
+    width: 100%;
+}
+
 label {
     color: #000;
 }

@@ -154,6 +154,8 @@ $('document').ready(function() {
     fetch_step(0);
     fetch_recipe();
 
+    $('#recipe_section').hide();
+
     // обработка нажатий изменения кол-ва порций
     $('#servings > p.sign').click(function() {
         let servings = $('.servings').html();
