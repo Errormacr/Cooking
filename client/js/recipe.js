@@ -1,6 +1,6 @@
 const server_url = localStorage.getItem('server_url');
 
-let current_step = 6;
+let current_step = 0;
 
 async function fetch_step(index) {
     const query = server_url + 'recipes/' + $.urlParam('id') + '/steps';
@@ -35,6 +35,8 @@ async function fetch_step(index) {
             minutes: (String(minutes).length == 1 ? '0' + minutes : minutes),
             seconds: (String(seconds).length == 1 ? '0' + seconds : seconds)
         });
+    } else {
+        $('#timer_container').html('')
     };
 
     if (index == 0) {
@@ -186,8 +188,24 @@ function on_step_by_step_btn_click() {
     $('#recipe_section').hide();
 
     fetch_step(current_step);
+};
+
+function on_to_recipe_btn_click() {
+    $('#recipe_section').show();
+    $('#step_section').hide();
+    
     current_step = 0;
-}
+};
+
+function on_next_btn_click() {
+    current_step++;
+    fetch_step(current_step);
+};
+
+function on_back_btn_click() {
+    current_step--;
+    fetch_step(current_step);
+};
 
 let standard_servings = 0;
 let standard_quantity = [];
