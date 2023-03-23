@@ -1,6 +1,6 @@
 const server_url = localStorage.getItem('server_url');
 
-var params = new Map();
+let params = new Map();
 params.set('offset', 0);
 params.set('name_sort', 0);
 params.set('score_sort', 0);
@@ -218,7 +218,7 @@ function close_menus() {
     })
 }
 
-var conditions = [' ↓', '  ', ' ↑']
+let conditions = [' ↓', '  ', ' ↑']
 
 $('document').ready(function() {
     fetch_filters();

@@ -1,5 +1,18 @@
 const server_url = localStorage.getItem('server_url');
 
+async function fetch_step(index) {
+    const query = server_url + 'recipes/' + $.urlParam('id') + '/steps';
+    const response = await fetch(query, {
+        credentials: 'include'
+    });
+
+    const steps = await response.json();
+    console.log(steps);
+    const step = steps[index];
+
+    console.log(step);
+}
+
 async function fetch_recipe() {
     // запрос информации о рецепте
     const recipes_query = server_url + 'recipes/' + $.urlParam('id');
@@ -138,36 +151,42 @@ let standard_servings = 0;
 let standard_quantity = [];
 
 $('document').ready(function() {
+    fetch_step(0);
     fetch_recipe();
-    
+
     // обработка нажатий изменения кол-ва порций
     $('#servings > p.sign').click(function() {
         let servings = $('.servings').html();
         const sign = $(this).html();
 
+        let changed = false;
         if (sign == '+') {
             if (servings < 99) {
                 servings++;
+                changed = true;
             }
         } else if (sign == '-') {
             if (servings > 1) {
                 servings--;
+                changed = true;
             }
         }
 
-        $('.servings').html(servings);
+        if (changed) {
+            $('.servings').html(servings);
         
-        $('span[name*="quantity"]').each(function(index, element) {
-            let quantity = $(element).html();
+            $('span[name*="quantity"]').each(function(index, element) {
+                let quantity = $(element).html();
 
-            const part = Math.round(standard_quantity[index] / standard_servings);
-            if (sign == '+') {
-                quantity = Number(quantity) + part;
-            } else if (sign == '-') {
-                quantity = Number(quantity) - part;
-            }
+                const part = Math.round(standard_quantity[index] / standard_servings);
+                if (sign == '+') {
+                    quantity = Number(quantity) + part;
+                } else if (sign == '-') {
+                    quantity = Number(quantity) - part;
+                }
 
-            $(element).html(Math.round(quantity));
-        })
+                $(element).html(Math.round(quantity));
+            })
+        }  
     })
 });
