@@ -25,10 +25,14 @@ async function fetch_step(index) {
     });
 
     if (step['timer']) {
-        const time = step['timer'];
+        const time = step['timer'];        
         const hours = Math.floor(time / 3600);
         const minutes = Math.floor(time % 3600 / 60);
         const seconds = time % 3600 % 60;
+
+        base_hours = (String(hours).length == 1 ? '0' + hours : hours);
+        base_minutes = (String(minutes).length == 1 ? '0' + minutes : minutes);
+        base_seconds = (String(seconds).length == 1 ? '0' + seconds : seconds);
 
         $('#timer_container').loadTemplate('templates/recipe/timer_tpl.html', {
             hours: (String(hours).length == 1 ? '0' + hours : hours),
@@ -183,6 +187,50 @@ async function fetch_recipe() {
     $('#tags_container').loadTemplate('templates/main/tag_tpl.html', tags_data);
 };
 
+// функции для таймера
+let timer;
+let base_hours, base_minutes, base_seconds;
+
+function on_play_btn_click() {
+    if (!timer) {
+        timer = setInterval(function() {
+            let seconds = Number($('#seconds').html());
+            let minutes = Number($('#minutes').html());
+            let hours = Number($('#hours').html());
+    
+            let time_left = hours * 3600 + minutes * 60 + seconds;
+            if (!time_left) {
+                clearInterval(timer);
+                timer = null;
+            } else {
+                time_left--;
+    
+                hours = Math.floor(time_left / 3600);
+                minutes = Math.floor(time_left % 3600 / 60);
+                seconds = time_left % 3600 % 60;
+    
+                $('#hours').html((String(hours).length == 1 ? '0' + hours : hours));
+                $('#minutes').html((String(minutes).length == 1 ? '0' + minutes : minutes));
+                $('#seconds').html((String(seconds).length == 1 ? '0' + seconds : seconds));
+            }
+        }, 1000);
+    }
+}
+
+function on_pause_btn_click() {
+    clearInterval(timer);
+    timer = null;
+}
+
+function on_restart_btn_click() {
+    clearInterval(timer);
+    timer = null;
+    $('#hours').html(base_hours);
+    $('#minutes').html(base_minutes);
+    $('#seconds').html(base_seconds);
+}
+
+// функции для навигации по шагам
 function on_step_by_step_btn_click() {
     $('#step_section').show();
     $('#recipe_section').hide();
@@ -207,6 +255,7 @@ function on_back_btn_click() {
     fetch_step(current_step);
 };
 
+// инициализация переменных для расчета кол-ва ингредиентов
 let standard_servings = 0;
 let standard_quantity = [];
 

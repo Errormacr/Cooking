@@ -120,6 +120,10 @@
     margin: 70px 0px;
 }
 
+.timer-block img {
+    cursor: pointer;
+}
+
 .timer {
     margin: 0;
     color: #fff;
@@ -130,4 +134,8 @@
 
 .btn-container {
     margin-top: 20px;
+}
+
+#step_section {
+    min-height: 40vh;
 }
