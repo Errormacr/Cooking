@@ -1,5 +1,7 @@
 const server_url = localStorage.getItem('server_url');
 
+let current_step;
+
 async function fetch_step(index) {
     const query = server_url + 'recipes/' + $.urlParam('id') + '/steps';
     const response = await fetch(query, {
@@ -147,14 +149,20 @@ async function fetch_recipe() {
     $('#tags_container').loadTemplate('templates/main/tag_tpl.html', tags_data);
 };
 
+function on_step_by_step_btn_click() {
+    $('#step_section').show();
+    $('#recipe_section').hide();
+
+    fetch_step(0);
+    current_step = 0;
+}
+
 let standard_servings = 0;
 let standard_quantity = [];
 
 $('document').ready(function() {
-    fetch_step(0);
+    $('#step_section').hide();
     fetch_recipe();
-
-    $('#recipe_section').hide();
 
     // обработка нажатий изменения кол-ва порций
     $('#servings > p.sign').click(function() {
