@@ -1,6 +1,6 @@
 const server_url = localStorage.getItem('server_url');
 
-let current_step;
+let current_step = 6;
 
 async function fetch_step(index) {
     const query = server_url + 'recipes/' + $.urlParam('id') + '/steps';
@@ -10,9 +10,41 @@ async function fetch_step(index) {
 
     const steps = await response.json();
     console.log(steps);
-    const step = steps[index];
 
+    const total_steps = steps.length;
+
+    const step = steps[index];
     console.log(step);
+
+    $('#step_num_container').loadTemplate('templates/recipe/step_num_tpl.html', {
+        step_num: index + 1
+    });
+
+    $('#step_description_container').loadTemplate('templates/recipe/step_description_tpl.html', {
+        description: step['description']
+    });
+
+    if (step['timer']) {
+        const time = step['timer'];
+        const hours = Math.floor(time / 3600);
+        const minutes = Math.floor(time % 3600 / 60);
+        const seconds = time % 3600 % 60;
+
+        $('#timer_container').loadTemplate('templates/recipe/timer_tpl.html', {
+            hours: (String(hours).length == 1 ? '0' + hours : hours),
+            minutes: (String(minutes).length == 1 ? '0' + minutes : minutes),
+            seconds: (String(seconds).length == 1 ? '0' + seconds : seconds)
+        });
+    };
+
+    if (index == 0) {
+        $('#buttons_container').loadTemplate('templates/recipe/step_first_buttons_tpl.html');
+    } else if (index == total_steps - 1) {
+        $('#buttons_container').loadTemplate('templates/recipe/step_last_buttons_tpl.html');
+    } else {
+        $('#buttons_container').loadTemplate('templates/recipe/step_buttons_tpl.html');
+    };
+
 }
 
 async function fetch_recipe() {
@@ -153,7 +185,7 @@ function on_step_by_step_btn_click() {
     $('#step_section').show();
     $('#recipe_section').hide();
 
-    fetch_step(0);
+    fetch_step(current_step);
     current_step = 0;
 }
 
