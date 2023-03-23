@@ -10,6 +10,14 @@ $.urlParam = function(name){
     }
 }
 
+function search_btn_click() {
+    if ($('.searchbar').val()) {
+        let href = 'search.html?query=';
+        href += $('.searchbar').val();
+        $(location).attr('href', href);
+    }
+};
+
 $('document').ready(function() { 
     var header_container = $('header');
     header_container.loadTemplate("templates/main/header_tpl.html", {});
