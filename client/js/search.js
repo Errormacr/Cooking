@@ -1,4 +1,4 @@
-const server_url = localStorage.getItem('server_url');
+const server_url = sessionStorage.getItem('server_url');
 
 let params = new Map();
 params.set('offset', 0);
