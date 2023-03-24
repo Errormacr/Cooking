@@ -1,4 +1,4 @@
-localStorage.setItem('server_url', 'http://localhost:8000/');
+sessionStorage.setItem('server_url', 'http://localhost:8000/');
 
 $.urlParam = function(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
