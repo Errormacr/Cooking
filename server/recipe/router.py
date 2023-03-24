@@ -274,7 +274,7 @@ async def get_recipe_photo(recipe_id: int, session: AsyncSession = Depends(get_a
 
 
 @router.get("/{step_id}_media/", tags=["step"])
-async def get_media_step(step_id: int):
+async def get_media_step(step_id: int, session: AsyncSession = Depends(get_async_session)):
     try:
         video_path = Path(f"../media/{step_id}_media")
         result = await session.execute(select(Step_bd.c.media_type).where(Step_bd.c.recipe_ID == step_id))
@@ -328,7 +328,7 @@ async def delete_tag_recipe(recipe_id: int, tag_id: int, user: auth_user = Depen
         raise HTTPException(status_code=404, detail="Not found recipe")
     if author[0][0] != user.id:
         raise HTTPException(status_code=400, detail="User not author")
-    stmt = delete(Recipe_tag).where(Recipe_tag.c.recipe_ID == recipe_id and Recipe_tat.c.tag_ID == tag_id)
+    stmt = delete(Recipe_tag).where(Recipe_tag.c.recipe_ID == recipe_id).where(Recipe_tat.c.tag_ID == tag_id)
     await session.execute(stmt)
     try:
         await session.commit()
@@ -347,7 +347,7 @@ async def delete_ingredient_recipe(recipe_id: int, ingredient_id: int, user: aut
     if author[0][0] != user.id:
         raise HTTPException(status_code=400, detail="User not author")
     stmt = delete(Recipe_ingredient).where(
-        Recipe_ingredient.c.recipe_ID == recipe_id and Recipe_ingredient.c.ingredient_ID == ingredient_id)
+        Recipe_ingredient.c.recipe_ID == recipe_id).where(Recipe_ingredient.c.ingredient_ID == ingredient_id)
     await session.execute(stmt)
     try:
         await session.commit()
@@ -366,7 +366,7 @@ async def delete_step_recipe(recipe_id: int, step_id: int, user: auth_user = Dep
     if author[0][0] != user.id:
         raise HTTPException(status_code=400, detail="User not author")
     stmt = delete(Step_bd).where(
-        Step_bd.c.recipe_ID == recipe_id and Step_bd.c.step_ID == step_id)
+        Step_bd.c.recipe_ID == recipe_id).where(Step_bd.c.step_ID == step_id)
     await session.execute(stmt)
     try:
         await session.commit()
@@ -528,7 +528,7 @@ async def update_step_of_recipe(step_id: int, description: str = None,
     return {"decription": description, "timer": timer, "media": media}
 
 
-@router.get("min_max/",tags=["recipe"])
+@router.get("min_max/", tags=["recipe"])
 async def get_min_max_of_parametr(session: AsyncSession = Depends(get_async_session)):
     kkal_min = 800000
     kkal_max = 0
