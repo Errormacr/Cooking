@@ -1,8 +1,8 @@
-"""media
+"""Db
 
-Revision ID: e348c07dbeaf
+Revision ID: bddc2ce184ca
 Revises: 
-Create Date: 2023-03-15 19:24:53.285290
+Create Date: 2023-03-25 21:08:49.543055
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = 'e348c07dbeaf'
+revision = 'bddc2ce184ca'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -69,6 +69,10 @@ def upgrade() -> None:
     sa.Column('rating', mysql.INTEGER(), nullable=False),
     sa.Column('recommend', mysql.TEXT(), nullable=True),
     sa.Column('author', mysql.INTEGER(unsigned=True), nullable=False),
+    sa.Column('Kkal', mysql.DECIMAL(precision=8, scale=2), nullable=True),
+    sa.Column('Belky', mysql.DECIMAL(precision=8, scale=2), nullable=True),
+    sa.Column('Zhyri', mysql.DECIMAL(precision=8, scale=2), nullable=True),
+    sa.Column('Uglevody', mysql.DECIMAL(precision=8, scale=2), nullable=True),
     sa.CheckConstraint('servings_cout>0'),
     sa.ForeignKeyConstraint(['author'], ['user.id'], ondelete='SET DEFAULT'),
     sa.PrimaryKeyConstraint('recipe_ID'),
@@ -90,7 +94,8 @@ def upgrade() -> None:
     sa.CheckConstraint('count>=0'),
     sa.ForeignKeyConstraint(['ingredient_ID'], ['Ingredient.ingredient_ID'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['recipe_ID'], ['Recipe.recipe_ID'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('recipe_ID_ingredient')
+    sa.PrimaryKeyConstraint('recipe_ID_ingredient'),
+    sa.UniqueConstraint('recipe_ID', 'ingredient_ID')
     )
     op.create_table('Recipe_tag',
     sa.Column('recipe_ID_tag', mysql.INTEGER(unsigned=True), nullable=False),

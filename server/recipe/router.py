@@ -67,57 +67,27 @@ async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: i
         query = query.order_by(Recipe_bd.c.name)
     elif name_sort == -1:
         query = query.order_by(Recipe_bd.c.name.desc())
+    if ot_kkal:
+        query = query.where(Recipe_bd.c.Kkal >= ot_kkal)
+    if do_kkal:
+        query = query.where(Recipe_bd.c.Kkal <= do_kkal)
+    if ot_belki:
+        query = query.where(Recipe_bd.c.Belky >= ot_belki)
+    if do_belki:
+        query = query.where(Recipe_bd.c.Belky <= do_belki)
+    if ot_zhiry:
+        query = query.where(Recipe_bd.c.Zhyri >= ot_zhiry)
+    if do_zhiry:
+        query = query.where(Recipe_bd.c.Zhyri <= do_zhiry)
+    if ot_uglevody:
+        query = query.where(Recipe_bd.c.Uglevody >= ot_uglevody)
+    if do_uglevody:
+        query = query.where(Recipe_bd.c.Uglevody <= do_uglevody)
     query = query.offset(offset).limit(limit)
-    result_rec = await session.execute(query)
-    result_rec = result_rec.all()
-    result = []
-    if not result_rec:
+    result = await session.execute(query)
+    result = result.all()
+    if not result:
         raise HTTPException(status_code=404, detail="Can't found recipe")
-    if not ot_kkal and not ot_belki and not ot_zhiry and not ot_uglevody and not do_kkal and not do_belki and not do_zhiry and not do_uglevody:
-        result = result_rec
-    else:
-        for i in result_rec:
-            kkal = 0
-            belki = 0
-            zhiry = 0
-            uglevody = 0
-            query = select(Recipe_ingredient).where(Recipe_ingredient.c.recipe_ID == i[0])
-            result_ingr_rec = await session.execute(query)
-            result_ingr_rec = result_ingr_rec.all()
-            for j in result_ingr_rec:
-                query = select(Ingredient).where(Ingredient.c.ingredient_ID == j[2])
-                result_ingr = await session.execute(query)
-                result_ingr = result_ingr.all()
-                kkal += result_ingr[0][3]
-                belki += result_ingr[0][4]
-                zhiry += result_ingr[0][5]
-                uglevody += result_ingr[0][6]
-            if ot_kkal:
-                if kkal < ot_kkal:
-                    continue
-            if ot_belki:
-                if belki < ot_belki:
-                    continue
-            if ot_zhiry:
-                if zhiry < ot_zhiry:
-                    continue
-            if ot_uglevody:
-                if uglevody < ot_uglevody:
-                    continue
-            if do_kkal:
-                if kkal > do_kkal:
-                    continue
-            if do_belki:
-                if belki > do_belki:
-                    continue
-            if do_zhiry:
-                if zhiry > do_zhiry:
-                    continue
-            if do_uglevody:
-                if uglevody > do_uglevody:
-                    continue
-            result.append(i)
-
     tags = {}
     for i in result:
         query = select(Recipe_tag.c.tag_ID).where(Recipe_tag.c.recipe_ID == i[0])
@@ -134,7 +104,8 @@ async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: i
     answer = [{
         "recipe_id": rec[0],
         "name": rec[1], "photo": rec[2], "photo_type": rec[3], "servings_cout": rec[4], "cook_time": rec[5],
-        "rating": rec[6], "recommend": rec[7], "author": rec[8],
+        "rating": rec[6], "recommend": rec[7], "author": rec[8], "kkal": rec[9], "belky": rec[10], "zhyri": rec[11],
+        "uglevody": rec[12],
         'tags': tags[rec[0]]} for rec in result]
 
     return answer
@@ -160,10 +131,7 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
             if resultTag:
                 tags_rec.append(resultTag[0][0])
         tags[i[0]] = tags_rec
-    belky = 0
-    zhiry = 0
-    uglevody = 0
-    kkal = 0
+
     ingredients = []
     for i in result:
         query = select(Recipe_ingredient).where(Recipe_ingredient.c.recipe_ID == i[0])
@@ -173,18 +141,6 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
             query = select(Ingredient).where(Ingredient.c.ingredient_ID == j[2])
             resultIngr = await session.execute(query)
             resultIngr = resultIngr.all()
-            if resultIngr[0][2] in (1, 2):
-                modif = j[3] / 100
-                kkal += resultIngr[0][3] * modif
-                belky += resultIngr[0][4] * modif
-                zhiry += resultIngr[0][5] * modif
-                uglevody += resultIngr[0][6] * modif
-            else:
-                modif = j[3]
-                kkal += resultIngr[0][3] * modif
-                belky += resultIngr[0][4] * modif
-                zhiry += resultIngr[0][5] * modif
-                uglevody += resultIngr[0][6] * modif
             resultUnit = await session.execute(select(Unit.c.name).where(Unit.c.unit_ID == resultIngr[0][2]))
             resultUnit = resultUnit.all()
             ingredients.append((resultIngr[0][1], resultUnit[0][0], j[3]))
@@ -195,7 +151,7 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
                         "rating": rec[6], "recommend": rec[7], "author": rec[8]},
         'tags': tags[rec[0]],
         'ingredients': ingredients,
-        'belky': belky, 'zhiry': zhiry, 'uglevody': uglevody, 'kkal': kkal} for rec in result]
+        'belky': rec[10], 'zhiry': rec[11], 'uglevody': rec[12], 'kkal': rec[9]} for rec in result]
     return answer
 
 
@@ -346,9 +302,39 @@ async def delete_ingredient_recipe(recipe_id: int, ingredient_id: int, user: aut
         raise HTTPException(status_code=404, detail="Not found recipe")
     if author[0][0] != user.id:
         raise HTTPException(status_code=400, detail="User not author")
+    count = await session.execute(select(Recipe_ingredient.c.count).where(
+        Recipe_ingredient.c.recipe_ID == recipe_id).where(Recipe_ingredient.c.ingredient_ID == ingredient_id))
+    count = count.all()[0][0]
     stmt = delete(Recipe_ingredient).where(
         Recipe_ingredient.c.recipe_ID == recipe_id).where(Recipe_ingredient.c.ingredient_ID == ingredient_id)
     await session.execute(stmt)
+    ingredient = await session.execute(
+        select(Ingredient.c.kkal, Ingredient.c.belki, Ingredient.c.zhiry, Ingredient.c.uglevody,
+               Ingredient.c.unit_ID).where(
+            Ingredient.c.ingredient_ID == ingredient_id))
+    ingredient = ingredient.all()
+    unit_id = ingredient[0][4]
+    unit = await session.execute(select(Unit).where(Unit.c.unit_ID == unit_id))
+    unit = unit.all()
+    if unit[0][1] == "гр" or unit[0][1] == "мл":
+        modif = 0.01
+    else:
+        modif = 1
+    recipe = await session.execute(
+        select(Recipe_bd.c.Kkal, Recipe_bd.c.Belky, Recipe_bd.c.Zhyri, Recipe_bd.c.Uglevody).where(
+            Recipe_bd.c.recipe_ID == recipe_id))
+    recipe = recipe.all()
+    stmt = update(Recipe_bd).where(Recipe_bd.c.recipe_ID == recipe_id).values(
+        Kkal=(float(recipe[0][0]) if recipe[0][0] is not None else 0.0) - float(ingredient[0][0]) * modif * float(
+            count),
+        Belky=(float(recipe[0][1]) if recipe[0][1] is not None else 0.0) - float(ingredient[0][1]) * modif * float(
+            count),
+        Zhyri=(float(recipe[0][2]) if recipe[0][2] is not None else 0.0) - float(ingredient[0][2]) * modif * float(
+            count),
+        Uglevody=(float(recipe[0][3]) if recipe[0][3] is not None else 0.0) - float(ingredient[0][3]) * modif * float(
+            count))
+    await session.execute(stmt)
+
     try:
         await session.commit()
     except exc.DataError:
@@ -468,6 +454,29 @@ async def create_recipe_ingredient_relation(ingredient_id: int, recipe_id: int, 
                                             ingredient_ID=ingredient_id,
                                             count=count)
     try:
+        await session.execute(stmt)
+        ingredient = await session.execute(
+            select(Ingredient.c.kkal, Ingredient.c.belki, Ingredient.c.zhiry, Ingredient.c.uglevody,
+                   Ingredient.c.unit_ID).where(
+                Ingredient.c.ingredient_ID == ingredient_id))
+        ingredient = ingredient.all()
+        unit_id = ingredient[0][4]
+        unit = await session.execute(select(Unit).where(Unit.c.unit_ID == unit_id))
+        unit = unit.all()
+        if unit[0][1] == "гр" or unit[0][1] == "мл":
+            modif = 0.01
+        else:
+            modif = 1
+        recipe = await session.execute(
+            select(Recipe_bd.c.Kkal, Recipe_bd.c.Belky, Recipe_bd.c.Zhyri, Recipe_bd.c.Uglevody).where(
+                Recipe_bd.c.recipe_ID == recipe_id))
+        recipe = recipe.all()
+        stmt = update(Recipe_bd).where(Recipe_bd.c.recipe_ID == recipe_id).values(
+            Kkal=(float(recipe[0][0]) if recipe[0][0] is not None else 0.0) + float(ingredient[0][0]) * modif * count,
+            Belky=(float(recipe[0][1]) if recipe[0][1] is not None else 0.0) + float(ingredient[0][1]) * modif * count,
+            Zhyri=(float(recipe[0][2]) if recipe[0][2] is not None else 0.0) + float(ingredient[0][2]) * modif * count,
+            Uglevody=(float(recipe[0][3]) if recipe[0][3] is not None else 0.0) + float(
+                ingredient[0][3]) * modif * count)
         await session.execute(stmt)
         await session.commit()
         return dict(recipe_ID=recipe_id, ingredient_ID=ingredient_id, count=count)

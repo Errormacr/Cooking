@@ -15,6 +15,10 @@ Recipe = Table(
     Column("rating", INTEGER(unsigned=False), nullable=False),
     Column("recommend", TEXT(), nullable=True),
     Column("author", INTEGER(unsigned=True), ForeignKey("user.id", ondelete="SET DEFAULT"), nullable=False),
+    Column("Kkal", DECIMAL(8, 2), default=0.0),
+    Column("Belky", DECIMAL(8, 2), default=0.0),
+    Column("Zhyri", DECIMAL(8, 2), default=0.0),
+    Column("Uglevody", DECIMAL(8, 2), default=0.0),
     UniqueConstraint("photo"),
     CheckConstraint('servings_cout>0'), )
 
@@ -39,7 +43,7 @@ Step = Table(
     Column("media", VARCHAR(length=20), nullable=True),
     Column("media_type", VARCHAR(length=20)),
     Column("recipe_ID", INTEGER(unsigned=True), ForeignKey("Recipe.recipe_ID", ondelete="CASCADE"), nullable=False),
-    UniqueConstraint("media"),)
+    UniqueConstraint("media"), )
 
 Tag = Table(
     'Tag',
@@ -82,6 +86,7 @@ Recipe_ingredient = Table(
     Column("ingredient_ID", INTEGER(unsigned=True), ForeignKey("Ingredient.ingredient_ID", ondelete="CASCADE"),
            nullable=False),
     Column("count", DECIMAL(precision=8, scale=2), nullable=False),
+    UniqueConstraint("recipe_ID", "ingredient_ID"),
     CheckConstraint("count>=0"),
 )
 Recipe_tag = Table(
