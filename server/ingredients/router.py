@@ -26,7 +26,6 @@ async def get_ingredients(recipe_id: int = None, ingredient_name: str = None, li
             if ingredient_name:
                 if ingredient_name not in result_ingr[0][1]:
                     continue
-            print(result_ingr)
             if result_ingr[0][2] in (1, 2):
                 kkal = rec[3] / 100 * result_ingr[0][3]
                 belki = rec[3] / 100 * result_ingr[0][4]

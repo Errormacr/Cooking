@@ -23,7 +23,7 @@ def fill_user():
             user = {"email": mail,
                     "password": password,
                     "is_active": 1,
-                    "is_superuser":0,
+                    "is_superuser": 0,
                     "is_verified": 0,
                     "login": login}
             req = post('http://127.0.0.1:8000/auth/register', json=dict(user))
@@ -173,6 +173,28 @@ def fill_recipe_ingredient(conn):
                 with connection.cursor() as curs:
                     curs.execute(sql)
                     conn.commit()
+                    sql = f'select * from Ingredient where ingredient_ID = {ingr}'
+                    curs.execute(sql)
+                    ingred = curs.fetchall()[0]
+                    if ingred[2] in (1, 2):
+                        modif = 0.01
+                    else:
+                        modif = 1
+
+                    kkal = float(ingred[3]) * coun * modif
+                    b = float(ingred[4]) * coun * modif
+                    z = float(ingred[5]) * coun * modif
+                    u = float(ingred[6]) * coun * modif
+                    sql = f'select Kkal,Belky,Zhyri,Uglevody from Recipe where recipe_ID = {rec}'
+                    curs.execute(sql)
+                    recipe = curs.fetchall()[0]
+                    kkal = kkal + (float(recipe[0]) if recipe[0] is not None else 0.0)
+                    b = b + (float(recipe[1]) if recipe[1] is not None else 0.0)
+                    z = z + (float(recipe[2]) if recipe[2] is not None else 0.0)
+                    u = u + (float(recipe[3]) if recipe[3] is not None else 0.0)
+                    sql = f'update Recipe set Kkal = {kkal},Belky = {b},Zhyri = {z},Uglevody = {u} where recipe_ID = {rec}'
+                    curs.execute(sql)
+                    conn.commit()
 
 
 def fill_fav_rec(conn):
@@ -210,8 +232,11 @@ def fill_recipe_score(conn):
                 with connection.cursor() as curs:
                     curs.execute(sql)
                     conn.commit()
-
-
+sql = f'select Kkal,Belky,Zhyri,Uglevody from Recipe where recipe_ID = 1'
+with connection.cursor() as curs:
+    curs.execute(sql)
+    recipe = curs.fetchall()
+    print(recipe)
 while True:
     try:
         ch = int(input(

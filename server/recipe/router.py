@@ -68,21 +68,21 @@ async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: i
     elif name_sort == -1:
         query = query.order_by(Recipe_bd.c.name.desc())
     if ot_kkal:
-        query = query.where(Recipe_bd.c.Kkal >= ot_kkal)
+        query = query.where(Recipe_bd.c.Kkal/Recipe_bd.c.servings_cout >= ot_kkal)
     if do_kkal:
-        query = query.where(Recipe_bd.c.Kkal <= do_kkal)
+        query = query.where(Recipe_bd.c.Kkal/Recipe_bd.c.servings_cout <= do_kkal)
     if ot_belki:
-        query = query.where(Recipe_bd.c.Belky >= ot_belki)
+        query = query.where(Recipe_bd.c.Belky/Recipe_bd.c.servings_cout >= ot_belki)
     if do_belki:
-        query = query.where(Recipe_bd.c.Belky <= do_belki)
+        query = query.where(Recipe_bd.c.Belky/Recipe_bd.c.servings_cout <= do_belki)
     if ot_zhiry:
-        query = query.where(Recipe_bd.c.Zhyri >= ot_zhiry)
+        query = query.where(Recipe_bd.c.Zhyri/Recipe_bd.c.servings_cout >= ot_zhiry)
     if do_zhiry:
-        query = query.where(Recipe_bd.c.Zhyri <= do_zhiry)
+        query = query.where(Recipe_bd.c.Zhyri/Recipe_bd.c.servings_cout <= do_zhiry)
     if ot_uglevody:
-        query = query.where(Recipe_bd.c.Uglevody >= ot_uglevody)
+        query = query.where(Recipe_bd.c.Uglevody/Recipe_bd.c.servings_cout >= ot_uglevody)
     if do_uglevody:
-        query = query.where(Recipe_bd.c.Uglevody <= do_uglevody)
+        query = query.where(Recipe_bd.c.Uglevody/Recipe_bd.c.servings_cout <= do_uglevody)
     query = query.offset(offset).limit(limit)
     result = await session.execute(query)
     result = result.all()
@@ -104,8 +104,11 @@ async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: i
     answer = [{
         "recipe_id": rec[0],
         "name": rec[1], "photo": rec[2], "photo_type": rec[3], "servings_cout": rec[4], "cook_time": rec[5],
-        "rating": rec[6], "recommend": rec[7], "author": rec[8], "kkal": rec[9], "belky": rec[10], "zhyri": rec[11],
-        "uglevody": rec[12],
+        "rating": rec[6], "recommend": rec[7], "author": rec[8],
+        "kkal": round(rec[9] / rec[4], 2) if rec[9] is not None else rec[9],
+        "belky": round(rec[10] / rec[4], 2) if rec[10] is not None else rec[10],
+        "zhyri": round(rec[11] / rec[4], 2) if rec[11] is not None else rec[11],
+        "uglevody": round(rec[12] / rec[4], 2) if rec[12] is not None else rec[12],
         'tags': tags[rec[0]]} for rec in result]
 
     return answer
