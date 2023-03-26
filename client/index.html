@@ -40,7 +40,7 @@
         ></script>
         <script src="js/main.js"></script>
         <script src="js/index.js"></script>
-        <script src="js/dragscroll.js"></script>
+        <script src="js/thirdparties/dragscroll.js"></script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"
             integrity="sha512-kZsqvmw94Y8hyhwtWZJvDtobwQ9pLhF1DuIvcqSuracbRn6WJs1Ih+04fpH/8d1CFKysp7XA1tR0Aa2jKLTQUg=="
@@ -51,6 +51,9 @@
     </head>
     <body>
         <header></header>
+        <section id="modals_container">
+            <div class="modal-back"></div>
+        </section>
         <section class="jumbotron hidden-sm hidden-xs">
             <div class="jumbotron-content container">
                 <div class="jumbotron-content row middle-xs between-xs">
@@ -155,7 +158,9 @@
                             <ul id="sortings">
                                 <li id="name_sort">названию&nbsp;</li>
                                 <li id="score_sort">рейтингу&nbsp;</li>
-                                <li id="time_sort">времени приготовления&nbsp;</li>
+                                <li id="time_sort">
+                                    времени приготовления&nbsp;
+                                </li>
                             </ul>
                         </div>
                     </div>
