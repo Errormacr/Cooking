@@ -37,6 +37,18 @@ async def get_user(user_id: int = None, user_name: str = None, user_email: str =
     return result
 
 
+@router.get("/current/", tags=["users"])
+async def get_current_user(user: auth_user = Depends(current_user),
+                           session: AsyncSession = Depends(get_async_session)):
+    query = select(User).where(User.c.id == user.id)
+    result = await session.execute(query)
+    result = result.all()
+    result = {"id": result[0][0], "login": result[0][1], "photo": result[0][3], "email": result[0][5],
+              "name": result[0][6], "s_name": result[0][7], "b_day": result[0][8], "gender": result[0][9],
+              "is_active": result[0][10], "is_superuser": result[0][11], "is_verified": result[0][12]}
+    return result
+
+
 @router.get("/photo", tags=["users"])
 async def get_user_photo(user_id: int = None, user_name: str = None, user_email: str = None,
                          session: AsyncSession = Depends(get_async_session)):
