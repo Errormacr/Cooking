@@ -42,15 +42,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-4">
+                <div class="col-sm-4 col-xs-10">
                     <div class="row center-xs">
                         <div class="col-xs-10">
-                            <img
-                                class="profile-pic"
-                                src="img/main/profile.png"
-                                alt="profile"
-                                onclick="on_profile_btn_click()"
-                            />
+                            <div class="round-block profile-pic">
+                                <img
+                                    class="round-img"
+                                    src="img/main/profile.png"
+                                    onerror="$(this).attr('src', 'img/main/profile.png');"
+                                    alt="profile"
+                                    onclick="on_profile_btn_click()"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

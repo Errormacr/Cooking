@@ -79,6 +79,9 @@ async function get_current_user() {
     console.log(user['id']);
 
     sessionStorage.setItem('user_id', user['id']);
+
+    const img_src = server_url + 'users/photo?user_id=' + sessionStorage.getItem('user_id');
+    $('.profile-pic img').attr('src', img_src);
 }
 
 async function sign_in() {
@@ -222,10 +225,15 @@ function authorized() {
 
 $('document').ready(function() { 
     var header_container = $('header');
-    header_container.loadTemplate("templates/main/header_tpl.html", {});
+    header_container.loadTemplate("templates/main/header_tpl.html", null, {
+        complete: function() {
+            const img_src = server_url + 'users/photo?user_id=' + sessionStorage.getItem('user_id');
+            $('.profile-pic img').attr('src', img_src);
+        }
+    });
 
     var footer_container = $('footer');
-    footer_container.loadTemplate("templates/main/footer_tpl.html", {});
+    footer_container.loadTemplate("templates/main/footer_tpl.html", null);
 
     $('#modals_container').loadTemplate('templates/main/sign_up_modal_tpl.html', null, {
         append: true

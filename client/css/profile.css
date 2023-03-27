@@ -1,20 +1,5 @@
-.round-block {
-    /* background-color: #d9d9d9; */
-    border-radius: 100%;
-    width: 100%;
-    padding-top: 100%;
+.profile-pic-container {
     margin-bottom: 30px;
-    position: relative;
-}
-
-.round-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 100%;
 }
 
 .menu {
