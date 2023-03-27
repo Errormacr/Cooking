@@ -13,21 +13,16 @@ from dev.router import router as dev_router
 from unit.router import router as unit_router
 from utils import fastapi_users
 
-
 middleware = [
     Middleware(
         CORSMiddleware,
-        allow_origins=['http://127.0.0.1:5500','http://cooking.ru.swtest.ru'],
+        allow_origins=['http://127.0.0.1:5500', 'http://cooking.ru.swtest.ru'],
         allow_credentials=True,
         allow_methods=['*'],
         allow_headers=['*']
     )
 ]
 app = FastAPI(middleware=middleware)
-
-
-
-
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
