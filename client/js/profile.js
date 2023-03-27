@@ -117,6 +117,10 @@ function on_users_recipes_click() {
 }
 
 $('document').ready(function() {
+    if (!authorized()) {
+        $(location).attr('href', 'index.html');
+    }
+
     tab = $.urlParam('tab')
     if (tab == 1) {
         $('#profile_data').click();
