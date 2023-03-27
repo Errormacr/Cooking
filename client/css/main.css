@@ -30,6 +30,11 @@ h2 {
     margin: 70px 0 40px;
 }
 
+h3 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
 input:focus {
     outline: none;
 }
@@ -96,6 +101,7 @@ footer {
 
 .btn-wide {
     width: 100%;
+    padding: 12px 0;
 }
 
 label {
@@ -232,6 +238,57 @@ input[type="number"]:focus {
 
 .tag-block:hover {
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.6);
+}
+
+.modal-back {
+    display:none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgb(105, 105, 105);
+    opacity: 0.7;
+    top: 0;
+    left: 0;
+    z-index: 110;
+    cursor: pointer;
+}
+
+.auth-modal-block {
+    position: relative;
+}
+
+.auth-modal {
+    width: 100%;
+    background-color: #fff;
+    padding: 30px 50px;
+    border-radius: 15px;
+    z-index: 111;
+    display: none;
+    position: relative;
+}
+
+.auth-modal button {
+    margin-bottom: 12px;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.auth-modal a {
+    color: #144f2b;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.auth-form label {
+    font-size: 18px;
+}
+
+.auth-form input {
+    border: #61b030 solid 2px;
+    background-color: #fff;
+    margin: 5px 0 30px;
+    font-size: 18px;
+    padding: 3% 9%;
 }
 
 @media screen and (width < 576px) {
