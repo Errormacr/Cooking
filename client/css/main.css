@@ -108,6 +108,10 @@ footer {
     padding: 12px 0;
 }
 
+.btn-abort {
+    background-color: #e62c2c;
+}
+
 label {
     color: #000;
 }

@@ -1,3 +1,74 @@
+const server_url = sessionStorage.getItem('server_url');
+
+async function fetch_user() {
+    const query = server_url + 'users/?user_id=' + sessionStorage.getItem('user_id');
+    
+    const response = await fetch(query, {
+        credentials: 'include'
+    })
+    console.log(response);
+
+    const user = await response.json();
+    console.log(user);
+    
+    const img_src = server_url + 'users/photo?user_id=' + sessionStorage.getItem('user_id');
+    $('.round-img').attr('src', img_src);
+
+    $('input[name="login"]').val(user['login']);
+    $('input[name="firstname"]').val(user['name']);
+    $('input[name="lastname"]').val(user['s_name']);
+    $('input[name="date_of_birth"]').val(user['b_day']);
+    $('input[name="sex"]').val(user['gender']);
+    $('input[name="email"]').val(user['email']);
+}
+
+async function update_user() {
+    let approved = true;
+    
+    $('#profile_data input').each(function(index, element) {
+        if ($(element).val().trim() == '') {
+            $('.hint').html('Пожалуйста, укажите личную информацию.');
+            approved = false;
+        }
+    })
+
+    // тут должны быть проверки
+
+    if (approved) {
+        const details = {
+            login: $('input[name="login"]').val(),
+            email: $('input[name="email"]').val(),
+            name: $('input[name="firstname"]').val(),
+            s_name: $('input[name="lastname"]').val(),
+            b_day: $('input[name="date_of_birth"]').val()+'T00:00',
+            gender: ($('input[name="sex"]').val() == 'Мужской' ? 'М' : 'Ж'),
+        };
+    
+        let url_params = [];
+        for (const property in details) {
+            const encoded_key = encodeURIComponent(property);
+            const encoded_value = encodeURIComponent(details[property]);
+            url_params.push(encoded_key + '=' + encoded_value); 
+        }
+        url_params = url_params.join('&');
+    
+        const query = server_url + 'users?' + url_params;
+        
+        const response = await fetch(query, {
+            method: 'PUT',
+            credentials: 'include',
+            // body: фотография
+        });
+        console.log(response);
+
+        $('#save_btn').hide();
+    }
+}
+
+function on_save_btn_click() {
+    update_user();
+}
+
 function on_prof_data_click() {
     $('.menu').css('background', 'linear-gradient(to right, #61b030 33%, #d9d9d9 33%)');
     $('#profile_data').css('color', '#fff');
@@ -5,7 +76,15 @@ function on_prof_data_click() {
     $('#users_recipes').css('color', '');
 
     profile_content_container = $('#profile_content_container');
-    profile_content_container.loadTemplate('templates/profile/profile_data_tpl.html');
+    profile_content_container.loadTemplate('templates/profile/profile_data_tpl.html', null, {
+        complete: function() {
+            $('#save_btn').hide();
+            $('#profile_data input').focus(function() {
+                $('#save_btn').show();
+            });
+            fetch_user();
+        }
+    });
 }
 
 function on_fav_recipes_click() {

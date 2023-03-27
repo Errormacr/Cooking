@@ -1,6 +1,15 @@
 <div class="row">
     <div class="col-xs-12">
         <form id="profile_data" action="#">
+            <label for="login">Логин</label><br />
+            <input
+                name="login"
+                id="login"
+                type="text"
+                placeholder="Логин"
+                autocomplete="off"
+            /><br />
+
             <label for="firstname">Имя</label><br />
             <input
                 name="firstname"
@@ -45,7 +54,14 @@
     </div>
 </div>
 <div class="row center-xs">
+    <div class="col-xs">
+        <p class="hint"></p>
+    </div>
+</div>
+<div class="row center-xs">
     <div class="submit-container col-xs">
-        <button class="btn" form="profile_data" type="button">Сохранить</button>
+        <button id="save_btn" class="btn" onclick="on_save_btn_click()" type="button">Сохранить</button>
+        <button class="btn btn-abort" onclick="">Выйти</button>
+
     </div>
 </div>

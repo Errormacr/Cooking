@@ -73,8 +73,8 @@ async function get_current_user() {
     });
     console.log(response);
 
-    const result = await response.json();
-    console.log(result);
+    const user = await response.json();
+    console.log(user);
 
     console.log(user['id']);
 
