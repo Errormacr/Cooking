@@ -1,4 +1,5 @@
 sessionStorage.setItem('server_url', 'http://localhost:8000/');
+server_url = sessionStorage.getItem('server_url');
 
 $.urlParam = function(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
@@ -64,6 +65,22 @@ function on_sign_in_click() {
     $('#sign_in_modal').popup();
 }
 
+async function get_current_user() {
+    const query = server_url + 'users/current/';
+
+    const response = await fetch(query, {
+        credentials: 'include',
+    });
+    console.log(response);
+
+    const result = await response.json();
+    console.log(result);
+
+    console.log(user['id']);
+
+    sessionStorage.setItem('user_id', user['id']);
+}
+
 async function sign_in() {
     // предположение о корректности введенных данных
     $('#sign_in_modal .hint').html('');
@@ -115,8 +132,7 @@ async function sign_in() {
         console.log(result);
 
         if (response.ok) {
-            // при успешной авторизации создаем в хранилище флаг "авторизован"
-            sessionStorage.setItem('authorized', true);
+            get_current_user();
 
             $('.modal-back').click();
 
@@ -201,7 +217,7 @@ async function sign_up() {
 }
 
 function authorized() {
-    return (sessionStorage.getItem('authorized') ? true : false);
+    return (sessionStorage.getItem('user_id') != null ? true : false);
 }
 
 $('document').ready(function() { 
