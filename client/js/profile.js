@@ -65,8 +65,17 @@ async function update_user() {
     }
 }
 
-function on_save_btn_click() {
-    update_user();
+async function logout() {
+    const query = server_url + 'auth/jwt/logout';
+        
+    const response = await fetch(query, {
+        method: 'POST',
+        credentials: 'include',
+    });
+    console.log(response);
+
+    sessionStorage.removeItem('user_id');
+    $(location).attr('href', 'index.html');
 }
 
 function on_prof_data_click() {

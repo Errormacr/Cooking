@@ -59,9 +59,18 @@
     </div>
 </div>
 <div class="row center-xs">
-    <div class="submit-container col-xs">
-        <button id="save_btn" class="btn" onclick="on_save_btn_click()" type="button">Сохранить</button>
-        <button class="btn btn-abort" onclick="">Выйти</button>
-
+    <div class="buttons-container col-xs">
+        <div class="button-container row">
+            <div class="col-xs">
+                <button id="save_btn" class="btn" onclick="update_user()">
+                    Сохранить
+                </button>
+            </div>
+        </div>
+        <div class="button-container row">
+            <div class="col-xs">
+                <button class="btn btn-abort" onclick="logout()">Выйти</button>
+            </div>
+        </div>
     </div>
 </div>

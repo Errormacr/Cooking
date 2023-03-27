@@ -31,8 +31,12 @@
     cursor: pointer;
 }
 
-.submit-container {
+.buttons-container {
     margin-bottom: 100px;
+}
+
+.button-container {
+    margin-bottom: 30px;
 }
 
 .favourite-btn {
