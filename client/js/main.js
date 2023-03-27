@@ -117,12 +117,86 @@ async function sign_in() {
         if (response.ok) {
             // при успешной авторизации создаем в хранилище флаг "авторизован"
             sessionStorage.setItem('authorized', true);
+
+            $('.modal-back').click();
+
+            // тут должно быть окошко "успешно"
         } else {
             $('#sign_in_modal .hint').html('Такого пользователя не существует.');
         }
-        
-        $('.modal-back').click();
+    }
+}
 
+async function sign_up() {
+    // предположение о корректности введенных данных
+    $('#sign_up_modal .hint').html('');
+    let approved = true;
+
+    // проверка заполнения всех полей
+    $('#sign_up_modal input').each(function(index, element) {
+        if ($(element).val().trim() == '') {
+            $('#sign_up_modal .hint').html('Все поля обязательны к заполнению.');
+            approved = false;
+        }
+    })
+
+    // проверка совпадения пароля и проверки
+    const password = $('#sign_up_modal input[name="password"]').val();
+    const password_confirmation = $('#sign_up_modal input[name="password_confirmation"]').val();
+    if (password != password_confirmation) {
+        $('#sign_up_modal .hint').html('Пароли должны совпадать.');
+        approved = false;
+    }
+
+    // проверка корректности адреса электронной почты
+    const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+
+    const email = $('#sign_up_modal input[name="email"]').val();
+    if (!EMAIL_REGEXP.test(email)) {
+        $('#sign_up_modal .hint').html('Предложен некорректный адрес электронной почты.');
+        approved = false;
+    }
+
+    // тут должны быть проверки
+
+    //если все проверки пройдены, регистрационный запрос
+    if (approved) {
+        const query = server_url + 'auth/register';
+        let fetch_params = {
+            method: 'POST',
+            credentials: 'include',
+        }
+
+        const headers = {
+            "Content-Type": "application/json",
+        };
+
+        const body = {
+            email: $('#sign_up_modal input[name="email"]').val(),
+            password: $('#sign_up_modal input[name="password"]').val(),
+            is_active: true,
+            is_superuser: false,
+            is_verified: false,
+            login: $('#sign_up_modal input[name="login"]').val(),
+        };
+
+
+        fetch_params.headers = headers;
+        fetch_params.body = JSON.stringify(body);
+
+        const response = await fetch(query, fetch_params);
+        console.log(response);
+
+        const result = await response.json();
+        console.log(result);
+
+        if (response.ok) {
+            $('.modal-back').click();
+
+            // тут должно быть окошко "успешно"
+        } else {
+            $('#sign_up_modal .hint').html('Такой пользователь уже существует.');
+        }
     }
 }
 
@@ -134,11 +208,8 @@ $('document').ready(function() {
     var header_container = $('header');
     header_container.loadTemplate("templates/main/header_tpl.html", {});
 
-    if (authorized()) {
-        var footer_container = $('footer');
-        footer_container.loadTemplate("templates/main/footer_tpl.html", {});
-    }
-    
+    var footer_container = $('footer');
+    footer_container.loadTemplate("templates/main/footer_tpl.html", {});
 
     $('#modals_container').loadTemplate('templates/main/sign_up_modal_tpl.html', null, {
         append: true

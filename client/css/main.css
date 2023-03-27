@@ -12,6 +12,10 @@ header {
     z-index: 100;
 }
 
+header img {
+    cursor: pointer;
+}
+
 img {
     user-select: none;
 }
