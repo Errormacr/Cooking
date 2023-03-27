@@ -84,7 +84,7 @@ async function fetch_recipe() {
     let categories = new Map();
     categories.set('kkal', 'Калории');
     categories.set('belky', 'Белки');
-    categories.set('zhiry', 'Жиры');
+    categories.set('zhyri', 'Жиры');
     categories.set('uglevody', 'Углеводы');
 
     let info_data = [];
@@ -124,13 +124,13 @@ async function fetch_recipe() {
 
     recipe['ingredients'].forEach(ingredient => {
         ingredients_data.push({
-            name: ingredient[0],
-            quantity: ingredient[2],
-            unit: ingredient[1]
+            name: ingredient[1],
+            quantity: ingredient[3],
+            unit: ingredient[2]
         });
 
         // запись стандартного количества для дальнейших расчетов
-        standard_quantity.push(ingredient[2])
+        standard_quantity.push(ingredient[3])
     });
 
     $('#ingredients_container').loadTemplate('templates/recipe/ingredient_tpl.html', ingredients_data);
@@ -287,14 +287,19 @@ $('document').ready(function() {
             $('span[name*="quantity"]').each(function(index, element) {
                 let quantity = $(element).html();
 
-                const part = Math.round(standard_quantity[index] / standard_servings);
+                const part = Number(standard_quantity[index] / standard_servings).toFixed(2);
                 if (sign == '+') {
-                    quantity = Number(quantity) + part;
+                    quantity = Number(quantity) + Number(part);
                 } else if (sign == '-') {
-                    quantity = Number(quantity) - part;
+                    quantity = Number(quantity) - Number(part);
                 }
 
-                $(element).html(Math.round(quantity));
+                quantity = quantity.toFixed(2);
+                if (String(quantity).endsWith('.00')) {
+                    $(element).html(Math.round(quantity));
+                } else {
+                    $(element).html(quantity);
+                }
             })
         }  
     })

@@ -291,6 +291,13 @@ input[type="number"]:focus {
     padding: 3% 9%;
 }
 
+.hint {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #e62c2c;
+}
+
 @media screen and (width < 576px) {
     .btn {
         padding: 12px 40px;
