@@ -39,7 +39,7 @@ def fill_recipe(connection):
             except:
                 break
             name = file.readline().replace('\n', '')
-            pathPhoto = f'../photo/recipe/{s}_recipe_photo.jpg'
+            pathPhoto = f'../photo/recipe/{s}_recipe_photo'
             file.readline()
             photo_type = file.readline().replace('\n', '')
             servings = int(file.readline())

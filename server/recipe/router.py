@@ -95,11 +95,11 @@ async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: i
         result1 = result1.all()
         tags_rec = []
         for j in result1:
-            query = select(Tag.c.name).where(Tag.c.tag_ID == j[0])
+            query = select(Tag).where(Tag.c.tag_ID == j[0])
             resultTag = await session.execute(query)
             resultTag = resultTag.all()
             if resultTag:
-                tags_rec.append(resultTag[0][0])
+                tags_rec.append((resultTag[0][0],resultTag[0][1]))
         tags[i[0]] = tags_rec
     answer = [{
         "recipe_id": rec[0],
@@ -128,11 +128,11 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
         result1 = result1.all()
         tags_rec = []
         for j in result1:
-            query = select(Tag.c.name).where(Tag.c.tag_ID == j[0])
+            query = select(Tag).where(Tag.c.tag_ID == j[0])
             resultTag = await session.execute(query)
             resultTag = resultTag.all()
             if resultTag:
-                tags_rec.append(resultTag[0][0])
+                tags_rec.append((resultTag[0][0],resultTag[0][1]))
         tags[i[0]] = tags_rec
 
     ingredients = []
@@ -146,7 +146,7 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
             resultIngr = resultIngr.all()
             resultUnit = await session.execute(select(Unit.c.name).where(Unit.c.unit_ID == resultIngr[0][2]))
             resultUnit = resultUnit.all()
-            ingredients.append((resultIngr[0][1], resultUnit[0][0], j[3]))
+            ingredients.append((resultIngr[0][0],resultIngr[0][1], resultUnit[0][0], j[3]))
     answer = [{
         "recipe_id": rec[0],
         'recipe_desc': {"name": rec[1], "photo": rec[2], "photo_type": rec[3], "servings_cout": rec[4],
@@ -154,7 +154,10 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
                         "rating": rec[6], "recommend": rec[7], "author": rec[8]},
         'tags': tags[rec[0]],
         'ingredients': ingredients,
-        'belky': rec[10], 'zhiry': rec[11], 'uglevody': rec[12], 'kkal': rec[9]} for rec in result]
+        "kkal": round(rec[9] / rec[4], 2) if rec[9] is not None else rec[9],
+        "belky": round(rec[10] / rec[4], 2) if rec[10] is not None else rec[10],
+        "zhyri": round(rec[11] / rec[4], 2) if rec[11] is not None else rec[11],
+        "uglevody": round(rec[12] / rec[4], 2) if rec[12] is not None else rec[12]} for rec in result]
     return answer
 
 
