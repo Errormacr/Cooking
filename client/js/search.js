@@ -36,13 +36,13 @@ async function fetch_recipes(type) {
     };
 
     if (type == 'tag') {
-        body = {
+        const body = {
             tag: [
                 $.urlParam('tag')
             ],
         };
 
-        headers = {
+        const headers = {
             "Content-Type": "application/json",
         };
 
