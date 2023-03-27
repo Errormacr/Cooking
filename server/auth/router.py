@@ -91,6 +91,19 @@ async def get_user_photo(user_id: int = None, user_name: str = None, user_email:
         raise HTTPException(status_code=404, detail="can't find photo")
 
 
+@router.get("/current/photo", tags=["users"])
+async def get_current_user_photo(user: auth_user = Depends(current_user),
+                                 session: AsyncSession = Depends(get_async_session)):
+    with open(f"../photo/user/{user.id}_user_photo", "rb") as photo:
+        result = await session.execute(select(User.c.photo_type).where(User.c.id == user.id))
+        result = result.all()
+        if result:
+            data = photo.read()
+            return Response(data, status_code=200, media_type=result[0][0])
+        else:
+            raise HTTPException(status_code=404, detail="can't find photo")
+
+
 @router.put("", status_code=201, tags=["users"])
 async def update_user(photo: UploadFile = None, user_req: UserUpdate = Depends(),
                       user: auth_user = Depends(current_user), session: AsyncSession = Depends(get_async_session)):
