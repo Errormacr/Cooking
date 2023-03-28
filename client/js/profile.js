@@ -1,5 +1,7 @@
 const server_url = sessionStorage.getItem('server_url');
 
+
+
 async function fetch_user() {
     const query = server_url + 'users/?user_id=' + sessionStorage.getItem('user_id');
     
@@ -96,6 +98,8 @@ function on_prof_data_click() {
     });
 }
 
+
+
 async function fetch_fav_recipes() {
     const query = server_url + 'users/' + sessionStorage.getItem('user_id') + '/favourite';
 
@@ -107,7 +111,7 @@ async function fetch_fav_recipes() {
     const recipes = await response.json();
     console.log(recipes);
 
-    fav_recipes_data = [];
+    let fav_recipes_data = [];
 
     recipes.forEach(recipe => {
         const recipe_desc = recipe['recipe_desc'];
@@ -153,9 +157,6 @@ function on_fav_recipes_click() {
     $('#profile_data').css('color', '');
     $('#favourite_recipes').css('color', '#fff');
     $('#users_recipes').css('color', '');
-    
-    
-
 
     profile_content_container = $('#profile_content_container');
     profile_content_container.loadTemplate('templates/profile/recipes_container_tpl.html', null, {
@@ -165,6 +166,63 @@ function on_fav_recipes_click() {
     });
 }
 
+
+
+async function fetch_users_recipes() {
+    const query = server_url + 'recipes/get/?author=' + sessionStorage.getItem('user_id');
+
+    const response = await fetch(query, {
+        method: 'POST',
+        credentials: 'include'
+    });
+    console.log(response);
+
+    const recipes = await response.json();
+    console.log(recipes);
+
+    let users_recipes_data = [];
+
+    recipes.forEach(recipe => {
+        let time = Number(recipe['cook_time']);
+        const hours = Math.floor(time / 3600);
+        const minutes = time % 3600 / 60;
+        
+        time = (hours != 0 ? hours + ' ч' : "") + " " + (minutes != 0 ? minutes + ' мин' : "");
+
+        const img_src = server_url + 'recipes/photo/' + recipe['recipe_id'];
+
+
+        users_recipes_data.push(
+            {
+                edit_alt: recipe['recipe_id'],
+                delete_alt: recipe['recipe_id'],
+                name: recipe['name'],
+                time: time,
+                img_src: img_src,
+                href: 'recipe.html?id=' + recipe['recipe_id']
+            }
+        )
+    });
+
+    $('#recipes_container').loadTemplate('templates/profile/users_recipe_card_tpl.html', users_recipes_data);
+}
+
+function edit_recipe(element) {
+    // редирект на стр редактирования рецепта + id рецепта
+}
+
+async function delete_recipe(element) {
+    const recipe_id = $(element).attr('alt');
+    
+    const query = server_url + 'recipes/' + recipe_id;
+    
+    const response = await fetch(query, {
+        method: 'DELETE',
+        credentials: 'include'
+    });
+    console.log(response);
+}
+
 function on_users_recipes_click() {
     $('.menu').css('background', 'linear-gradient(to right, #d9d9d9 66%, #61b030 66%)');
     $('#profile_data').css('color', '');
@@ -172,7 +230,11 @@ function on_users_recipes_click() {
     $('#users_recipes').css('color', '#fff');
 
     profile_content_container = $('#profile_content_container');
-    profile_content_container.loadTemplate('templates/profile/users_recipe_card_tpl.html');
+    profile_content_container.loadTemplate('templates/profile/recipes_container_tpl.html', null, {
+        complete: function() {
+            fetch_users_recipes();
+        }
+    });
 }
 
 $('document').ready(function() {

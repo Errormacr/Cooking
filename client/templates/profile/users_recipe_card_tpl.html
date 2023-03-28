@@ -1,137 +1,23 @@
-<div id="recipes_container" class="row start-md center-xs">
-    <div class="col-lg-4 col-md-6 col-xs-10">
-        <a class="recipe-link" href="recipe.html">
-            <div class="recipe-card">
-                <div class="edit-btn">
-                    <img
-                        src="img/profile/edit.svg"
-                        alt="edit"
-                    />
+<div class="col-lg-4 col-md-6 col-xs-10">
+    <div class="recipe-card">
+        <div class="edit-btn">
+            <img src="img/profile/edit.svg" data-alt="edit_alt" />
+        </div>
+        <div class="delete-btn">
+            <img src="img/profile/delete.svg" data-alt="delete_alt" />
+        </div>
+        <a class="recipe-link" data-href="href">
+            <img
+                class="recipe-card-img"
+                onerror="$(this).attr('src', 'img/main/recipe_placeholder.png');"
+                data-src="img_src"
+                alt="recipe_photo"
+            />
+            <div class="recipe-card-info">
+                <div class="recipe-card-time-block">
+                    <p class="recipe-card-time" data-content="time"></p>
                 </div>
-                <div class="delete-btn">
-                    <img
-                        src="img/profile/delete.svg"
-                        alt="delete"
-                    />
-                </div>
-                <img
-                    class="recipe-card-img"
-                    src="img/main/recipe_placeholder.png"
-                    alt="recipe_photo"
-                />
-                <div class="recipe-card-info">
-                    <div class="recipe-card-time-block">
-                        <p class="recipe-card-time">
-                            25 мин
-                        </p>
-                    </div>
-                    <p class="recipe-card-name">
-                        Фаршированные булочки с яйцом и
-                        сыром
-                    </p>
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-lg-4 col-md-6 col-xs-10">
-        <a class="recipe-link" href="recipe.html">
-            <div class="recipe-card">
-                <div class="edit-btn">
-                    <img
-                        src="img/profile/edit.svg"
-                        alt="edit"
-                    />
-                </div>
-                <div class="delete-btn">
-                    <img
-                        src="img/profile/delete.svg"
-                        alt="delete"
-                    />
-                </div>
-                <img
-                    class="recipe-card-img"
-                    src="img/main/recipe_placeholder.png"
-                    alt="recipe_photo"
-                />
-                <div class="recipe-card-info">
-                    <div class="recipe-card-time-block">
-                        <p class="recipe-card-time">
-                            25 мин
-                        </p>
-                    </div>
-                    <p class="recipe-card-name">
-                        Фаршированные булочки с яйцом и
-                        сыром
-                    </p>
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-lg-4 col-md-6 col-xs-10">
-        <a class="recipe-link" href="recipe.html">
-            <div class="recipe-card">
-                <div class="edit-btn">
-                    <img
-                        src="img/profile/edit.svg"
-                        alt="edit"
-                    />
-                </div>
-                <div class="delete-btn">
-                    <img
-                        src="img/profile/delete.svg"
-                        alt="delete"
-                    />
-                </div>
-                <img
-                    class="recipe-card-img"
-                    src="img/main/recipe_placeholder.png"
-                    alt="recipe_photo"
-                />
-                <div class="recipe-card-info">
-                    <div class="recipe-card-time-block">
-                        <p class="recipe-card-time">
-                            25 мин
-                        </p>
-                    </div>
-                    <p class="recipe-card-name">
-                        Фаршированные булочки с яйцом и
-                        сыром
-                    </p>
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-lg-4 col-md-6 col-xs-10">
-        <a class="recipe-link" href="recipe.html">
-            <div class="recipe-card">
-                <div class="edit-btn">
-                    <img
-                        src="img/profile/edit.svg"
-                        alt="edit"
-                    />
-                </div>
-                <div class="delete-btn">
-                    <img
-                        src="img/profile/delete.svg"
-                        alt="delete"
-                    />
-                </div>
-                <img
-                    class="recipe-card-img"
-                    src="img/main/recipe_placeholder.png"
-                    alt="recipe_photo"
-                />
-                <div class="recipe-card-info">
-                    <div class="recipe-card-time-block">
-                        <p class="recipe-card-time">
-                            25 мин
-                        </p>
-                    </div>
-                    <p class="recipe-card-name">
-                        Фаршированные булочки с яйцом и
-                        сыром
-                    </p>
-                </div>
+                <p class="recipe-card-name" data-content="name"></p>
             </div>
         </a>
     </div>
