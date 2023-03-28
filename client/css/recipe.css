@@ -8,6 +8,10 @@
     background-color: #fff;
 }
 
+.recipe-img-btn {
+    cursor: pointer;
+}
+
 .rating {
     padding: 3px 6px;
     bottom: 21px;

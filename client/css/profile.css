@@ -33,6 +33,7 @@
     border-radius: 15px;
     background-color: #fff;
     z-index: 1;
+    cursor: pointer;
 }
 
 .edit-btn {
@@ -43,6 +44,7 @@
     border-radius: 15px;
     background-color: #fff;
     z-index: 1;
+    cursor: pointer;
 }
 
 .delete-btn {
@@ -53,6 +55,7 @@
     border-radius: 15px;
     background-color: #fff;
     z-index: 1;
+    cursor: pointer;
 }
 
 #profile_content_container {
