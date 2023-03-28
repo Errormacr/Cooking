@@ -186,7 +186,7 @@ async def create_fav_recipe_of_user(recipe_id: int, user: auth_user = Depends(cu
 async def delete_fav_recipe_of_user(recipe_id: int, user: auth_user = Depends(current_user),
                                     session: AsyncSession = Depends(get_async_session)):
     stmt = delete(Favourite_recipe).where(
-        Favourite_recipe.c.user_ID == user.id and Favourite_recipe.c.recipe_ID == recipe_id)
+        Favourite_recipe.c.user_ID == user.id).where(Favourite_recipe.c.recipe_ID == recipe_id)
     await session.execute(stmt)
     try:
         await session.commit()
