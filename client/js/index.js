@@ -203,6 +203,8 @@ async function fetch_filters () {
             reload_recipes();
         }
     });
+
+    $('#more_btn').click();
 }
 
 function reload_recipes() {
@@ -223,8 +225,6 @@ let conditions = [' ↓', '  ', ' ↑']
 $('document').ready(function() {
     fetch_filters();
     fetch_tags();
-    
-    $('#more_btn').click();
 
     $('#filter_btn').click(function(event) {
         event.preventDefault();
