@@ -153,7 +153,8 @@ async function delete_fav(element) {
     });
     console.log(response);
 
-    fetch_fav_recipes();
+    // fetch_fav_recipes();
+    $('#favourite_recipes').click();
 }
 
 function on_fav_recipes_click() {
@@ -230,7 +231,7 @@ async function delete_recipe(element) {
     });
     console.log(response);
 
-    fetch_users_recipes();
+    $('#users_recipes').click();
 }
 
 function on_users_recipes_click() {

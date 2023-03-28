@@ -54,3 +54,7 @@
     background-color: #fff;
     z-index: 1;
 }
+
+#profile_content_container {
+    min-height: 30vh;
+}
