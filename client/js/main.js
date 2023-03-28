@@ -139,7 +139,7 @@ async function sign_in() {
 
             $('.modal-back').click();
 
-            // тут должно быть окошко "успешно"
+            notification('Вы успешно авторизовались!', 2500);
         } else {
             $('#sign_in_modal .hint').html('Такого пользователя не существует.');
         }
@@ -212,7 +212,7 @@ async function sign_up() {
         if (response.ok) {
             $('.modal-back').click();
 
-            // тут должно быть окошко "успешно"
+            notification('Вы успешно зарегистрировались!', 2500);
         } else {
             $('#sign_up_modal .hint').html('Такой пользователь уже существует.');
         }
@@ -221,6 +221,22 @@ async function sign_up() {
 
 function authorized() {
     return (sessionStorage.getItem('user_id') != null ? true : false);
+}
+
+function notification(text, duration) {
+    $('#notification').remove();
+    $('body').loadTemplate('templates/main/notification_tpl.html', {
+        text: text
+    }, {
+        append: true,
+        complete: function() {
+            const notification = $('#notification');
+            notification.css('left', ($(window).width() - notification.width()) / 2 + 'px');
+            setTimeout(function() {
+                notification.remove();
+            }, duration)
+        }
+    })
 }
 
 $('document').ready(function() { 

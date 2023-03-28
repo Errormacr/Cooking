@@ -164,7 +164,7 @@ async function fetch_fav_recipes() {
 }
 
 async function delete_fav(element) {
-    // окна "вы уверены..." "успешно удалено"
+    // окна "вы уверены..."
 
     const recipe_id = $(element).attr('alt');
 
@@ -176,7 +176,8 @@ async function delete_fav(element) {
     });
     console.log(response);
 
-    // fetch_fav_recipes();
+    notification('Рецепт удален из избранного.', 2500);
+
     $('#favourite_recipes').click();
 }
 
@@ -242,7 +243,7 @@ function edit_recipe(element) {
 }
 
 async function delete_recipe(element) {
-    // окна "вы уверены..." "успешно удалено"
+    // окна "вы уверены..."
     console.log('delete ', $(element).attr('alt'))
     
     const recipe_id = $(element).attr('alt');
@@ -255,6 +256,7 @@ async function delete_recipe(element) {
     });
     console.log(response);
 
+    notification('Рецепт удален.', 2500);
     $('#users_recipes').click();
 }
 
