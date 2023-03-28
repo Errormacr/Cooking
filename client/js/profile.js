@@ -96,14 +96,60 @@ function on_prof_data_click() {
     });
 }
 
+async function fetch_fav_recipes() {
+    const query = server_url + 'users/' + sessionStorage.getItem('user_id') + '/favourite';
+
+    const response = await fetch(query, {
+        credentials: 'include'
+    });
+    console.log(response);
+
+    const recipes = await response.json();
+    console.log(recipes);
+
+    fav_recipes_data = [];
+
+    recipes.forEach(recipe => {
+        const recipe_desc = recipe['recipe_desc'];
+
+        let time = Number(recipe_desc['cook_time']);
+        const hours = Math.floor(time / 3600);
+        const minutes = time % 3600 / 60;
+        
+        time = (hours != 0 ? hours + ' ч' : "") + " " + (minutes != 0 ? minutes + ' мин' : "");
+
+        const img_src = server_url + 'recipes/photo/' + recipe['recipe_id'];
+
+
+        fav_recipes_data.push(
+            {
+                name: recipe_desc['name'],
+                time: time,
+                img_src: img_src,
+                href: 'recipe.html?id=' + recipe['recipe_id']
+            }
+        )
+    });
+
+    $('#recipes_container').loadTemplate('templates/profile/fav_recipe_card_tpl.html', fav_recipes_data);
+
+}
+
 function on_fav_recipes_click() {
     $('.menu').css('background', 'linear-gradient(to right, #d9d9d9 33%, #61b030 33% 66%, #d9d9d9 66%)');
     $('#profile_data').css('color', '');
     $('#favourite_recipes').css('color', '#fff');
     $('#users_recipes').css('color', '');
     
+    
+
+
     profile_content_container = $('#profile_content_container');
-    profile_content_container.loadTemplate('templates/profile/fav_recipe_card_tpl.html');
+    profile_content_container.loadTemplate('templates/profile/recipes_container_tpl.html', null, {
+        complete: function() {
+            fetch_fav_recipes();
+        }
+    });
 }
 
 function on_users_recipes_click() {
