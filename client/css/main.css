@@ -191,6 +191,23 @@ textarea {
     margin: 0;
 }
 
+.recipe-card-rating-block {
+    position: absolute;
+    top: -112px;
+    right: 7px;
+    background-color: #fff;
+    border-radius: 23px;
+    padding: 7px 25px;
+}
+
+.recipe-card-rating-block img {
+    display: inline;
+}
+
+.recipe-card-rating {
+    margin: 0;
+}
+
 .recipe-link {
     text-decoration: none;
     color: #144f2b;

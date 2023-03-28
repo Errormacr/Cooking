@@ -42,6 +42,7 @@ async function fetch_recipes (params, append) {
         recipe_cards.push(
             {
                 name: recipe['name'],
+                rating: recipe['rating'],
                 time: time,
                 img_src: img_src,
                 href: 'recipe.html?id=' + recipe['recipe_id']

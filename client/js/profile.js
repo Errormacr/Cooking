@@ -151,6 +151,7 @@ async function fetch_fav_recipes() {
             {
                 fav_alt: recipe['recipe_id'],
                 name: recipe_desc['name'],
+                rating: recipe_desc['rating'],
                 time: time,
                 img_src: img_src,
                 href: 'recipe.html?id=' + recipe['recipe_id']
@@ -224,6 +225,7 @@ async function fetch_users_recipes() {
                 edit_alt: recipe['recipe_id'],
                 delete_alt: recipe['recipe_id'],
                 name: recipe['name'],
+                rating: recipe['rating'],
                 time: time,
                 img_src: img_src,
                 href: 'recipe.html?id=' + recipe['recipe_id']
