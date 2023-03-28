@@ -53,14 +53,36 @@ async function update_user() {
             url_params.push(encoded_key + '=' + encoded_value); 
         }
         url_params = url_params.join('&');
-    
-        const query = server_url + 'users?' + url_params;
         
-        const response = await fetch(query, {
+
+        // const img_response = await fetch(img_url);
+        // const img_blob = await img_response.blob();
+
+        
+
+        // const file = $('input[name="profile_photo"]').files[0];
+        // const reader = new FileReader();
+        // reader.onloadend = function() {
+        //     const data=(reader.result).split(',')[1];
+        //     const binaryBlob = atob(data);
+        //     body.append('photo', binaryBlob);
+        // }
+        // reader.readAsDataURL(file);
+
+        let fetch_params = {
             method: 'PUT',
             credentials: 'include',
-            // body: фотография
-        });
+        }
+
+        if (profile_photo) {
+            let body = new FormData();
+            body.append('photo', profile_photo);
+            fetch_params.body = body;
+        }
+
+        const query = server_url + 'users?' + url_params;
+        
+        const response = await fetch(query, fetch_params);
         console.log(response);
 
         $('#save_btn').hide();
@@ -248,6 +270,8 @@ function on_users_recipes_click() {
     });
 }
 
+let profile_photo;
+
 $('document').ready(function() {
     if (!authorized()) {
         $(location).attr('href', 'index.html');
@@ -259,4 +283,13 @@ $('document').ready(function() {
     } else if (tab == 2) {
         $('#favourite_recipes').click();
     }
+
+    $('#profile_photo').change(function() {
+        $('#save_btn').show();
+        profile_photo = this.files[0];
+        if (profile_photo) {
+            $('.round-img').attr('src', URL.createObjectURL(profile_photo));
+        }
+    });
+
 });

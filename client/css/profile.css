@@ -58,3 +58,17 @@
 #profile_content_container {
     min-height: 30vh;
 }
+
+.change-photo {
+    text-decoration: underline;
+    color: #144f2b;
+    cursor: pointer;
+}
+
+#profile_photo {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+    width: 0;
+    height: 0;
+}
