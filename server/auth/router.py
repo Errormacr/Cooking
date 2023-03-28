@@ -186,7 +186,7 @@ async def create_fav_recipe_of_user(recipe_id: int, user: auth_user = Depends(cu
 async def delete_fav_recipe_of_user(recipe_id: int, user: auth_user = Depends(current_user),
                                     session: AsyncSession = Depends(get_async_session)):
     stmt = delete(Favourite_recipe).where(
-        Favourite_recipe.c.user_ID == user.id and Favourite_recipe.c.recipe_ID == recipe_id)
+        Favourite_recipe.c.user_ID == user.id).where(Favourite_recipe.c.recipe_ID == recipe_id)
     await session.execute(stmt)
     try:
         await session.commit()
@@ -227,7 +227,7 @@ async def get_score_of_recipe(recipe_id: int, session: AsyncSession = Depends(ge
 async def delete_score_of_recipe(recipe_id: int, user: auth_user = Depends(current_user),
                                  session: AsyncSession = Depends(get_async_session)):
     stmt = delete(Score_recipe).where(
-        Score_recipe.c.user_ID == user.id and Score_recipe.c.recipe_ID == recipe_id)
+        Score_recipe.c.user_ID == user.id).where(Score_recipe.c.recipe_ID == recipe_id)
     try:
         await session.execute(stmt)
         await session.commit()
@@ -241,13 +241,13 @@ async def delete_score_of_recipe(recipe_id: int, user: auth_user = Depends(curre
 @router.put("/score/", tags=['Score'])
 async def update_score(recipe_id: int, score: int, user: auth_user = Depends(current_user),
                        session: AsyncSession = Depends(get_async_session)):
-    query = select(Score_recipe).where(Score_recipe.c.recipe_ID == recipe_id and Score_recipe.c.user_ID == user.id)
+    query = select(Score_recipe).where(Score_recipe.c.recipe_ID == recipe_id).where(Score_recipe.c.user_ID == user.id)
     result = await session.execute(query)
     result = result.all()
     if not result:
         raise HTTPException(status_code=404, detail={"Error": "Can't find this score"})
     stmt = update(Score_recipe).where(
-        Score_recipe.c.user_ID == user.id and Score_recipe.c.recipe_ID == recipe_id).values(score=score)
+        Score_recipe.c.user_ID == user.id).where(Score_recipe.c.recipe_ID == recipe_id).values(score=score)
     try:
         await session.execute(stmt)
         await session.commit()

@@ -68,21 +68,21 @@ async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: i
     elif name_sort == -1:
         query = query.order_by(Recipe_bd.c.name.desc())
     if ot_kkal:
-        query = query.where(Recipe_bd.c.Kkal/Recipe_bd.c.servings_cout >= ot_kkal)
+        query = query.where(Recipe_bd.c.Kkal / Recipe_bd.c.servings_cout >= ot_kkal)
     if do_kkal:
-        query = query.where(Recipe_bd.c.Kkal/Recipe_bd.c.servings_cout <= do_kkal)
+        query = query.where(Recipe_bd.c.Kkal / Recipe_bd.c.servings_cout <= do_kkal)
     if ot_belki:
-        query = query.where(Recipe_bd.c.Belky/Recipe_bd.c.servings_cout >= ot_belki)
+        query = query.where(Recipe_bd.c.Belky / Recipe_bd.c.servings_cout >= ot_belki)
     if do_belki:
-        query = query.where(Recipe_bd.c.Belky/Recipe_bd.c.servings_cout <= do_belki)
+        query = query.where(Recipe_bd.c.Belky / Recipe_bd.c.servings_cout <= do_belki)
     if ot_zhiry:
-        query = query.where(Recipe_bd.c.Zhyri/Recipe_bd.c.servings_cout >= ot_zhiry)
+        query = query.where(Recipe_bd.c.Zhyri / Recipe_bd.c.servings_cout >= ot_zhiry)
     if do_zhiry:
-        query = query.where(Recipe_bd.c.Zhyri/Recipe_bd.c.servings_cout <= do_zhiry)
+        query = query.where(Recipe_bd.c.Zhyri / Recipe_bd.c.servings_cout <= do_zhiry)
     if ot_uglevody:
-        query = query.where(Recipe_bd.c.Uglevody/Recipe_bd.c.servings_cout >= ot_uglevody)
+        query = query.where(Recipe_bd.c.Uglevody / Recipe_bd.c.servings_cout >= ot_uglevody)
     if do_uglevody:
-        query = query.where(Recipe_bd.c.Uglevody/Recipe_bd.c.servings_cout <= do_uglevody)
+        query = query.where(Recipe_bd.c.Uglevody / Recipe_bd.c.servings_cout <= do_uglevody)
     query = query.offset(offset).limit(limit)
     result = await session.execute(query)
     result = result.all()
@@ -99,7 +99,7 @@ async def get_recipe(tag: List[int] = None, name_sort: int = None, score_sort: i
             resultTag = await session.execute(query)
             resultTag = resultTag.all()
             if resultTag:
-                tags_rec.append((resultTag[0][0],resultTag[0][1]))
+                tags_rec.append((resultTag[0][0], resultTag[0][1]))
         tags[i[0]] = tags_rec
     answer = [{
         "recipe_id": rec[0],
@@ -132,7 +132,7 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
             resultTag = await session.execute(query)
             resultTag = resultTag.all()
             if resultTag:
-                tags_rec.append((resultTag[0][0],resultTag[0][1]))
+                tags_rec.append((resultTag[0][0], resultTag[0][1]))
         tags[i[0]] = tags_rec
 
     ingredients = []
@@ -146,7 +146,7 @@ async def get_one_recipe(recipe_id: int, session: AsyncSession = Depends(get_asy
             resultIngr = resultIngr.all()
             resultUnit = await session.execute(select(Unit.c.name).where(Unit.c.unit_ID == resultIngr[0][2]))
             resultUnit = resultUnit.all()
-            ingredients.append((resultIngr[0][0],resultIngr[0][1], resultUnit[0][0], j[3]))
+            ingredients.append((resultIngr[0][0], resultIngr[0][1], resultUnit[0][0], j[3]))
     answer = [{
         "recipe_id": rec[0],
         'recipe_desc': {"name": rec[1], "photo": rec[2], "photo_type": rec[3], "servings_cout": rec[4],
