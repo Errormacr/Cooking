@@ -141,6 +141,8 @@ async function fetch_fav_recipes() {
 }
 
 async function delete_fav(element) {
+    // окна "вы уверены..." "успешно удалено"
+
     const recipe_id = $(element).attr('alt');
 
     const query = server_url + 'users/favourite?recipe_id=' + recipe_id;
@@ -150,6 +152,8 @@ async function delete_fav(element) {
         credentials: 'include'
     });
     console.log(response);
+
+    fetch_fav_recipes();
 }
 
 function on_fav_recipes_click() {
@@ -169,7 +173,7 @@ function on_fav_recipes_click() {
 
 
 async function fetch_users_recipes() {
-    const query = server_url + 'recipes/get/?author=' + sessionStorage.getItem('user_id');
+    const query = server_url + 'recipes/get/?limit=100&author=' + sessionStorage.getItem('user_id');
 
     const response = await fetch(query, {
         method: 'POST',
@@ -209,9 +213,13 @@ async function fetch_users_recipes() {
 
 function edit_recipe(element) {
     // редирект на стр редактирования рецепта + id рецепта
+    console.log('edit ', $(element).attr('alt'));
 }
 
 async function delete_recipe(element) {
+    // окна "вы уверены..." "успешно удалено"
+    console.log('delete ', $(element).attr('alt'))
+    
     const recipe_id = $(element).attr('alt');
     
     const query = server_url + 'recipes/' + recipe_id;
@@ -221,6 +229,8 @@ async function delete_recipe(element) {
         credentials: 'include'
     });
     console.log(response);
+
+    fetch_users_recipes();
 }
 
 function on_users_recipes_click() {
