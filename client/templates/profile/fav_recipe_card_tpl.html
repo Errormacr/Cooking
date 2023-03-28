@@ -1,9 +1,13 @@
 <div class="col-lg-4 col-md-6 col-xs-10">
-    <a class="recipe-link" data-href="href">
-        <div class="recipe-card">
-            <div class="favourite-btn">
-                <img src="img/profile/favourite.svg" alt="favourite" />
-            </div>
+    <div class="recipe-card">
+        <div class="favourite-btn">
+            <img
+                src="img/profile/favourite.svg"
+                data-alt="fav_alt"
+                onclick="delete_fav(this)"
+            />
+        </div>
+        <a class="recipe-link" data-href="href">
             <img
                 class="recipe-card-img"
                 onerror="$(this).attr('src', 'img/main/recipe_placeholder.png');"
@@ -16,6 +20,6 @@
                 </div>
                 <p class="recipe-card-name" data-content="name"></p>
             </div>
-        </div>
-    </a>
+        </a>
+    </div>
 </div>

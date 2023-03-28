@@ -123,6 +123,7 @@ async function fetch_fav_recipes() {
 
         fav_recipes_data.push(
             {
+                fav_alt: recipe['recipe_id'],
                 name: recipe_desc['name'],
                 time: time,
                 img_src: img_src,
@@ -133,6 +134,18 @@ async function fetch_fav_recipes() {
 
     $('#recipes_container').loadTemplate('templates/profile/fav_recipe_card_tpl.html', fav_recipes_data);
 
+}
+
+async function delete_fav(element) {
+    const recipe_id = $(element).attr('alt');
+
+    const query = server_url + 'users/favourite?recipe_id=' + recipe_id;
+
+    const response = await fetch(query, {
+        method: 'DELETE',
+        credentials: 'include'
+    });
+    console.log(response);
 }
 
 function on_fav_recipes_click() {
