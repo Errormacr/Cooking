@@ -187,6 +187,16 @@ async function fetch_recipe() {
     $('#tags_container').loadTemplate('templates/main/tag_tpl.html', tags_data);
 };
 
+async function add_to_fav() {
+    const query = server_url + 'users/favourite?recipe_id=' + $.urlParam('id');
+
+    const response = await fetch(query, {
+        method: 'POST',
+        credentials: 'include'
+    });
+    console.log(response);
+};
+
 // функции для таймера
 let timer;
 let base_hours, base_minutes, base_seconds;
