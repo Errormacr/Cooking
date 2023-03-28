@@ -1,6 +1,9 @@
 const server_url = sessionStorage.getItem('server_url');
 
-
+function set_photo() {
+    const img_src = server_url + 'users/photo?user_id=' + sessionStorage.getItem('user_id');
+    $('.round-img').attr('src', img_src);
+}
 
 async function fetch_user() {
     const query = server_url + 'users/?user_id=' + sessionStorage.getItem('user_id');
@@ -12,9 +15,6 @@ async function fetch_user() {
 
     const user = await response.json();
     console.log(user);
-    
-    const img_src = server_url + 'users/photo?user_id=' + sessionStorage.getItem('user_id');
-    $('.round-img').attr('src', img_src);
 
     $('input[name="login"]').val(user['login']);
     $('input[name="firstname"]').val(user['name']);
@@ -108,6 +108,8 @@ function on_prof_data_click() {
     $('#favourite_recipes').css('color', '');
     $('#users_recipes').css('color', '');
 
+    $('.change-photo').show();
+
     profile_content_container = $('#profile_content_container');
     profile_content_container.loadTemplate('templates/profile/profile_data_tpl.html', null, {
         complete: function() {
@@ -186,6 +188,8 @@ function on_fav_recipes_click() {
     $('#profile_data').css('color', '');
     $('#favourite_recipes').css('color', '#fff');
     $('#users_recipes').css('color', '');
+
+    $('.change-photo').hide();
 
     profile_content_container = $('#profile_content_container');
     profile_content_container.loadTemplate('templates/profile/recipes_container_tpl.html', null, {
@@ -266,6 +270,8 @@ function on_users_recipes_click() {
     $('#favourite_recipes').css('color', '');
     $('#users_recipes').css('color', '#fff');
 
+    $('.change-photo').hide();
+
     profile_content_container = $('#profile_content_container');
     profile_content_container.loadTemplate('templates/profile/recipes_container_tpl.html', null, {
         complete: function() {
@@ -280,6 +286,8 @@ $('document').ready(function() {
     if (!authorized()) {
         $(location).attr('href', 'index.html');
     }
+
+    set_photo();
 
     tab = $.urlParam('tab')
     if (tab == 1) {
