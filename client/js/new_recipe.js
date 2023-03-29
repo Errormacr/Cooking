@@ -59,6 +59,7 @@ function on_add_ingr_click() {
     }, {
         append: true,
         complete: function() {
+            $('#ingredient_' + curr_ingredient + ' input[name=ingredient]').focus();
             $('#ingredient_' + curr_ingredient + ' input[name=ingredient]').change(function() {
                 fetch_unit(this);
             });
