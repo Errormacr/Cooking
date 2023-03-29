@@ -37,4 +37,9 @@ function on_incr_serv_click() {
 $('document').ready(function() {
     $('#add_ingredient').click();
     $('#add_step').click();
+
+    if (!authorized()) {
+        sessionStorage.setItem('unathorized_access', true);
+        $(location).attr('href', 'index.html');
+    }
 });

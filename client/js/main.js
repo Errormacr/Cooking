@@ -259,6 +259,11 @@ $('document').ready(function() {
         append: true
     });
 
+    if(sessionStorage.getItem('unathorized_access')) {
+        notification('Для доступа к этой странице необходима авторизация.', 3000);
+        sessionStorage.removeItem('unathorized_access');
+    }
+
     $('.modal-back').click(function(){
         $('.auth-modal').fadeOut();
         $('.modal-back').fadeOut();

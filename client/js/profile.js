@@ -284,6 +284,7 @@ let profile_photo;
 
 $('document').ready(function() {
     if (!authorized()) {
+        sessionStorage.setItem('unathorized_access', true);
         $(location).attr('href', 'index.html');
     }
 
