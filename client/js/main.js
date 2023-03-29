@@ -264,6 +264,11 @@ $('document').ready(function() {
         sessionStorage.removeItem('unathorized_access');
     }
 
+    if(sessionStorage.getItem('cant_find')) {
+        notification('Страница не найдена.', 2500);
+        sessionStorage.removeItem('cant_find');
+    }
+
     $('.modal-back').click(function(){
         $('.auth-modal').fadeOut();
         $('.modal-back').fadeOut();

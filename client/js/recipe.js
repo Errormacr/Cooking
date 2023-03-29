@@ -61,6 +61,11 @@ async function fetch_recipe() {
     });
     console.log(recipes_response);
 
+    if (!recipes_response.ok) {
+        sessionStorage.setItem('cant_find', true);
+        $(location).attr('href', 'index.html');
+    }
+
     const recipe_info = await recipes_response.json();
     const recipe = recipe_info[0];
     console.log(recipe);
