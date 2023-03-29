@@ -1,8 +1,70 @@
-function on_add_ingr_click() {
-    ingredients_container = $('#ingredients_container');
-    ingredients_container.loadTemplate('templates/new_recipe/ingredient_tpl.html', null, {
-        append: true
+const server_url = sessionStorage.getItem('server_url');
+
+let curr_ingredient = 0;
+
+async function fetch_ingredients() {
+    const query = server_url + 'ingredient/?limit=1000';
+
+    const response = await fetch(query, {
+        credentials: 'include'
     });
+    console.log(response);
+
+    const ingredients = await response.json();
+    console.log(ingredients);
+
+    ingredients.forEach(ingredient => {
+        $('#ingredients_list').loadTemplate('templates/new_recipe/ingredient_option_tpl.html', {
+            ingredient_id: ingredient['id'],
+            value: ingredient['name']
+        }, {
+            append: true,
+        })
+    });
+}
+
+async function fetch_unit(element) {
+    const ingredient_name = $(element).val();
+    console.log(ingredient_name);
+
+    const query = server_url + 'ingredient/?ingredient_name=' + encodeURIComponent(ingredient_name);
+
+    const response = await fetch(query, {
+        credentials: 'include'
+    });
+    console.log(response);
+
+    const ingredients = await response.json();
+    const ingredient = ingredients[0];
+    console.log(ingredient);
+
+    $('#ingredient_' + curr_ingredient + ' input[name=unit]').val(ingredient['unit']);
+}
+
+function on_add_ingr_click() {
+    let can_add = true;
+    $('#ingredient_' + curr_ingredient + ' input').each(function (index, element) {
+        if ($(element).val().trim() == '' && can_add) {
+            can_add = false;
+            notification('Сначала заполните текущий ингредиент.', 2500);
+        }
+    })
+
+    if (can_add) {
+        curr_ingredient++;
+
+    ingredients_container = $('#ingredients_container');
+    ingredients_container.loadTemplate('templates/new_recipe/ingredient_tpl.html', {
+        ingredient_id: 'ingredient_' + curr_ingredient,
+    }, {
+        append: true,
+        complete: function() {
+            $('#ingredient_' + curr_ingredient + ' input[name=ingredient]').change(function() {
+                fetch_unit(this);
+            });
+        }
+    });
+    }
 }
 
 function on_add_step_click() {
@@ -35,6 +97,7 @@ function on_incr_serv_click() {
 }
 
 $('document').ready(function() {
+    fetch_ingredients();
     $('#add_ingredient').click();
     $('#add_step').click();
 
