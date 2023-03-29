@@ -42,4 +42,24 @@ $('document').ready(function() {
         sessionStorage.setItem('unathorized_access', true);
         $(location).attr('href', 'index.html');
     }
+
+    $('#hours').focusout(function() {
+        const hours_input = $('#hours');
+
+        if(Number(hours_input.val()) > hours_input.attr('max')) {
+            hours_input.val(hours_input.attr('max'));
+        } else if (Number(hours_input.val()) < hours_input.attr('min')) {
+            hours_input.val(hours_input.attr('min'));
+        }
+    });
+
+    $('#minutes').focusout(function() {
+        const minutes_input = $('#minutes');
+
+        if(Number(minutes_input.val()) > minutes_input.attr('max')) {
+            minutes_input.val(minutes_input.attr('max'));
+        } else if (Number(minutes_input.val()) < minutes_input.attr('min')) {
+            minutes_input.val(minutes_input.attr('min'));
+        }
+    });
 });
