@@ -2,7 +2,7 @@ const server_url = sessionStorage.getItem('server_url');
 
 let curr_ingredient = 0;
 
-async function fetch_ingredients() {
+async function fetch_ingredients_list() {
     const query = server_url + 'ingredient/?limit=1000';
 
     const response = await fetch(query, {
@@ -48,30 +48,46 @@ function on_add_ingr_click() {
             can_add = false;
             notification('Сначала заполните текущий ингредиент.', 2500);
         }
-    })
+    });
 
     if (can_add) {
         curr_ingredient++;
 
-    ingredients_container = $('#ingredients_container');
-    ingredients_container.loadTemplate('templates/new_recipe/ingredient_tpl.html', {
-        ingredient_id: 'ingredient_' + curr_ingredient,
-    }, {
-        append: true,
-        complete: function() {
-            $('#ingredient_' + curr_ingredient + ' input[name=ingredient]').focus();
-            $('#ingredient_' + curr_ingredient + ' input[name=ingredient]').change(function() {
-                fetch_unit(this);
-            });
-        }
-    });
+        ingredients_container = $('#ingredients_container');
+        ingredients_container.loadTemplate('templates/new_recipe/ingredient_tpl.html', {
+            ingredient_id: 'ingredient_' + curr_ingredient,
+        }, {
+            append: true,
+            complete: function() {
+                $('#ingredient_' + curr_ingredient + ' input[name=ingredient]').focus();
+                $('#ingredient_' + curr_ingredient + ' input[name=ingredient]').change(function() {
+                    fetch_unit(this);
+                });
+            }
+        });
     }
 }
 
+let curr_step = 0;
+
 function on_add_step_click() {
+    curr_step++;
+
     steps_container = $('#steps_container');
-    steps_container.loadTemplate('templates/new_recipe/step_tpl.html', null, {
-        append: true
+    steps_container.loadTemplate('templates/new_recipe/step_tpl.html', {
+        step_id: 'step_' + curr_step,
+    }, {
+        append: true,
+        complete: function() {
+            $('#step_' + curr_step + ' input[name=step]').focus();
+            $('#step_' + curr_step + ' .timer-row input').focusout(function() {
+                if(Number($(this).val()) > $(this).attr('max')) {
+                    $(this).val($(this).attr('max'));
+                } else if (Number($(this).val()) < $(this).attr('min')) {
+                    $(this).val($(this).attr('min'));
+                }
+            })
+        }
     });
 }
 
@@ -80,6 +96,45 @@ function on_add_rec_click() {
     recommendations_container.loadTemplate('templates/new_recipe/recommendations_tpl.html');
     $('#add_rec').hide();
 }
+
+let curr_tag = 0;
+
+async function fetch_tags_list() {
+    const query = server_url + 'tag/?limit=1000';
+
+    const response = await fetch(query, {
+        credentials: 'include'
+    });
+    console.log(response);
+
+    const tags = await response.json();
+    console.log(tags);
+
+    tags.forEach(tag => {
+        $('#tags_list').loadTemplate('templates/new_recipe/tag_option_tpl.html', {
+            tag_id: tag['id'],
+            value: tag['name']
+        }, {
+            append: true,
+        })
+    });
+}
+
+function on_add_tag_click() {
+    $('#add_tag').css('margin-top', '40px');
+    curr_tag++;
+
+    tags_container = $('#tags_container');
+    tags_container.loadTemplate('templates/new_recipe/tag_tpl.html', {
+        tag_id: 'tag_' + curr_tag,
+    }, {
+        append: true,
+        complete: function() {
+            $('#tag_' + curr_tag + ' input[name=tag]').focus();
+        }
+    });
+}
+
 
 function on_decr_serv_click() {
     servings_input = $('#servings');
@@ -98,7 +153,8 @@ function on_incr_serv_click() {
 }
 
 $('document').ready(function() {
-    fetch_ingredients();
+    fetch_ingredients_list();
+    fetch_tags_list()
     $('#add_ingredient').click();
     $('#add_step').click();
 
