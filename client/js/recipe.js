@@ -21,14 +21,23 @@ async function fetch_step(index) {
     });
 
     // выяснение типа медиа - изображение или видео
-    // const media_query = server_url + 'recipes/' + step['step_ID'] + '_media/'
-    // const media_response = await fetch(media_query, {
-    //     credentials: 'include'
-    // });
-    // console.log(media_response);
-
-    // const media = await media_response.blob();
-    // console.log(media);
+    const media_query = server_url + 'recipes/' + step['step_ID'] + '_media/'
+    const media_response = await fetch(media_query, {
+        credentials: 'include'
+    });
+    console.log(media_response);
+    const media_type = media_response.headers.get('Content-Type');
+    console.log(media_type);
+    $('#media_container').empty();
+    if (media_type.startsWith('image')) {
+        $('#media_container').loadTemplate('templates/recipe/step_media_img_tpl.html', {
+            img_src: media_query
+        });
+    } else if (media_type.startsWith('video')) {
+        $('#media_container').loadTemplate('templates/recipe/step_media_video_tpl.html', {
+            video_src: media_query
+        });
+    }
 
     $('#step_description_container').loadTemplate('templates/recipe/step_description_tpl.html', {
         description: step['description']

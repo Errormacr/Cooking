@@ -143,3 +143,7 @@
 #step_section {
     min-height: 40vh;
 }
+
+.media {
+    width: 100%;
+}
