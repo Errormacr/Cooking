@@ -29,7 +29,6 @@ async function update_user() {
     
     $('#profile_data input').each(function(index, element) {
         if ($(element).val().trim() == '') {
-            notification('Пожалуйста, укажите всю личную информацию.', 3000);
             approved = false;
         }
     })
@@ -71,6 +70,8 @@ async function update_user() {
         console.log(response);
 
         $('#save_btn').hide();
+    } else {
+        notification('Пожалуйста, укажите всю личную информацию.', 3000);
     }
 }
 
