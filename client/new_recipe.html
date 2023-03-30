@@ -47,16 +47,25 @@
                 <form id="recipe_data" novalidate>
                     <div class="row">
                         <div class="col-xs-12">
-                            <label for="recipe_photo"
-                                >Фотография готового блюда</label
-                            ><br />
+                            <label>Фотография готового блюда</label><br />
                             <input
+                                class="hidden-input"
                                 name="recipe_photo"
                                 id="recipe_photo"
                                 type="file"
                                 accept="image/*"
                                 placeholder="Загрузить фото"
                             /><br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label class="hidden-input-label" for="recipe_photo"
+                                ><img
+                                    id="recipe_photo_img"
+                                    src="img/main/recipe_placeholder.png"
+                                    alt=""
+                            /></label>
                         </div>
                     </div>
                     <div class="row">
@@ -235,6 +244,7 @@
                             class="btn btn-bold"
                             form="profile_data"
                             type="button"
+                            onclick="post_recipe()"
                         >
                             Опубликовать рецепт
                         </button>
