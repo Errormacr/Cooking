@@ -111,10 +111,7 @@ async def update_user(photo: UploadFile = None, user_req: UserUpdate = Depends()
     stmt = update(User)
     if photo is not None:
         cont = await photo.read()
-        try:
-            f = open(f"../photo/user/{user_id}_user_photo", "wb")
-        except:
-            raise HTTPException(status_code=404, detail="can't find photo")
+        f = open(f"../photo/user/{user_id}_user_photo", "wb")
         f.write(cont)
         await session.execute(update(User).where(User.c.id == user.id).values(photo_type=photo.content_type))
         await session.commit()
