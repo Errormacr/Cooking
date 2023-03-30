@@ -111,12 +111,12 @@ async def update_user(photo: UploadFile = None, user_req: UserUpdate = Depends()
     stmt = update(User)
     if photo is not None:
         cont = await photo.read()
-        f = open(f"../photo/user/{user_id}_user_photo", "wb")
+        f = open(f"../photo/user/{user.id}_user_photo", "wb")
         f.write(cont)
         await session.execute(update(User).where(User.c.id == user.id).values(photo_type=photo.content_type))
         await session.commit()
         f.close()
-    if user_req.gender not in ('Ж', 'М'):
+    if user_req.gender not in ('Ж', 'М') and user_req.gender is not None:
         raise HTTPException(status_code=400, detail="gender must be M or Ж")
     for key, value in user_req.__dict__.items():
         if value is not None:
