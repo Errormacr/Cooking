@@ -239,12 +239,13 @@ async def get_recipe_photo(recipe_id: int, session: AsyncSession = Depends(get_a
 async def get_media_step(step_id: int, session: AsyncSession = Depends(get_async_session)):
     try:
         video_path = Path(f"../media/{step_id}_media")
-        result = await session.execute(select(Step_bd.c.media_type).where(Step_bd.c.recipe_ID == step_id))
+        result = await session.execute(select(Step_bd.c.media_type).where(Step_bd.c.step_ID == step_id))
         result = result.all()
         if not result:
             raise HTTPException(status_code=404, detail="Can't find media")
         with open(video_path, "rb") as video:
             data = video.read()
+            print(result[0][0])
             return Response(data, status_code=200, media_type=result[0][0])
     except:
         raise HTTPException(status_code=404, detail="Can't find media")
