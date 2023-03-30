@@ -58,7 +58,7 @@ async def get_ingredients(recipe_id: int = None, ingredient_name: str = None, li
             query = select(Unit.c.name).where(Unit.c.unit_ID == rec[2])
             resultUnit = await session.execute(query)
             resultUnit = resultUnit.all()
-            ans.append({"name": rec[1], "unit": resultUnit[0][0], "kkal": rec[3], "belki": rec[4], "zhiry": rec[5],
+            ans.append({"id": rec[0],"name": rec[1], "unit": resultUnit[0][0], "kkal": rec[3], "belki": rec[4], "zhiry": rec[5],
                         "uglevody": rec[6]})
         return ans
     else:
