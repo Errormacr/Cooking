@@ -170,6 +170,52 @@ function on_incr_serv_click() {
     };
 }
 
+async function post_ingredient_recipe_relation(ingredient_id, recipe_id, quantity) {
+    const query = server_url + 'recipes' + recipe_id + '/' + ingredient_id + '?count=' + quantity;
+
+    const response = await fetch(query, {
+        method: 'POST',
+        credentials: 'include'
+    });
+    console.log(response);
+
+    const relation = await response.json();
+    console.log(relation);
+}
+
+async function post_ingredient_recipe(recipe_id) {
+    let ingredients_data = [];
+
+    const ingredients_count = $('#ingredients_container input[name=ingredient]').length;
+
+    for (let i = 0; i < ingredients_count; i++) {
+        const name = $('#ingredients_container input[name=ingredient]:eq(' + i + ')').val().trim();
+        const quantity = $('#ingredients_container input[name=quantity]:eq(' + i + ')').val().trim();
+
+        const query = server_url + 'ingredient/?ingredient_name=' + encodeURIComponent(name);
+
+        const response = await fetch(query, {
+            credentials: 'include'
+        });
+        console.log(response);
+
+        const ingredients = await response.json();
+        const ingredient = ingredients[0];
+        console.log(ingredient);
+
+        ingredients_data.push({
+            id: ingredient['id'],
+            quantity: quantity,
+        })
+    }
+
+    console.log(ingredients_data);
+    
+    ingredients_data.forEach(ingredient => {
+        post_ingredient_recipe_relation(ingredient.id, recipe_id, ingredient.quantity);
+    });
+}
+
 async function post_recipe() {
     //сбор основной информации о рецепте
     const name = $('input[name="name"]').val().trim();
@@ -208,12 +254,27 @@ async function post_recipe() {
     } else {
         recipe_photo_check = false;
     }
+    
+    //проверка ингредиентов
+    let ingredients_check = true;
+    
+    if ($('#ingredients_container input').length == 0) {
+        ingredients_check = false;
+    }
+
+    $('#ingredients_container input').each(function(index, element) {
+        if($(element).val().trim() == '') {
+            ingredients_check = false;
+        }
+    })
 
     //проверка собранных данных
     if (!main_info_check) {
         notification('Укажите основную информацию о рецепте.', 3000);
     } else if (!recipe_photo_check) {
         notification('Приложите фотографию готового блюда.', 3000);
+    } else if (!ingredients_check) {
+        notification('Укажите ингредиенты.', 2500);
     } else {
         const fetch_params = {
             method: 'POST',
@@ -225,6 +286,19 @@ async function post_recipe() {
 
         const response = await fetch(query, fetch_params);
         console.log(response);
+
+        if (response.ok) {
+            const recipe = await response.json();
+            console.log(recipe);
+
+            const new_recipe_id = recipe[1];
+
+            post_ingredient_recipe(new_recipe_id);
+
+            // редирект "мои рецепты"
+        } else {
+            notification('Рецепт с таким именем уже существует.', 3000);
+        }
     }
 }
 
