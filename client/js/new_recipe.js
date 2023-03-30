@@ -264,6 +264,8 @@ $('document').ready(function() {
     $('#recipe_photo').change(function() {
         recipe_photo = this.files[0];
         if (recipe_photo) {
+            console.log(recipe_photo);
+
             $('#recipe_photo_img').attr('src', URL.createObjectURL(recipe_photo));
         }
     });

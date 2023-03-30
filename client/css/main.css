@@ -364,3 +364,7 @@ input[type="number"]:focus {
     width: 0;
     height: 0;
 }
+
+.hidden-input-label {
+    cursor: pointer;
+}

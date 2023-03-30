@@ -280,7 +280,7 @@ $('document').ready(function() {
         $('#profile_data').click();
     } else if (tab == 2) {
         $('#favourite_recipes').click();
-    } else {
+    } else if (tab == 3) {
         $('#users_recipes').click();
     }
 
