@@ -129,8 +129,9 @@ def fill_step(conn):
             except:
                 timer = None
             path = f'media/{s}_step.mp4'
-            media_type = file.readline().replace('\n', '')
             file.readline()
+            media_type = file.readline().replace('\n', '')
+            print(media_type)
             recipe_id = int(file.readline())
             if s:
                 sql = "insert into Step (description,timer,media,media_type,recipe_ID) VALUES (%s,%s,%s,%s,%s)"
@@ -232,11 +233,7 @@ def fill_recipe_score(conn):
                 with connection.cursor() as curs:
                     curs.execute(sql)
                     conn.commit()
-sql = f'select Kkal,Belky,Zhyri,Uglevody from Recipe where recipe_ID = 1'
-with connection.cursor() as curs:
-    curs.execute(sql)
-    recipe = curs.fetchall()
-    print(recipe)
+
 while True:
     try:
         ch = int(input(
