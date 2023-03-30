@@ -301,15 +301,6 @@ async function post_recipe() {
     }
     console.log(details);
 
-    //подготовка основной информации к отправке
-    let url_params = [];
-    for (const property in details) {
-        const encoded_key = encodeURIComponent(property);
-        const encoded_value = encodeURIComponent(details[property]);
-        url_params.push(encoded_key + '=' + encoded_value); 
-    }
-    url_params = url_params.join('&');
-
     //получение фотографии рецепта
     let recipe_photo_check = true;
 
@@ -333,10 +324,24 @@ async function post_recipe() {
         }
     })
 
+    // let ingredients = [];
+    // $('#ingredients_container input[name=ingredient]').each(function(i, ingredient) {
+    //     let ingredient_id = 0;
+        
+    //     $('#ingredients_list option').each(function(j, ingredient_option) {
+    //         if ($(ingredient).val().trim() == $(ingredient_option).val()) {
+    //             ingredient_id = $(ingredient_option).attr('id');
+    //             ingredients.push(ingredient_id);
+    //         }
+    //     });
+    // });
+
+    // details.ingredients = ingredients.join(',');
+
     //проверка шагов
     let steps_check = true;
     
-    if ($('#steps_container input').length == 0) {
+    if ($('#steps_container input[name=step]').length < 2) {
         steps_check = false;
     }
 
@@ -344,13 +349,35 @@ async function post_recipe() {
         if($(element).val().trim() == '') {
             steps_check = false;
         }
-    })
+    });
 
     $('#steps_container input[name=media]').each(function(index, element) {
         if($(element).val().trim() == '') {
             steps_check = false;
         }
-    })
+    });
+
+    //проверка тегов
+    let tags_check = true;
+    $('#tags_container input').each(function(index, element) {
+        if($(element).val().trim() == '') {
+            tags_check = false;
+        }
+    });
+
+    let tags = [];
+    $('#tags_container input').each(function(i, tag) {
+        let tag_id = 0;
+        
+        $('#tags_list option').each(function(j, tag_option) {
+            if ($(tag).val().trim() == $(tag_option).val()) {
+                tag_id = $(tag_option).attr('id');
+                tags.push(tag_id);
+            }
+        });
+    });
+
+    details.tag = tags.join(',');
 
     //проверка собранных данных
     if (!main_info_check) {
@@ -361,7 +388,18 @@ async function post_recipe() {
         notification('Укажите ингредиенты.', 2500);
     } else if (!steps_check) {
         notification('Укажите шаги.', 2500);
+    } else if (!tags_check) {
+        notification('Укажите теги.', 2500);
     } else {
+        //подготовка основной информации к отправке
+        let url_params = [];
+        for (const property in details) {
+            const encoded_key = encodeURIComponent(property);
+            const encoded_value = encodeURIComponent(details[property]);
+            url_params.push(encoded_key + '=' + encoded_value); 
+        }
+        url_params = url_params.join('&');
+
         const fetch_params = {
             method: 'POST',
             credentials: 'include',
