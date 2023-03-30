@@ -108,6 +108,8 @@ function on_add_step_click() {
                 $('#step_media_container_' + new_step_id + ' input').change(function() {
                     const step_media = this.files[0];
                     console.log(step_media);
+                    steps_files.set(new_step_id, step_media);
+
                     const step_media_url = URL.createObjectURL(step_media);
                     if (step_media.type.startsWith('image/')) {
                         $('#step_media_label_container_' + new_step_id).loadTemplate('templates/new_recipe/step_img_tpl.html', {
@@ -235,6 +237,49 @@ async function post_ingredient_recipe(recipe_id) {
     });
 }
 
+let steps_files = new Map();
+
+async function post_steps(recipe_id) {
+    const steps_count = $('#steps_container input[name=step]').length;
+
+    for (let i = 0; i < steps_count; i++) {
+        const description = $('#steps_container input[name=step]:eq(' + i + ')').val().trim();
+        const time = $('#steps_container input[name=hours]:eq(' + i + ')').val() * 3600 + $('#steps_container input[name=minutes]:eq(' + i + ')').val() * 60;
+
+        const details = {
+            description: description,
+            timer: time,
+        }
+
+        let url_params = [];
+        for (const property in details) {
+            const encoded_key = encodeURIComponent(property);
+            const encoded_value = encodeURIComponent(details[property]);
+            url_params.push(encoded_key + '=' + encoded_value); 
+        }
+        url_params = url_params.join('&');        
+
+        const query = server_url + 'recipes/' + recipe_id + '/step?' + url_params;
+        const fetch_params = {
+            method: 'POST',
+            credentials: 'include',
+            body: null
+        }
+
+        const step_id = $('input[name="media"]').parents(".step-container").attr('id').split('_').pop();
+
+        let body = new FormData();
+        body.append('media', steps_files.get(step_id));
+        fetch_params.body = body;
+
+        const response = await fetch(query, fetch_params);
+        console.log(response);
+
+        const step = await response.json();
+        console.log(step);
+    }
+}
+
 async function post_recipe() {
     //сбор основной информации о рецепте
     const name = $('input[name="name"]').val().trim();
@@ -287,6 +332,25 @@ async function post_recipe() {
         }
     })
 
+    //проверка шагов
+    let steps_check = true;
+    
+    if ($('#steps_container input').length == 0) {
+        steps_check = false;
+    }
+
+    $('#steps_container input[name=step]').each(function(index, element) {
+        if($(element).val().trim() == '') {
+            steps_check = false;
+        }
+    })
+
+    $('#steps_container input[name=media]').each(function(index, element) {
+        if($(element).val().trim() == '') {
+            steps_check = false;
+        }
+    })
+
     //проверка собранных данных
     if (!main_info_check) {
         notification('Укажите основную информацию о рецепте.', 3000);
@@ -294,6 +358,8 @@ async function post_recipe() {
         notification('Приложите фотографию готового блюда.', 3000);
     } else if (!ingredients_check) {
         notification('Укажите ингредиенты.', 2500);
+    } else if (!steps_check) {
+        notification('Укажите шаги.', 2500);
     } else {
         const fetch_params = {
             method: 'POST',
@@ -313,6 +379,8 @@ async function post_recipe() {
             const new_recipe_id = recipe[1];
 
             post_ingredient_recipe(new_recipe_id);
+            
+            post_steps(new_recipe_id);
 
             // редирект "мои рецепты"
         } else {
