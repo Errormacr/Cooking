@@ -56,12 +56,18 @@ function on_add_ingr_click() {
         ingredients_container = $('#ingredients_container');
         ingredients_container.loadTemplate('templates/new_recipe/ingredient_tpl.html', {
             ingredient_id: 'ingredient_' + curr_ingredient,
+            deletion_btn_id: 'delete_ingredient_' + curr_ingredient,
         }, {
             append: true,
             complete: function() {
                 $('#ingredient_' + curr_ingredient + ' input[name=ingredient]').focus();
                 $('#ingredient_' + curr_ingredient + ' input[name=ingredient]').change(function() {
                     fetch_unit(this);
+                });
+                $('#delete_ingredient_' + curr_ingredient).click(function() {
+                    const ingr_to_del = $(this).attr('id').split('_').pop();
+                    $('#ingredient_' + ingr_to_del).remove();
+                    $('#delete_ingredient_' + ingr_to_del).remove();
                 });
             }
         });
@@ -76,6 +82,7 @@ function on_add_step_click() {
     steps_container = $('#steps_container');
     steps_container.loadTemplate('templates/new_recipe/step_tpl.html', {
         step_id: 'step_' + curr_step,
+        deletion_btn_id: 'delete_step_' + curr_step
     }, {
         append: true,
         complete: function() {
@@ -86,7 +93,12 @@ function on_add_step_click() {
                 } else if (Number($(this).val()) < $(this).attr('min')) {
                     $(this).val($(this).attr('min'));
                 }
-            })
+            });
+            $('#delete_step_' + curr_step).click(function() {
+                const step_to_del = $(this).attr('id').split('_').pop();
+                $('#step_' + step_to_del).remove();
+                $('#delete_step_' + step_to_del).remove();
+            });
         }
     });
 }
@@ -127,10 +139,16 @@ function on_add_tag_click() {
     tags_container = $('#tags_container');
     tags_container.loadTemplate('templates/new_recipe/tag_tpl.html', {
         tag_id: 'tag_' + curr_tag,
+        deletion_btn_id: 'delete_tag_' + curr_tag
     }, {
         append: true,
         complete: function() {
             $('#tag_' + curr_tag + ' input[name=tag]').focus();
+            $('#delete_tag_' + curr_tag).click(function() {
+                const tag_to_del = $(this).attr('id').split('_').pop();
+                $('#tag_' + tag_to_del).remove();
+                $('#delete_tag_' + tag_to_del).remove();
+            });
         }
     });
 }
