@@ -239,12 +239,32 @@ function notification(text, duration) {
     })
 }
 
+function close_menus() {
+    $('.menu-block > div').each(function(index, element) {
+        $(element).css('display', 'none');
+    })
+}
+
 $('document').ready(function() { 
     var header_container = $('header');
     header_container.loadTemplate("templates/main/header_tpl.html", null, {
         complete: function() {
             const img_src = server_url + 'users/photo?user_id=' + sessionStorage.getItem('user_id');
             $('.profile-pic img').attr('src', img_src);
+            $('#sidebar_btn').click(function(event) {
+                event.preventDefault();
+                $('.sidebar-block').css('top', $('header').height());
+        
+                if ($('.sidebar-menu').css('display') == 'none') {
+                    close_menus();
+                    $('.sidebar-menu').css('display', 'block');
+                    $('.sidebar-menu').animate({opacity: 1}, 300);
+                } else {
+                    $('.sidebar-menu').animate({opacity: 0}, 300, function() {
+                        $('.sidebar-menu').css('display', 'none');
+                    });
+                }
+            })
         }
     });
 

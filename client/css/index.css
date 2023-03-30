@@ -60,16 +60,6 @@
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.6);
 }
 
-.menu-container {
-    position: relative;
-}
-
-.menu-block {
-    width: 100%;
-    position: absolute;
-    z-index: 10;
-}
-
 .filter-menu {
     box-sizing: border-box;
     background-color: #fff;
