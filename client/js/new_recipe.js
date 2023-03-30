@@ -170,6 +170,64 @@ function on_incr_serv_click() {
     };
 }
 
+async function post_recipe() {
+    //сбор основной информации о рецепте
+    const name = $('input[name="name"]').val().trim();
+    const servings_cout = $('input[name="servings"]').val();
+    const cook_time = $('input[name="hours"]').val() * 3600 + $('input[name="minutes"]').val() * 60;
+    const recommend = $('textarea[name="recommendations"]').val();
+
+    let main_info_check = true;
+    if (!name || !cook_time) {
+        main_info_check = false;
+    }
+
+    const details = {
+        name: name,
+        servings_cout: servings_cout,
+        cook_time: cook_time,
+        recommend: (recommend ? recommend : null),
+    }
+    console.log(details);
+
+    //подготовка основной информации к отправке
+    let url_params = [];
+    for (const property in details) {
+        const encoded_key = encodeURIComponent(property);
+        const encoded_value = encodeURIComponent(details[property]);
+        url_params.push(encoded_key + '=' + encoded_value); 
+    }
+    url_params = url_params.join('&');
+
+    //получение фотографии рецепта
+    let recipe_photo_check = true;
+
+    let body = new FormData();
+    if (recipe_photo) {
+        body.append('photo', recipe_photo);
+    } else {
+        recipe_photo_check = false;
+    }
+
+    //проверка собранных данных
+    if (!main_info_check) {
+        notification('Укажите основную информацию о рецепте.', 3000);
+    } else if (!recipe_photo_check) {
+        notification('Приложите фотографию готового блюда.', 3000);
+    } else {
+        const fetch_params = {
+            method: 'POST',
+            credentials: 'include',
+            body: body
+        }
+
+        const query = server_url + 'recipes/?' + url_params;
+
+        const response = await fetch(query, fetch_params);
+        console.log(response);
+    }
+}
+
 let recipe_photo;
 
 $('document').ready(function() {
