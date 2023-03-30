@@ -1,4 +1,4 @@
-<div class="row">
+<div data-id="ingredient_id" class="row">
     <div class="col-xs-12">
         <input
             class="ingredient-name"
@@ -8,11 +8,6 @@
             placeholder="Мука"
             autocomplete="off"
         />
-        <datalist id="ingredients_list">
-            <option value="Мука"></option>
-            <option value="Мясо"></option>
-            <option value="Манка"></option>
-        </datalist>
     </div>
     <div class="col-sm-5 col-xs-6">
         <input
@@ -30,13 +25,19 @@
             class="ingredient-data"
             name="unit"
             type="text"
-            list="units_list"
+            readonly
             placeholder="Ед. изм."
             autocomplete="off"
         />
-        <datalist id="units_list">
-            <option value="грамм"></option>
-            <option value="по вкусу"></option>
-        </datalist>
+    </div>
+</div>
+<div data-id="deletion_btn_id" class="row">
+    <div class="col-md-5 col-xs">
+        <button
+            class="delete-btn btn btn-wide btn-abort"
+            type="button"
+        >
+            Удалить ингредиент
+        </button>
     </div>
 </div>

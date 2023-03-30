@@ -28,3 +28,11 @@
 #recommendations {
     margin-bottom: 0;
 }
+
+.tag-input {
+    margin-bottom: 20px;
+}
+
+.delete-btn {
+    margin-bottom: 30px;
+}

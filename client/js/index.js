@@ -42,6 +42,7 @@ async function fetch_recipes (params, append) {
         recipe_cards.push(
             {
                 name: recipe['name'],
+                rating: recipe['rating'],
                 time: time,
                 img_src: img_src,
                 href: 'recipe.html?id=' + recipe['recipe_id']
@@ -203,6 +204,8 @@ async function fetch_filters () {
             reload_recipes();
         }
     });
+
+    $('#more_btn').click();
 }
 
 function reload_recipes() {
@@ -223,8 +226,6 @@ let conditions = [' ↓', '  ', ' ↑']
 $('document').ready(function() {
     fetch_filters();
     fetch_tags();
-    
-    $('#more_btn').click();
 
     $('#filter_btn').click(function(event) {
         event.preventDefault();
