@@ -10,15 +10,18 @@
                     autocomplete="off"
                 />
             </div>
-            <div class="col-xs-12">
+            <div data-id="step_media_id" class="step-media-container col-xs-12">
                 <label
                     >Добавить фото/видео</label
                 ><br />
                 <input
-                    name="step_photo"
+                    class="hidden-input"
                     type="file"
                     accept="image/*, video/*"
                 />
+                <label class="hidden-input-label">
+                    Загрузить файл
+                </label>
             </div>
             <div class="col-xs-12">
                 <div class="timer-row row">

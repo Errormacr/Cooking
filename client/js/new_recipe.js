@@ -82,7 +82,8 @@ function on_add_step_click() {
     steps_container = $('#steps_container');
     steps_container.loadTemplate('templates/new_recipe/step_tpl.html', {
         step_id: 'step_' + curr_step,
-        deletion_btn_id: 'delete_step_' + curr_step
+        deletion_btn_id: 'delete_step_' + curr_step,
+        step_media_id: 'step_media_container_' + curr_step
     }, {
         append: true,
         complete: function() {
@@ -99,6 +100,24 @@ function on_add_step_click() {
                 $('#step_' + step_to_del).remove();
                 $('#delete_step_' + step_to_del).remove();
             });
+            $('#step_media_container_' + curr_step + ' input').attr('id', 'step_media_' + curr_step);
+            $('#step_media_container_' + curr_step + ' label:eq(1)').attr('for', 'step_media_' + curr_step);
+            $('#step_media_container_' + curr_step + ' label:eq(1)').attr('id', 'step_media_label_container_' + curr_step);
+            $('#step_media_container_' + curr_step).click(function() {
+                const new_step_id = $(this).attr('id').split('_').pop();
+                $('#step_media_container_' + new_step_id + ' input').change(function() {
+                    const step_media = this.files[0];
+                    console.log(step_media);
+                    const step_media_url = URL.createObjectURL(step_media);
+                    if (step_media.type.startsWith('image/')) {
+                        $('#step_media_label_container_' + new_step_id).loadTemplate('templates/new_recipe/step_img_tpl.html', {
+                            url: step_media_url
+                        })
+                    } else if (step_media.type.startsWith('video/')) {
+                        $('#step_media_label_container_' + new_step_id).html('Видео...')
+                    }
+                })
+            })
         }
     });
 }
