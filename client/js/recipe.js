@@ -20,6 +20,16 @@ async function fetch_step(index) {
         step_num: index + 1
     });
 
+    // выяснение типа медиа - изображение или видео
+    // const media_query = server_url + 'recipes/' + step['step_ID'] + '_media/'
+    // const media_response = await fetch(media_query, {
+    //     credentials: 'include'
+    // });
+    // console.log(media_response);
+
+    // const media = await media_response.blob();
+    // console.log(media);
+
     $('#step_description_container').loadTemplate('templates/recipe/step_description_tpl.html', {
         description: step['description']
     });

@@ -64,8 +64,8 @@ function on_add_ingr_click() {
                 $('#ingredient_' + curr_ingredient + ' input[name=ingredient]').change(function() {
                     fetch_unit(this);
                 });
-                $('#delete_ingredient_' + curr_ingredient).click(function() {
-                    const ingr_to_del = $(this).attr('id').split('_').pop();
+                $('#delete_ingredient_' + curr_ingredient + ' .delete-btn').click(function() {
+                    const ingr_to_del = $(this).parents('.row').attr('id').split('_').pop();
                     $('#ingredient_' + ingr_to_del).remove();
                     $('#delete_ingredient_' + ingr_to_del).remove();
                 });
@@ -95,8 +95,8 @@ function on_add_step_click() {
                     $(this).val($(this).attr('min'));
                 }
             });
-            $('#delete_step_' + curr_step).click(function() {
-                const step_to_del = $(this).attr('id').split('_').pop();
+            $('#delete_step_' + curr_step + ' .delete-btn').click(function() {
+                const step_to_del = $(this).parents('.row').attr('id').split('_').pop();
                 $('#step_' + step_to_del).remove();
                 $('#delete_step_' + step_to_del).remove();
             });
@@ -165,8 +165,9 @@ function on_add_tag_click() {
         append: true,
         complete: function() {
             $('#tag_' + curr_tag + ' input[name=tag]').focus();
-            $('#delete_tag_' + curr_tag).click(function() {
-                const tag_to_del = $(this).attr('id').split('_').pop();
+            
+            $('#delete_tag_' + curr_tag + ' .delete-btn').click(function() {
+                const tag_to_del = $(this).parents('.row').attr('id').split('_').pop();
                 $('#tag_' + tag_to_del).remove();
                 $('#delete_tag_' + tag_to_del).remove();
             });
