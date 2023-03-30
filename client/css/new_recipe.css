@@ -36,3 +36,7 @@
 .delete-btn {
     margin-bottom: 30px;
 }
+
+#recipe_photo_img {
+    width: 100%;
+}

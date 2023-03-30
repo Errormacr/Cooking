@@ -170,6 +170,8 @@ function on_incr_serv_click() {
     };
 }
 
+let recipe_photo;
+
 $('document').ready(function() {
     fetch_ingredients_list();
     fetch_tags_list()
@@ -198,6 +200,13 @@ $('document').ready(function() {
             minutes_input.val(minutes_input.attr('max'));
         } else if (Number(minutes_input.val()) < minutes_input.attr('min')) {
             minutes_input.val(minutes_input.attr('min'));
+        }
+    });
+
+    $('#recipe_photo').change(function() {
+        recipe_photo = this.files[0];
+        if (recipe_photo) {
+            $('#recipe_photo_img').attr('src', URL.createObjectURL(recipe_photo));
         }
     });
 });
