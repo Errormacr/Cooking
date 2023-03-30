@@ -29,7 +29,7 @@ async function update_user() {
     
     $('#profile_data input').each(function(index, element) {
         if ($(element).val().trim() == '') {
-            $('.hint').html('Пожалуйста, укажите личную информацию.');
+            notification('Пожалуйста, укажите всю личную информацию.', 3000);
             approved = false;
         }
     })
@@ -53,21 +53,6 @@ async function update_user() {
             url_params.push(encoded_key + '=' + encoded_value); 
         }
         url_params = url_params.join('&');
-        
-
-        // const img_response = await fetch(img_url);
-        // const img_blob = await img_response.blob();
-
-        
-
-        // const file = $('input[name="profile_photo"]').files[0];
-        // const reader = new FileReader();
-        // reader.onloadend = function() {
-        //     const data=(reader.result).split(',')[1];
-        //     const binaryBlob = atob(data);
-        //     body.append('photo', binaryBlob);
-        // }
-        // reader.readAsDataURL(file);
 
         let fetch_params = {
             method: 'PUT',
