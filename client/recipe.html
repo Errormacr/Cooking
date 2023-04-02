@@ -71,14 +71,56 @@
                 <div class="row middle-xs center-xs">
                     <div class="col-xs-12">
                         <div id="img_container" class="recipe-img-block">
-                            <div class="recipe-img-btn rating upvote">
-                                <img src="img/recipe/upvote.png" alt="upvote" />
+                            <div
+                                id="upvote_btn"
+                                class="recipe-img-btn rating upvote"
+                                onclick="on_upvote_btn_click()"
+                            >
+                                <?xml version="1.0" encoding="utf-8"?>
+                                <svg
+                                    width="50"
+                                    height="50"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <g id="Arrow / Arrow_Up_LG">
+                                        <path
+                                            stroke="#61b030"
+                                            id="upvote_path"
+                                            d="M12 3L7 8M12 3L17 8M12 3V21"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        />
+                                    </g>
+                                </svg>
                             </div>
-                            <div class="recipe-img-btn rating downvote">
-                                <img
-                                    src="img/recipe/downvote.png"
-                                    alt="downvote"
-                                />
+                            <div
+                                id="downvote_btn"
+                                class="recipe-img-btn rating downvote"
+                                onclick="on_downvote_btn_click()"
+                            >
+                                <?xml version="1.0" encoding="utf-8"?>
+                                <svg
+                                    transform="rotate(180)"
+                                    width="50"
+                                    height="50"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <g id="Arrow / Arrow_Up_LG">
+                                        <path
+                                            stroke="#e64343"
+                                            id="downvote_path"
+                                            d="M12 3L7 8M12 3L17 8M12 3V21"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        />
+                                    </g>
+                                </svg>
                             </div>
                             <div class="recipe-img-btn favourite">
                                 <img
@@ -121,7 +163,10 @@
                 <div id="ingredients_container"></div>
                 <div class="row center-xs">
                     <div class="col-xs">
-                        <button onclick="on_step_by_step_btn_click()" class="btn btn-bold">
+                        <button
+                            onclick="on_step_by_step_btn_click()"
+                            class="btn btn-bold"
+                        >
                             Пошаговое приготовление
                         </button>
                     </div>

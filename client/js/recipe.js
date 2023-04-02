@@ -289,6 +289,54 @@ function on_back_btn_click() {
     fetch_step(current_step);
 };
 
+let score = 0;
+
+function on_upvote_btn_click() {
+    const white = "#fff";
+    const green = "#61b030"
+
+    switch(score) {
+        case 1:
+            score = 0;
+            $('#upvote_btn').css('background-color', white);
+            $('#upvote_path').attr('stroke', green);
+            break;
+        case 0:
+            score = 1;
+            $('#upvote_btn').css('background-color', green);
+            $('#upvote_path').attr('stroke', white);
+            break;
+        case -1:
+            $('#downvote_btn').click();
+            break;
+    }
+
+    console.log(score);
+}
+
+function on_downvote_btn_click() {
+    const white = "#fff";
+    const red = "#e64343"
+    
+    switch(score) {
+        case -1:
+            score = 0;
+            $('#downvote_btn').css('background-color', white);
+            $('#downvote_path').attr('stroke', red);
+            break;
+        case 0:
+            score = -1;
+            $('#downvote_btn').css('background-color', red);
+            $('#downvote_path').attr('stroke', white);
+            break;
+        case 1:
+            $('#upvote_btn').click();
+            break;
+    }
+
+    console.log(score);
+}
+
 // инициализация переменных для расчета кол-ва ингредиентов
 let standard_servings = 0;
 let standard_quantity = [];

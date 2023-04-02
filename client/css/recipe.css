@@ -6,19 +6,22 @@
     position: absolute;
     border-radius: 15px;
     background-color: #fff;
-}
-
-.recipe-img-btn {
     cursor: pointer;
+    pointer-events: auto;
+    transition: 0.3s ease;
 }
 
 .rating {
-    padding: 3px 6px;
+    padding: 6px 6px 0;
     bottom: 21px;
 }
 
 .upvote {
     left: 15px;
+}
+
+.rating:hover {
+    bottom: 31px;
 }
 
 .downvote {
@@ -29,6 +32,10 @@
     top: 15px;
     right: 15px;
     padding: 11px 11px 7px;
+}
+
+.favourite:hover {
+    top: 5px;
 }
 
 .recipe-img {
