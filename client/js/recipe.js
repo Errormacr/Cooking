@@ -1,5 +1,10 @@
 const server_url = sessionStorage.getItem('server_url');
 
+const WHITE = "#fff";
+const PINK = "#ff2787";
+const RED = "#e64343";
+const GREEN = "#61b030";
+
 let current_step = 0;
 
 async function fetch_step(index) {
@@ -211,16 +216,6 @@ async function fetch_recipe() {
     $('#tags_container').loadTemplate('templates/main/tag_tpl.html', tags_data);
 };
 
-async function add_to_fav() {
-    const query = server_url + 'users/favourite?recipe_id=' + $.urlParam('id');
-
-    const response = await fetch(query, {
-        method: 'POST',
-        credentials: 'include'
-    });
-    console.log(response);
-};
-
 // функции для таймера
 let timer;
 let base_hours, base_minutes, base_seconds;
@@ -292,49 +287,117 @@ function on_back_btn_click() {
 let score = 0;
 
 function on_upvote_btn_click() {
-    const white = "#fff";
-    const green = "#61b030"
-
-    switch(score) {
-        case 1:
-            score = 0;
-            $('#upvote_btn').css('background-color', white);
-            $('#upvote_path').attr('stroke', green);
-            break;
-        case 0:
-            score = 1;
-            $('#upvote_btn').css('background-color', green);
-            $('#upvote_path').attr('stroke', white);
-            break;
-        case -1:
-            $('#downvote_btn').click();
-            break;
+    if (authorized()) {
+        switch(score) {
+            case 1:
+                score = 0;
+                $('#upvote_btn').css('background-color', WHITE);
+                $('#upvote_path').attr('stroke', GREEN);
+                break;
+            case 0:
+                score = 1;
+                $('#upvote_btn').css('background-color', GREEN);
+                $('#upvote_path').attr('stroke', WHITE);
+                break;
+            case -1:
+                $('#downvote_btn').click();
+                break;
+        }
+    
+        console.log(score);
+    } else {
+        notification('Вы должны быть авторизованы для добавления оценок.', 3000);
     }
-
-    console.log(score);
 }
 
 function on_downvote_btn_click() {
-    const white = "#fff";
-    const red = "#e64343"
+    if (authorized()) {
+        switch(score) {
+            case -1:
+                score = 0;
+                $('#downvote_btn').css('background-color', WHITE);
+                $('#downvote_path').attr('stroke', RED);
+                break;
+            case 0:
+                score = -1;
+                $('#downvote_btn').css('background-color', RED);
+                $('#downvote_path').attr('stroke', WHITE);
+                break;
+            case 1:
+                $('#upvote_btn').click();
+                break;
+        }
     
-    switch(score) {
-        case -1:
-            score = 0;
-            $('#downvote_btn').css('background-color', white);
-            $('#downvote_path').attr('stroke', red);
-            break;
-        case 0:
-            score = -1;
-            $('#downvote_btn').css('background-color', red);
-            $('#downvote_path').attr('stroke', white);
-            break;
-        case 1:
-            $('#upvote_btn').click();
-            break;
+        console.log(score);
+    } else {
+        notification('Вы должны быть авторизованы для добавления оценок.', 3000);
+    }
+}
+
+// избранные рецепты
+
+async function add_to_fav() {
+    const query = server_url + 'users/favourite?recipe_id=' + $.urlParam('id');
+
+    const response = await fetch(query, {
+        method: 'POST',
+        credentials: 'include'
+    });
+    console.log(response);
+}
+
+async function check_fav() {
+    const query = server_url + 'users/' + sessionStorage.getItem('user_id') + '/favourite';
+
+    const response = await fetch(query, {
+        credentials: 'include'
+    });
+    
+    const favourites = await response.json();
+    console.log(favourites);
+
+    favourites.forEach(favourite => {
+        if ($.urlParam('id') == favourite['recipe_id']) {
+            fav = true;
+            $('#fav_btn').css('background-color', PINK);
+            $('#fav_btn').children('svg').attr('fill', WHITE);
+        }
+    })
+
+}
+
+async function delete_fav() {
+    const query = server_url + 'users/favourite?recipe_id=' + $.urlParam('id');
+
+    const response = await fetch(query, {
+        method: 'DELETE',
+        credentials: 'include'
+    });
+    console.log(response);
+}
+
+let fav = false;
+
+function on_fav_btn_click() {
+    console.log(fav);
+    if (authorized()) {
+        fav = !fav;
+
+        if (fav) {
+            $('#fav_btn').css('background-color', PINK);
+            $('#fav_btn').children('svg').attr('fill', WHITE);
+            add_to_fav();
+        } else {
+            $('#fav_btn').css('background-color', WHITE);
+            $('#fav_btn').children('svg').attr('fill', PINK);
+            delete_fav();
+        }
+    } else {
+        notification('Вы должны быть авторизованы для добавления рецепта в избранные.', 3500);
     }
 
-    console.log(score);
+    
+
 }
 
 // инициализация переменных для расчета кол-ва ингредиентов
@@ -344,6 +407,10 @@ let standard_quantity = [];
 $('document').ready(function() {
     $('#step_section').hide();
     fetch_recipe();
+
+    if (authorized()) {
+        check_fav();
+    }
 
     // обработка нажатий изменения кол-ва порций
     $('#servings > p.sign').click(function() {

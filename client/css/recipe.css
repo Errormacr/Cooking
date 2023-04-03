@@ -9,11 +9,19 @@
     cursor: pointer;
     pointer-events: auto;
     transition: 0.3s ease;
+    padding: 6px 6px 0;
+}
+
+.recipe-img-btn:hover {
+    padding: 9px 9px 3px;
 }
 
 .rating {
-    padding: 6px 6px 0;
     bottom: 21px;
+}
+
+.rating:hover {
+    bottom: 18px;
 }
 
 .upvote {
@@ -22,11 +30,6 @@
 
 .downvote {
     left: 86px;
-}
-
-.rating:hover {
-    padding: 9px 9px 3px;
-    bottom: 18px;
 }
 
 .upvote:hover {
@@ -40,11 +43,11 @@
 .favourite {
     top: 15px;
     right: 15px;
-    padding: 11px 11px 7px;
 }
 
 .favourite:hover {
-    top: 5px;
+    top: 12px;
+    right: 12px;
 }
 
 .recipe-img {
