@@ -240,7 +240,7 @@ async function post_recipe() {
     const name = $('input[name="name"]').val().trim();
     const servings_cout = $('input[name="servings"]').val();
     const cook_time = $('input[name="hours"]').val() * 3600 + $('input[name="minutes"]').val() * 60;
-    const recommend = $('textarea[name="recommendations"]').val();
+    const recommend = $('textarea[name="recommendations"]').val().trim();
 
     let main_info_check = true;
     if (!name || !cook_time) {
@@ -251,8 +251,12 @@ async function post_recipe() {
         name: name,
         servings_cout: servings_cout,
         cook_time: cook_time,
-        recommend: (recommend ? recommend : null),
     }
+
+    if (recommend) {
+        details.recommend = recommend;
+    }
+
     console.log(details);
 
     //получение фотографии рецепта
@@ -296,8 +300,6 @@ async function post_recipe() {
             ingredients_exist = false;
         }
     });
-
-    // console.log(ingredients.join(','));
 
     details.ingredients = ingredients.join(',');
 
