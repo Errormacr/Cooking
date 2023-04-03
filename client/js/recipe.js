@@ -127,6 +127,11 @@ async function fetch_recipe() {
     
     $('#info_container').loadTemplate('templates/recipe/info_block_tpl.html', info_data);
 
+    // загрузка шаблона рейтинга рецепта
+    $('#rating_container').loadTemplate('templates/recipe/rating_tpl.html', {
+        rating: recipe_desc['rating']
+    });
+
     // загрузка шаблона времени приготовления рецепта
     let time = Number(recipe_desc['cook_time']);
     const hours = Math.floor(time / 3600);
