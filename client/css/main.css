@@ -68,7 +68,6 @@ input:focus {
 }
 
 .round-block {
-    /* background-color: #d9d9d9; */
     border-radius: 100%;
     width: 100%;
     padding-top: 100%;
@@ -296,9 +295,16 @@ input[type="number"]:focus {
     cursor: pointer;
 }
 
-.notification {
+.notification-container {
+    width: 100%;
+    margin: auto;
     position: fixed;
     bottom: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.notification {
     background-color: #fff;
     padding: 25px;
     border-radius: 15px;
