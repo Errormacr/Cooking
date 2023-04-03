@@ -289,6 +289,53 @@ function on_back_btn_click() {
     fetch_step(current_step);
 };
 
+// оценки
+
+async function check_score() {
+    const query = server_url + 'users/score?recipe_id=' + $.urlParam('id');
+
+    const response = await fetch(query, {
+        credentials: 'include'
+    });
+    
+    const resp_score = await response.json();
+    console.log(resp_score);
+
+    if (resp_score) {
+        if (resp_score['score'] == 1) {
+            $('#upvote_btn').css('background-color', GREEN);
+            $('#upvote_path').attr('stroke', WHITE);
+            score = 1;
+        } else if (resp_score['score'] == -1) {
+            $('#downvote_btn').css('background-color', RED);
+            $('#downvote_path').attr('stroke', WHITE);
+            score = -1;
+        }
+    }
+}
+
+async function update_score() {
+    const query = server_url + 'users/score?recipe_id=' + $.urlParam('id') + '&score=' + score;
+
+    const response = await fetch(query, {
+        method: 'PUT',
+        credentials: 'include'
+    });
+    
+    console.log(response);
+}
+
+async function post_score() {
+    const query = server_url + 'users/score?recipe_id=' + $.urlParam('id') + '&score=' + score;
+
+    const response = await fetch(query, {
+        method: 'POST',
+        credentials: 'include'
+    });
+    
+    console.log(response);
+}
+
 let score = 0;
 
 function on_upvote_btn_click() {
@@ -298,11 +345,13 @@ function on_upvote_btn_click() {
                 score = 0;
                 $('#upvote_btn').css('background-color', WHITE);
                 $('#upvote_path').attr('stroke', GREEN);
+                update_score();
                 break;
             case 0:
                 score = 1;
                 $('#upvote_btn').css('background-color', GREEN);
                 $('#upvote_path').attr('stroke', WHITE);
+                post_score();
                 break;
             case -1:
                 $('#downvote_btn').click();
@@ -322,11 +371,13 @@ function on_downvote_btn_click() {
                 score = 0;
                 $('#downvote_btn').css('background-color', WHITE);
                 $('#downvote_path').attr('stroke', RED);
+                update_score();
                 break;
             case 0:
                 score = -1;
                 $('#downvote_btn').css('background-color', RED);
                 $('#downvote_path').attr('stroke', WHITE);
+                post_score();
                 break;
             case 1:
                 $('#upvote_btn').click();
@@ -368,7 +419,6 @@ async function check_fav() {
             $('#fav_btn').children('svg').attr('fill', WHITE);
         }
     })
-
 }
 
 async function delete_fav() {
@@ -415,6 +465,7 @@ $('document').ready(function() {
 
     if (authorized()) {
         check_fav();
+        check_score();
     }
 
     // обработка нажатий изменения кол-ва порций
