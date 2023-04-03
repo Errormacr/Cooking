@@ -235,6 +235,29 @@ async function post_steps(recipe_id) {
     }
 }
 
+async function post_tag_recipe(recipe_id, tag_id) {
+    const query = server_url + 'recipes/' + recipe_id + '/tag?tag_id=' + tag_id;
+    const response = await fetch(query, {
+        method: 'POST',
+        credentials: 'include'
+    });
+    console.log(response);
+}
+
+async function post_tag(recipe_id, tag_name) {
+    const query = server_url + 'tag/?tag=' + encodeURIComponent(tag_name);
+    const response = await fetch(query, {
+        method: 'POST',
+        credentials: 'include'
+    });
+    console.log(response);
+
+    const new_tag = await response.json();
+    console.log(new_tag);
+
+    post_tag_recipe(recipe_id, new_tag['id']);
+}
+
 async function post_recipe() {
     //сбор основной информации о рецепте
     const name = $('input[name="name"]').val().trim();
@@ -330,16 +353,23 @@ async function post_recipe() {
         }
     });
 
+    //сбор тегов
     let tags = [];
+    let tags_to_create = [];
     $('#tags_container input').each(function(i, tag) {
         let tag_id = 0;
         
         $('#tags_list option').each(function(j, tag_option) {
             if ($(tag).val().trim() == $(tag_option).val()) {
                 tag_id = $(tag_option).attr('id');
-                tags.push(tag_id);
             }
         });
+
+        if (tag_id) {
+            tags.push(tag_id);
+        } else {
+            tags_to_create.push($(tag).val().trim())
+        }
     });
 
     details.tag = tags.join(',');
@@ -388,7 +418,11 @@ async function post_recipe() {
             
             post_steps(new_recipe_id);
 
-            $(location).attr('href', 'profile.html?tab=3');
+            tags_to_create.forEach(tag => {
+                post_tag(new_recipe_id, tag);
+            })
+
+            // $(location).attr('href', 'profile.html?tab=3');
         } else {
             notification('Рецепт с таким именем уже существует.', 3000);
         }
