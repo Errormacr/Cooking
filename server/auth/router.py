@@ -198,6 +198,9 @@ async def post_score(recipe_id: int, score: int, user: auth_user = Depends(curre
                      session: AsyncSession = Depends(get_async_session)):
     try:
         await session.execute(insert(Score_recipe).values(user_ID=user.id, recipe_ID=recipe_id, score=score))
+        recipe = await session.execute(select(Recipe.c.rating).where(Recipe.c.recipe_ID == recipe_id))
+        recipe = recipe.all()
+        await session.execute(update(Recipe).where(Recipe.c.recipe_ID == recipe_id).values(rating=recipe[0][0] + score))
         await session.commit()
 
     except exc.IntegrityError:
@@ -208,15 +211,15 @@ async def post_score(recipe_id: int, score: int, user: auth_user = Depends(curre
 
 
 @router.get("/score/", tags=["Score"])
-async def get_score_of_recipe(recipe_id: int, session: AsyncSession = Depends(get_async_session)):
-    query = select(Score_recipe).where(Score_recipe.c.recipe_ID == recipe_id)
+async def get_score_of_recipe(recipe_id: int, user: auth_user = Depends(current_user), session: AsyncSession = Depends(get_async_session)):
+    query = select(Score_recipe).where(Score_recipe.c.recipe_ID == recipe_id).where(Score_recipe.c.user_ID == user.id)
     result = await session.execute(query)
     result = result.all()
     if not result:
-        raise HTTPException(status_code=404, detail="Can't find score")
+        return None
     r = [rec[3] for rec in result]
     r = sum(r)
-    result = {"recipe_ID": recipe_id, "score": r}
+    result = {"user":user.id,"recipe_ID": recipe_id, "score": r}
     return result
 
 
@@ -247,6 +250,10 @@ async def update_score(recipe_id: int, score: int, user: auth_user = Depends(cur
         Score_recipe.c.user_ID == user.id).where(Score_recipe.c.recipe_ID == recipe_id).values(score=score)
     try:
         await session.execute(stmt)
+        recipe = await session.execute(select(Recipe.c.rating).where(Recipe.c.recipe_ID == recipe_id))
+        recipe = recipe.all()
+        await session.execute(
+            update(Recipe).where(Recipe.c.recipe_ID == recipe_id).values(rating=recipe[0][0] - result[0][3] + score))
         await session.commit()
     except exc.IntegrityError:
         raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})

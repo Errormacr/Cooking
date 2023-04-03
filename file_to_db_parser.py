@@ -233,6 +233,14 @@ def fill_recipe_score(conn):
                 with connection.cursor() as curs:
                     curs.execute(sql)
                     conn.commit()
+                    sql = f'select rating from Recipe where recipe_ID = {rec}'
+                    curs.execute(sql)
+                    recipe = curs.fetchall()[0][0]
+
+                    sql = f'update Recipe set rating = {recipe + score} where recipe_ID = {rec}'
+                    curs.execute(sql)
+                    conn.commit()
+
 
 while True:
     try:

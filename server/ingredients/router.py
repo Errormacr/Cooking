@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
-from sqlalchemy import select, insert, update, delete
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select
 from models import Ingredient, Recipe_ingredient, Unit
 from auth.db import get_async_session
 
@@ -42,7 +42,7 @@ async def get_ingredients(recipe_id: int = None, ingredient_name: str = None, li
             ans.append(
                 {"id": rec[2], "name": result_ingr[0][1], "unit": result_unit[0][0], "count": rec[3], "kkal": kkal,
                  "belki": belki, "zhiry": zhiry, "uglevody": uglevody})
-        if ans == []:
+        if not ans:
             raise HTTPException(status_code=404, detail="Can't find ingredients")
         return ans
     elif ingredient_name:
@@ -58,7 +58,8 @@ async def get_ingredients(recipe_id: int = None, ingredient_name: str = None, li
             query = select(Unit.c.name).where(Unit.c.unit_ID == rec[2])
             resultUnit = await session.execute(query)
             resultUnit = resultUnit.all()
-            ans.append({"id": rec[0],"name": rec[1], "unit": resultUnit[0][0], "kkal": rec[3], "belki": rec[4], "zhiry": rec[5],
+            ans.append({"id": rec[0], "name": rec[1], "unit": resultUnit[0][0], "kkal": rec[3], "belki": rec[4],
+                        "zhiry": rec[5],
                         "uglevody": rec[6]})
         return ans
     else:

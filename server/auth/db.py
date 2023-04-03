@@ -7,7 +7,7 @@ from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 from sqlalchemy import Column
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.dialects.mysql import INTEGER, DECIMAL, TINYINT, TEXT, TIME, DATE, ENUM, VARCHAR, NCHAR, BOOLEAN
+from sqlalchemy.dialects.mysql import INTEGER, TEXT, DATE, ENUM, VARCHAR, BOOLEAN
 
 DATABASE_URL = f"mysql+aiomysql://{USER}:{PASS}@{HOST}:{PORT}/{DB_Name}"
 

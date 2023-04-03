@@ -1,15 +1,11 @@
 from utils import fastapi_users
-from auth.db import get_async_session, User as auth_user
+from auth.db import get_async_session
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
-from sqlalchemy import select, insert, update, delete
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import insert, delete
 from sqlalchemy import exc
-import json
-import datetime
-import keyring
-from typing import List
 from dev.shemas import Ingredient_create
-from models import Tag, Ingredient, Unit
+from models import Ingredient, Unit
 from config import KEY
 
 router = APIRouter(prefix="/dev", tags=["dev"])
