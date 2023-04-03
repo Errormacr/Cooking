@@ -1,5 +1,10 @@
 const server_url = sessionStorage.getItem('server_url');
 
+const WHITE = "#fff";
+const PINK = "#ff2787";
+const RED = "#e64343";
+const GREEN = "#61b030";
+
 let current_step = 0;
 
 async function fetch_step(index) {
@@ -19,6 +24,25 @@ async function fetch_step(index) {
     $('#step_num_container').loadTemplate('templates/recipe/step_num_tpl.html', {
         step_num: index + 1
     });
+
+    // выяснение типа медиа - изображение или видео
+    const media_query = server_url + 'recipes/' + step['step_ID'] + '_media/'
+    const media_response = await fetch(media_query, {
+        credentials: 'include'
+    });
+    console.log(media_response);
+    const media_type = media_response.headers.get('Content-Type');
+    console.log(media_type);
+    $('#media_container').empty();
+    if (media_type.startsWith('image')) {
+        $('#media_container').loadTemplate('templates/recipe/step_media_img_tpl.html', {
+            img_src: media_query
+        });
+    } else if (media_type.startsWith('video')) {
+        $('#media_container').loadTemplate('templates/recipe/step_media_video_tpl.html', {
+            video_src: media_query
+        });
+    }
 
     $('#step_description_container').loadTemplate('templates/recipe/step_description_tpl.html', {
         description: step['description']
@@ -102,6 +126,11 @@ async function fetch_recipe() {
     }
     
     $('#info_container').loadTemplate('templates/recipe/info_block_tpl.html', info_data);
+
+    // загрузка шаблона рейтинга рецепта
+    $('#rating_container').loadTemplate('templates/recipe/rating_tpl.html', {
+        rating: recipe_desc['rating']
+    });
 
     // загрузка шаблона времени приготовления рецепта
     let time = Number(recipe_desc['cook_time']);
@@ -192,16 +221,6 @@ async function fetch_recipe() {
     $('#tags_container').loadTemplate('templates/main/tag_tpl.html', tags_data);
 };
 
-async function add_to_fav() {
-    const query = server_url + 'users/favourite?recipe_id=' + $.urlParam('id');
-
-    const response = await fetch(query, {
-        method: 'POST',
-        credentials: 'include'
-    });
-    console.log(response);
-};
-
 // функции для таймера
 let timer;
 let base_hours, base_minutes, base_seconds;
@@ -270,6 +289,122 @@ function on_back_btn_click() {
     fetch_step(current_step);
 };
 
+let score = 0;
+
+function on_upvote_btn_click() {
+    if (authorized()) {
+        switch(score) {
+            case 1:
+                score = 0;
+                $('#upvote_btn').css('background-color', WHITE);
+                $('#upvote_path').attr('stroke', GREEN);
+                break;
+            case 0:
+                score = 1;
+                $('#upvote_btn').css('background-color', GREEN);
+                $('#upvote_path').attr('stroke', WHITE);
+                break;
+            case -1:
+                $('#downvote_btn').click();
+                break;
+        }
+    
+        console.log(score);
+    } else {
+        notification('Вы должны быть авторизованы для добавления оценок.', 3000);
+    }
+}
+
+function on_downvote_btn_click() {
+    if (authorized()) {
+        switch(score) {
+            case -1:
+                score = 0;
+                $('#downvote_btn').css('background-color', WHITE);
+                $('#downvote_path').attr('stroke', RED);
+                break;
+            case 0:
+                score = -1;
+                $('#downvote_btn').css('background-color', RED);
+                $('#downvote_path').attr('stroke', WHITE);
+                break;
+            case 1:
+                $('#upvote_btn').click();
+                break;
+        }
+    
+        console.log(score);
+    } else {
+        notification('Вы должны быть авторизованы для добавления оценок.', 3000);
+    }
+}
+
+// избранные рецепты
+
+async function add_to_fav() {
+    const query = server_url + 'users/favourite?recipe_id=' + $.urlParam('id');
+
+    const response = await fetch(query, {
+        method: 'POST',
+        credentials: 'include'
+    });
+    console.log(response);
+}
+
+async function check_fav() {
+    const query = server_url + 'users/' + sessionStorage.getItem('user_id') + '/favourite';
+
+    const response = await fetch(query, {
+        credentials: 'include'
+    });
+    
+    const favourites = await response.json();
+    console.log(favourites);
+
+    favourites.forEach(favourite => {
+        if ($.urlParam('id') == favourite['recipe_id']) {
+            fav = true;
+            $('#fav_btn').css('background-color', PINK);
+            $('#fav_btn').children('svg').attr('fill', WHITE);
+        }
+    })
+
+}
+
+async function delete_fav() {
+    const query = server_url + 'users/favourite?recipe_id=' + $.urlParam('id');
+
+    const response = await fetch(query, {
+        method: 'DELETE',
+        credentials: 'include'
+    });
+    console.log(response);
+}
+
+let fav = false;
+
+function on_fav_btn_click() {
+    console.log(fav);
+    if (authorized()) {
+        fav = !fav;
+
+        if (fav) {
+            $('#fav_btn').css('background-color', PINK);
+            $('#fav_btn').children('svg').attr('fill', WHITE);
+            add_to_fav();
+        } else {
+            $('#fav_btn').css('background-color', WHITE);
+            $('#fav_btn').children('svg').attr('fill', PINK);
+            delete_fav();
+        }
+    } else {
+        notification('Вы должны быть авторизованы для добавления рецепта в избранные.', 3500);
+    }
+
+    
+
+}
+
 // инициализация переменных для расчета кол-ва ингредиентов
 let standard_servings = 0;
 let standard_quantity = [];
@@ -277,6 +412,10 @@ let standard_quantity = [];
 $('document').ready(function() {
     $('#step_section').hide();
     fetch_recipe();
+
+    if (authorized()) {
+        check_fav();
+    }
 
     // обработка нажатий изменения кол-ва порций
     $('#servings > p.sign').click(function() {

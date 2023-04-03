@@ -6,15 +6,22 @@
     position: absolute;
     border-radius: 15px;
     background-color: #fff;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: 0.3s ease;
+    padding: 6px 6px 0;
 }
 
-.recipe-img-btn {
-    cursor: pointer;
+.recipe-img-btn:hover {
+    padding: 9px 9px 3px;
 }
 
 .rating {
-    padding: 3px 6px;
     bottom: 21px;
+}
+
+.rating:hover {
+    bottom: 18px;
 }
 
 .upvote {
@@ -25,10 +32,22 @@
     left: 86px;
 }
 
+.upvote:hover {
+    left: 12px;
+}
+
+.downvote:hover {
+    left: 83px;
+}
+
 .favourite {
     top: 15px;
     right: 15px;
-    padding: 11px 11px 7px;
+}
+
+.favourite:hover {
+    top: 12px;
+    right: 12px;
 }
 
 .recipe-img {
@@ -142,4 +161,12 @@
 
 #step_section {
     min-height: 40vh;
+}
+
+.media {
+    width: 100%;
+}
+
+.rating-row {
+    display: inline-block;
 }

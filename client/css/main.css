@@ -155,7 +155,7 @@ textarea {
     border-radius: 36px;
     box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
     margin-bottom: 45px;
-    transition: 0.5s;
+    transition: 0.3s;
 }
 
 .recipe-card:hover {
@@ -367,4 +367,56 @@ input[type="number"]:focus {
 
 .hidden-input-label {
     cursor: pointer;
+}
+
+.menu-container {
+    position: relative;
+}
+
+.menu-block {
+    width: 100%;
+    position: absolute;
+    z-index: 10;
+}
+
+.sidebar-menu {
+    box-sizing: border-box;
+    background-color: #fff;
+    width: 100%;
+    box-shadow: 0 10px 30px 0 rgba(49, 89, 65, 0.26);
+    padding: 20px 20px 10px;
+    border-radius: 15px;
+    opacity: 0;
+    display: none;
+}
+
+.sidebar-menu p {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.sidebar-menu a {
+    text-decoration: none;
+    color: #144f2b;
+    transition: 0.5s;
+}
+
+.sidebar-menu a:hover {
+    color: #61b030;
+}
+
+.sidebar-menu ul {
+    margin: 0;
+}
+
+.sidebar-menu ul li {
+    list-style-type: none;
+    padding: 10px 0;
+    border-bottom: 1px solid #d9d9d9;
+    user-select: none;
+    cursor: pointer;
+}
+
+.sidebar-menu ul li:last-child {
+    border-bottom: none;
 }

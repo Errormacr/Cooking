@@ -1,152 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
-        />
-        <link
-            rel="stylesheet"
-            href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.css"
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap"
-            rel="stylesheet"
-        />
-        <link rel="stylesheet" href="css/main.css" />
-        <link rel="stylesheet" href="css/recipe.css" />
-        <script
-            src="https://code.jquery.com/jquery-3.6.3.min.js"
-            integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
-            crossorigin="anonymous"
-        ></script>
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.loadtemplate/1.5.10/jquery.loadTemplate.min.js"
-            integrity="sha512-T1zx+UG2gXu9mr29wvzaKkNUmAOAie40T32ZPIvcRPJgO5br53+Ocqj8gzguUuix7FK+Z3ncRCJMaZcumnPZzg=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
-        ></script>
-        <script src="js/main.js"></script>
-        <script src="js/recipe.js"></script>
-        <title>Cooking - Рецепт</title>
-    </head>
 
-    <body>
-        <header></header>
-        <section id="modals_container">
-            <div class="modal-back"></div>
-        </section>
-        <section>
-            <div class="container">
-                <div class="row middle-xs center-xs">
-                    <div id="name_container" class="col-xs"></div>
-                </div>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/recipe.css" />
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.loadtemplate/1.5.10/jquery.loadTemplate.min.js"
+        integrity="sha512-T1zx+UG2gXu9mr29wvzaKkNUmAOAie40T32ZPIvcRPJgO5br53+Ocqj8gzguUuix7FK+Z3ncRCJMaZcumnPZzg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="js/main.js"></script>
+    <script src="js/recipe.js"></script>
+    <title>Cooking - Рецепт</title>
+</head>
+
+<body>
+    <header></header>
+    <section id="modals_container">
+        <div class="modal-back"></div>
+    </section>
+    <section>
+        <div class="container">
+            <div class="row middle-xs center-xs">
+                <div id="name_container" class="col-xs"></div>
             </div>
-        </section>
-        <section id="step_section" class="section-padding">
-            <div class="container">
-                <div class="row">
-                    <div id="step_num_container" class="col-xs"></div>
-                </div>
-                <div class="row">
-                    <div id="step_description_container" class="col-xs"></div>
-                </div>
-                <div class="row">
-                    <div id="media_container" class="col-xs-12"></div>
-                </div>
-                <div id="timer_container" class="row center-xs"></div>
-                <div
-                    id="buttons_container"
-                    class="row around-sm center-xs"
-                ></div>
+        </div>
+    </section>
+    <section id="step_section" class="section-padding">
+        <div class="container">
+            <div class="row">
+                <div id="step_num_container" class="col-xs"></div>
             </div>
-        </section>
-        <section id="recipe_section" class="section-padding">
-            <div class="container">
-                <div class="row middle-xs center-xs">
-                    <div class="col-xs-12">
-                        <div id="img_container" class="recipe-img-block">
-                            <div class="recipe-img-btn rating upvote">
-                                <img src="img/recipe/upvote.png" alt="upvote" />
-                            </div>
-                            <div class="recipe-img-btn rating downvote">
-                                <img
-                                    src="img/recipe/downvote.png"
-                                    alt="downvote"
-                                />
-                            </div>
-                            <div class="recipe-img-btn favourite">
-                                <img
-                                    src="img/recipe/favourite.png"
-                                    alt="favourite"
-                                    onclick="add_to_fav()"
-                                />
-                            </div>
+            <div class="row">
+                <div id="step_description_container" class="col-xs"></div>
+            </div>
+            <div class="row">
+                <div id="media_container" class="col-xs-12"></div>
+            </div>
+            <div id="timer_container" class="row center-xs"></div>
+            <div id="buttons_container" class="row around-sm center-xs"></div>
+        </div>
+    </section>
+    <section id="recipe_section" class="section-padding">
+        <div class="container">
+            <div class="row middle-xs center-xs">
+                <div class="col-xs-12">
+                    <div id="img_container" class="recipe-img-block">
+                        <div id="upvote_btn" class="recipe-img-btn rating upvote" onclick="on_upvote_btn_click()">
+                            <?xml version="1.0" encoding="utf-8"?>
+                            <svg width="50" height="50" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g id="Arrow / Arrow_Up_LG">
+                                    <path stroke="#61b030" id="upvote_path" d="M12 3L7 8M12 3L17 8M12 3V21"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </g>
+                            </svg>
+                        </div>
+                        <div id="downvote_btn" class="recipe-img-btn rating downvote" onclick="on_downvote_btn_click()">
+                            <?xml version="1.0" encoding="utf-8"?>
+                            <svg transform="rotate(180)" width="50" height="50" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g id="Arrow / Arrow_Up_LG">
+                                    <path stroke="#e64343" id="downvote_path" d="M12 3L7 8M12 3L17 8M12 3V21"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </g>
+                            </svg>
+                        </div>
+                        <div id="fav_btn" class="recipe-img-btn favourite" onclick="on_fav_btn_click()">
+                            <?xml version="1.0" ?>
+                            <!DOCTYPE svg
+                                PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg
+                                height="100%"
+                                style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
+                                version="1.1" viewBox="0 0 24 24" width="50" fill="#ff2787" xml:space="preserve"
+                                xmlns="http://www.w3.org/2000/svg" xmlns:serif="http://www.serif.com/"
+                                xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <g id="Icon">
+                                    <path
+                                        d="M12,5.593l0.563,-0.563c1.009,-1.009 2.378,-1.576 3.804,-1.576c1.427,0 2.796,0.567 3.805,1.576c0,0.001 0.001,0.002 0.002,0.003c1.009,1.008 1.576,2.377 1.576,3.804c-0,1.331 -0.227,3.257 -2.417,5.963c-2.063,2.548 -4.071,4.257 -7.015,5.633c-0.1,0.047 -0.206,0.07 -0.31,0.071l-0.016,0c-0.104,-0.001 -0.21,-0.024 -0.31,-0.071c-2.944,-1.376 -4.952,-3.085 -7.015,-5.633c-2.19,-2.706 -2.417,-4.632 -2.417,-5.963c-0,-1.427 0.567,-2.796 1.576,-3.804c0.001,-0.001 0.002,-0.002 0.002,-0.003c1.009,-1.009 2.378,-1.576 3.805,-1.576c1.426,0 2.795,0.567 3.804,1.576l0.563,0.563Zm0,13.33c2.552,-1.248 4.334,-2.802 6.167,-5.067c1.85,-2.285 2.083,-3.895 2.083,-5.019c0,-1.029 -0.409,-2.016 -1.136,-2.744c-0.001,-0.001 -0.002,-0.002 -0.003,-0.002c-0.728,-0.728 -1.715,-1.137 -2.744,-1.137c-1.029,0 -2.015,0.409 -2.743,1.137c-0.348,0.347 -0.714,0.713 -1.093,1.092c-0.146,0.147 -0.339,0.22 -0.531,0.22c-0.192,0 -0.385,-0.073 -0.531,-0.22c-0.379,-0.379 -0.745,-0.745 -1.093,-1.092c-0.728,-0.728 -1.714,-1.137 -2.743,-1.137c-1.029,0 -2.016,0.409 -2.744,1.137c-0.001,0 -0.002,0.001 -0.003,0.002c-0.727,0.728 -1.136,1.715 -1.136,2.744c0,1.124 0.233,2.734 2.083,5.019c1.833,2.265 3.615,3.819 6.167,5.067Z" />
+                                </g>
+                            </svg>
                         </div>
                     </div>
                 </div>
-                <div class="recipe-info row middle-xs center-xs">
-                    <div class="col-lg-9 col-md-10 col-xs-12">
-                        <div id="info_container" class="row"></div>
-                    </div>
-                </div>
-                <div class="row start-xs">
-                    <div class="col-xs">
-                        <p id="time_container">Время приготовления:</p>
-                    </div>
-                </div>
-                <div class="row start-xs">
-                    <div class="col-xs-12">
-                        <div id="servings" class="row middle-xs">
-                            <p class="servings-fix">Порций:</p>
-                            <p class="sign">-</p>
-                            <div
-                                id="servings_container"
-                                class="servings-block"
-                            ></div>
-                            <p class="sign">+</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row start-xs">
-                    <div class="col-xs">
-                        <p>Ингредиенты:</p>
-                    </div>
-                </div>
-                <div id="ingredients_container"></div>
-                <div class="row center-xs">
-                    <div class="col-xs">
-                        <button onclick="on_step_by_step_btn_click()" class="btn btn-bold">
-                            Пошаговое приготовление
-                        </button>
-                    </div>
-                </div>
-                <div class="row center-xs">
-                    <div class="col-xs">
-                        <h1>Рецепт</h1>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div id="steps_container" class="steps-block"></div>
-                    </div>
-                </div>
-                <div class="row start-xs">
-                    <div class="col-xs">
-                        <div
-                            id="recommendations_container"
-                            class="recommendations-block"
-                        ></div>
-                    </div>
-                </div>
-                <div id="tags_container" class="row center-xs"></div>
             </div>
-        </section>
-    </body>
-    <footer></footer>
+            <div class="recipe-info row middle-xs center-xs">
+                <div class="col-lg-9 col-md-10 col-xs-12">
+                    <div id="info_container" class="row"></div>
+                </div>
+            </div>
+            <div class="row middle-xs">
+                <div id="rating_container" class="col-xs">
+                    
+                </div>
+            </div>
+            <div class="row start-xs">
+                <div class="col-xs">
+                    <p id="time_container">Время приготовления:</p>
+                </div>
+            </div>
+            <div class="row start-xs">
+                <div class="col-xs-12">
+                    <div id="servings" class="row middle-xs">
+                        <p class="servings-fix">Порций:</p>
+                        <p class="sign">-</p>
+                        <div id="servings_container" class="servings-block"></div>
+                        <p class="sign">+</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row start-xs">
+                <div class="col-xs">
+                    <p>Ингредиенты:</p>
+                </div>
+            </div>
+            <div id="ingredients_container"></div>
+            <div class="row center-xs">
+                <div class="col-xs">
+                    <button onclick="on_step_by_step_btn_click()" class="btn btn-bold">
+                        Пошаговое приготовление
+                    </button>
+                </div>
+            </div>
+            <div class="row center-xs">
+                <div class="col-xs">
+                    <h1>Рецепт</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div id="steps_container" class="steps-block"></div>
+                </div>
+            </div>
+            <div class="row start-xs">
+                <div class="col-xs">
+                    <div id="recommendations_container" class="recommendations-block"></div>
+                </div>
+            </div>
+            <div id="tags_container" class="row center-xs"></div>
+        </div>
+    </section>
+</body>
+<footer></footer>
+
 </html>

@@ -215,12 +215,6 @@ function reload_recipes() {
     params.set("offset", 6);
 }
 
-function close_menus() {
-    $('.menu-block > div').each(function(index, element) {
-        $(element).css('display', 'none');
-    })
-}
-
 let conditions = [' ↓', '  ', ' ↑']
 
 $('document').ready(function() {
