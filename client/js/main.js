@@ -135,12 +135,11 @@ async function sign_in() {
         console.log(result);
 
         if (response.ok) {
-            get_current_user();
-
-            $('.modal-back').click();
-
-            sessionStorage.setItem('authorized', true);
-            location.reload();
+            get_current_user().then(function() {
+                $('.modal-back').click();
+                sessionStorage.setItem('authorized', true);
+                location.reload();
+            })
         } else {
             $('#sign_in_modal .hint').html('Такого пользователя не существует.');
         }
