@@ -139,7 +139,8 @@ async function sign_in() {
 
             $('.modal-back').click();
 
-            notification('Вы успешно авторизовались!', 2500);
+            sessionStorage.setItem('authorized', true);
+            location.reload();
         } else {
             $('#sign_in_modal .hint').html('Такого пользователя не существует.');
         }
@@ -287,6 +288,11 @@ $('document').ready(function() {
     if(sessionStorage.getItem('cant_find')) {
         notification('Страница не найдена.', 2500);
         sessionStorage.removeItem('cant_find');
+    }
+
+    if(sessionStorage.getItem('authorized')) {
+        notification('Вы успешно авторизовались!', 2500);
+        sessionStorage.removeItem('authorized');
     }
 
     $('.modal-back').click(function(){
