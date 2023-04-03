@@ -192,52 +192,6 @@ function on_incr_serv_click() {
     };
 }
 
-async function post_ingredient_recipe_relation(ingredient_id, recipe_id, quantity) {
-    const query = server_url + 'recipes' + recipe_id + '/' + ingredient_id + '?count=' + quantity;
-
-    const response = await fetch(query, {
-        method: 'POST',
-        credentials: 'include'
-    });
-    console.log(response);
-
-    const relation = await response.json();
-    console.log(relation);
-}
-
-async function post_ingredient_recipe(recipe_id) {
-    let ingredients_data = [];
-
-    const ingredients_count = $('#ingredients_container input[name=ingredient]').length;
-
-    for (let i = 0; i < ingredients_count; i++) {
-        const name = $('#ingredients_container input[name=ingredient]:eq(' + i + ')').val().trim();
-        const quantity = $('#ingredients_container input[name=quantity]:eq(' + i + ')').val().trim();
-
-        const query = server_url + 'ingredient/?ingredient_name=' + encodeURIComponent(name);
-
-        const response = await fetch(query, {
-            credentials: 'include'
-        });
-        console.log(response);
-
-        const ingredients = await response.json();
-        const ingredient = ingredients[0];
-        console.log(ingredient);
-
-        ingredients_data.push({
-            id: ingredient['id'],
-            quantity: quantity,
-        })
-    }
-
-    console.log(ingredients_data);
-    
-    ingredients_data.forEach(ingredient => {
-        post_ingredient_recipe_relation(ingredient.id, recipe_id, ingredient.quantity);
-    });
-}
-
 let steps_files = new Map();
 
 async function post_steps(recipe_id) {
@@ -324,19 +278,28 @@ async function post_recipe() {
         }
     })
 
-    // let ingredients = [];
-    // $('#ingredients_container input[name=ingredient]').each(function(i, ingredient) {
-    //     let ingredient_id = 0;
+    let ingredients_exist = true;
+    let ingredients = [];
+    $('#ingredients_container input[name=ingredient]').each(function(i, ingredient) {
+        let ingredient_id = 0;
         
-    //     $('#ingredients_list option').each(function(j, ingredient_option) {
-    //         if ($(ingredient).val().trim() == $(ingredient_option).val()) {
-    //             ingredient_id = $(ingredient_option).attr('id');
-    //             ingredients.push(ingredient_id);
-    //         }
-    //     });
-    // });
+        $('#ingredients_list option').each(function(j, ingredient_option) {
+            if ($(ingredient).val().trim() == $(ingredient_option).val()) {
+                ingredient_id = $(ingredient_option).attr('id');
+            }
+        });
 
-    // details.ingredients = ingredients.join(',');
+        if(ingredient_id) {
+            const quantity = $('#ingredients_container input[name=quantity]:eq(' + i + ')').val().trim();
+            ingredients.push(ingredient_id + '-' + quantity);
+        } else {
+            ingredients_exist = false;
+        }
+    });
+
+    // console.log(ingredients.join(','));
+
+    details.ingredients = ingredients.join(',');
 
     //проверка шагов
     let steps_check = true;
@@ -390,6 +353,8 @@ async function post_recipe() {
         notification('Укажите шаги.', 2500);
     } else if (!tags_check) {
         notification('Укажите теги.', 2500);
+    } else if (!ingredients_exist) {
+        notification('Выберите ингредиенты из списка.', 3000)
     } else {
         //подготовка основной информации к отправке
         let url_params = [];
@@ -417,7 +382,7 @@ async function post_recipe() {
 
             const new_recipe_id = recipe[1];
 
-            post_ingredient_recipe(new_recipe_id);
+            // post_ingredient_recipe(new_recipe_id);
             
             post_steps(new_recipe_id);
 
