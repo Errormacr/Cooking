@@ -325,6 +325,17 @@ async function update_score() {
     console.log(response);
 }
 
+async function delete_score() {
+    const query = server_url + 'users/score?recipe_id=' + $.urlParam('id');
+
+    const response = await fetch(query, {
+        method: 'DELETE',
+        credentials: 'include'
+    });
+    
+    console.log(response);
+}
+
 async function post_score() {
     const query = server_url + 'users/score?recipe_id=' + $.urlParam('id') + '&score=' + score;
 
@@ -346,6 +357,7 @@ function on_upvote_btn_click() {
                 $('#upvote_btn').css('background-color', WHITE);
                 $('#upvote_path').attr('stroke', GREEN);
                 update_score();
+                delete_score();
                 break;
             case 0:
                 score = 1;
@@ -372,6 +384,7 @@ function on_downvote_btn_click() {
                 $('#downvote_btn').css('background-color', WHITE);
                 $('#downvote_path').attr('stroke', RED);
                 update_score();
+                delete_score();
                 break;
             case 0:
                 score = -1;
