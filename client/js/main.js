@@ -232,7 +232,6 @@ function notification(text, duration) {
         append: true,
         complete: function() {
             const notification = $('#notification');
-            notification.css('left', ($(window).width() - notification.width()) / 2 + 'px');
             setTimeout(function() {
                 notification.remove();
             }, duration)
