@@ -20,12 +20,21 @@
     left: 15px;
 }
 
-.rating:hover {
-    bottom: 31px;
-}
-
 .downvote {
     left: 86px;
+}
+
+.rating:hover {
+    padding: 9px 9px 3px;
+    bottom: 18px;
+}
+
+.upvote:hover {
+    left: 12px;
+}
+
+.downvote:hover {
+    left: 83px;
 }
 
 .favourite {
