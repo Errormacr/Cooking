@@ -48,3 +48,9 @@
 .step-media {
     width: 100%;
 }
+
+.load-label {
+    display: block;
+    margin-top: 20px;
+    text-decoration: underline;
+}
