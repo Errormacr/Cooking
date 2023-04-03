@@ -215,7 +215,7 @@ function reload_recipes() {
     params.set("offset", 6);
 }
 
-let conditions = [' ↓', '  ', ' ↑']
+let conditions = [' ↑', '  ', ' ↓']
 
 $('document').ready(function() {
     fetch_filters();
