@@ -151,10 +151,8 @@ async function fetch_fav_recipes() {
 
 }
 
-async function delete_fav(element) {
+async function delete_fav(recipe_id) {
     // окна "вы уверены..."
-
-    const recipe_id = $(element).attr('alt');
 
     const query = server_url + 'users/favourite?recipe_id=' + recipe_id;
 
@@ -163,10 +161,20 @@ async function delete_fav(element) {
         credentials: 'include'
     });
     console.log(response);
+}
 
-    notification('Рецепт удален из избранного.', 2500);
+function on_delete_fav_click(element) {
+    $(element).parents('.recipe-card').animate({
+        opacity: 0
+    }, 400, function() {
+        const recipe_id = $(element).attr('alt');
 
-    $('#favourite_recipes').click();
+        delete_fav(recipe_id).then(function() {
+            notification('Рецепт удален из избранного.', 2500);
+
+            $('#favourite_recipes').click();
+        });
+    });
 }
 
 function on_fav_recipes_click() {

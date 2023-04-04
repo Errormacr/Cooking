@@ -1,6 +1,11 @@
 sessionStorage.setItem('server_url', 'http://localhost:8000/');
 server_url = sessionStorage.getItem('server_url');
 
+const WHITE = "#fff";
+const PINK = "#ff2787";
+const RED = "#e64343";
+const GREEN = "#61b030";
+
 $.urlParam = function(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results==null){

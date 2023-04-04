@@ -1,10 +1,5 @@
 const server_url = sessionStorage.getItem('server_url');
 
-const WHITE = "#fff";
-const PINK = "#ff2787";
-const RED = "#e64343";
-const GREEN = "#61b030";
-
 let current_step = 0;
 
 async function fetch_step(index) {
