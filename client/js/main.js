@@ -135,11 +135,11 @@ async function sign_in() {
         console.log(result);
 
         if (response.ok) {
-            get_current_user();
-
-            $('.modal-back').click();
-
-            notification('Вы успешно авторизовались!', 2500);
+            get_current_user().then(function() {
+                $('.modal-back').click();
+                sessionStorage.setItem('authorized', true);
+                location.reload();
+            })
         } else {
             $('#sign_in_modal .hint').html('Такого пользователя не существует.');
         }
@@ -231,7 +231,6 @@ function notification(text, duration) {
         append: true,
         complete: function() {
             const notification = $('#notification');
-            notification.css('left', ($(window).width() - notification.width()) / 2 + 'px');
             setTimeout(function() {
                 notification.remove();
             }, duration)
@@ -287,6 +286,11 @@ $('document').ready(function() {
     if(sessionStorage.getItem('cant_find')) {
         notification('Страница не найдена.', 2500);
         sessionStorage.removeItem('cant_find');
+    }
+
+    if(sessionStorage.getItem('authorized')) {
+        notification('Вы успешно авторизовались!', 2500);
+        sessionStorage.removeItem('authorized');
     }
 
     $('.modal-back').click(function(){

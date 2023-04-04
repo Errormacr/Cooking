@@ -4,6 +4,7 @@ from sqlalchemy import select, insert, update, delete
 from models import Tag, Recipe_tag
 from auth.db import get_async_session, User
 from utils import fastapi_users
+from sqlalchemy import exc
 
 router = APIRouter(prefix="/tag", tags=["tag"])
 
@@ -56,13 +57,16 @@ async def create_tag(tag: str, user: User = Depends(current_user), session: Asyn
     if len(tag) > 20:
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
     try:
-        await session.execute(insert(Tag).values(name=tag))
+        stmt = insert(Tag).values(name=tag)
+        await session.execute(stmt)
+        result = await session.execute(select(Tag.c.tag_ID).where(Tag.c.name == tag))
+        result = result.all()
         await session.commit()
     except exc.IntegrityError:
         raise HTTPException(status_code=400, detail={"Error": "Diplicate"})
     except exc.DataError:
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
-    return {"tag": tag}
+    return {"id": result[0][0], "tag": tag}
 
 
 @router.delete("/", status_code=204)
