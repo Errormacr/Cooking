@@ -3,6 +3,21 @@ const server_url = sessionStorage.getItem('server_url');
 let params = new Map();
 params.set('offset', 0);
 
+async function fetch_author_name(user_id) {
+    const query = server_url + 'users/?user_id=' + user_id;
+    const response = await fetch(query, {
+        credentials: 'include'
+    });
+    console.log(response);
+
+    const author = await response.json();
+    console.log(author);
+
+    author_name = author['login'];
+}
+
+let author_name;
+
 async function fetch_title(type) {
     let search_type, value;
     if (type == 'tag') {
@@ -17,7 +32,12 @@ async function fetch_title(type) {
     } else if (type == 'query') {
         search_type = 'запросу';
         value = decodeURI($.urlParam('query'));
-    };
+    } else if (type == 'author') {
+        search_type = 'автору';
+        fetch_author_name($.urlParam('author')).then(function() {
+            value = author_name;
+        })
+    }
 
     console.log(search_type);
     console.log(value);
@@ -50,7 +70,9 @@ async function fetch_recipes(type) {
         fetch_params.headers = headers;
     } else if (type == 'query') {
         params.set('name', $.urlParam('query'));
-    };
+    } else if (type == 'author') {
+        params.set('author', $.urlParam('author'));
+    }
 
     for (const [param, value] of params) {
         query += '&' + param + '=' + value;
@@ -111,6 +133,8 @@ $('document').ready(function() {
         type = 'tag';
     } else if ($.urlParam('query')) {
         type = 'query';
+    } else if ($.urlParam('author')) {
+        type = 'author';
     };
 
     fetch_title(type);

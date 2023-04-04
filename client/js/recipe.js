@@ -77,6 +77,22 @@ async function fetch_step(index) {
 
 }
 
+async function fetch_author(user_id) {
+    const query = server_url + 'users/?user_id=' + user_id;
+    const response = await fetch(query, {
+        credentials: 'include'
+    });
+    console.log(response);
+
+    const author = await response.json();
+    console.log(author);
+
+    $('#author_container').loadTemplate('templates/recipe/author_tpl.html', {
+        src: 'search.html?author=' + user_id,
+        author: author['login']
+    });
+}
+
 async function fetch_recipe() {
     // запрос информации о рецепте
     const recipes_query = server_url + 'recipes/' + $.urlParam('id');
@@ -131,6 +147,9 @@ async function fetch_recipe() {
     $('#rating_container').loadTemplate('templates/recipe/rating_tpl.html', {
         rating: recipe_desc['rating']
     });
+
+    // загрузка автора рецепта
+    fetch_author(recipe_desc['author']);
 
     // загрузка шаблона времени приготовления рецепта
     let time = Number(recipe_desc['cook_time']);
