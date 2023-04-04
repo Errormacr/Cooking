@@ -272,7 +272,7 @@ async def create_step(recipe_id: int, user: auth_user = Depends(current_user),
         raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
     except exc.DataError:
         raise HTTPException(status_code=400, detail={"Error": "Data error"})
-    f = open(f"../media/{r}_step", "wb")
+    f = open(f"../media/{r}_media", "wb")
     cont = await step.media.read()
     f.write(cont)
     f.close()
