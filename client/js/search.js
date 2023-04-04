@@ -3,20 +3,20 @@ const server_url = sessionStorage.getItem('server_url');
 let params = new Map();
 params.set('offset', 0);
 
-async function fetch_author_name(user_id) {
-    const query = server_url + 'users/?user_id=' + user_id;
-    const response = await fetch(query, {
-        credentials: 'include'
-    });
-    console.log(response);
+// async function fetch_author_name(user_id) {
+//     const query = server_url + 'users/?user_id=' + user_id;
+//     const response = await fetch(query, {
+//         credentials: 'include'
+//     });
+//     console.log(response);
 
-    const author = await response.json();
-    console.log(author);
+//     const author = await response.json();
+//     console.log(author);
 
-    author_name = author['login'];
-}
+//     author_name = author['login'];
+// }
 
-let author_name;
+// let author_name;
 
 async function fetch_title(type) {
     let search_type, value;
@@ -33,10 +33,17 @@ async function fetch_title(type) {
         search_type = 'запросу';
         value = decodeURI($.urlParam('query'));
     } else if (type == 'author') {
+        const query = server_url + 'users/?user_id=' + $.urlParam('author');
+        const response = await fetch(query, {
+            credentials: 'include'
+        });
+        console.log(response);
+
+        const author = await response.json();
+        console.log(author);
+
         search_type = 'автору';
-        fetch_author_name($.urlParam('author')).then(function() {
-            value = author_name;
-        })
+        value = author['login'];
     }
 
     console.log(search_type);
