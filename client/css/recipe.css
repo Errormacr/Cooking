@@ -170,3 +170,11 @@
 .rating-row {
     display: inline-block;
 }
+
+#author_container a {
+    color: #144f2b;
+}
+
+#author_container a:hover {
+    color: #61b030;
+}

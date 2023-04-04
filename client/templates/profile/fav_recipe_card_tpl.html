@@ -1,19 +1,22 @@
 <div class="col-lg-4 col-md-6 col-xs-10">
     <div class="recipe-card">
         <div class="favourite-btn">
-            <img
-                src="img/profile/favourite.svg"
-                data-alt="fav_alt"
-                onclick="delete_fav(this)"
-            />
+            <?xml version="1.0" ?>
+            <!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg
+                data-alt="fav_alt" onclick="on_delete_fav_click(this)" height="100%"
+                style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" version="1.1"
+                viewBox="0 0 24 24" width="50" fill="#fff" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:serif="http://www.serif.com/" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g id="Icon">
+                    <path
+                        d="M12,5.593l0.563,-0.563c1.009,-1.009 2.378,-1.576 3.804,-1.576c1.427,0 2.796,0.567 3.805,1.576c0,0.001 0.001,0.002 0.002,0.003c1.009,1.008 1.576,2.377 1.576,3.804c-0,1.331 -0.227,3.257 -2.417,5.963c-2.063,2.548 -4.071,4.257 -7.015,5.633c-0.1,0.047 -0.206,0.07 -0.31,0.071l-0.016,0c-0.104,-0.001 -0.21,-0.024 -0.31,-0.071c-2.944,-1.376 -4.952,-3.085 -7.015,-5.633c-2.19,-2.706 -2.417,-4.632 -2.417,-5.963c-0,-1.427 0.567,-2.796 1.576,-3.804c0.001,-0.001 0.002,-0.002 0.002,-0.003c1.009,-1.009 2.378,-1.576 3.805,-1.576c1.426,0 2.795,0.567 3.804,1.576l0.563,0.563Zm0,13.33c2.552,-1.248 4.334,-2.802 6.167,-5.067c1.85,-2.285 2.083,-3.895 2.083,-5.019c0,-1.029 -0.409,-2.016 -1.136,-2.744c-0.001,-0.001 -0.002,-0.002 -0.003,-0.002c-0.728,-0.728 -1.715,-1.137 -2.744,-1.137c-1.029,0 -2.015,0.409 -2.743,1.137c-0.348,0.347 -0.714,0.713 -1.093,1.092c-0.146,0.147 -0.339,0.22 -0.531,0.22c-0.192,0 -0.385,-0.073 -0.531,-0.22c-0.379,-0.379 -0.745,-0.745 -1.093,-1.092c-0.728,-0.728 -1.714,-1.137 -2.743,-1.137c-1.029,0 -2.016,0.409 -2.744,1.137c-0.001,0 -0.002,0.001 -0.003,0.002c-0.727,0.728 -1.136,1.715 -1.136,2.744c0,1.124 0.233,2.734 2.083,5.019c1.833,2.265 3.615,3.819 6.167,5.067Z" />
+                </g>
+            </svg>
+            <!-- <img src="img/profile/favourite.svg" data-alt="fav_alt" onclick="delete_fav(this)" /> -->
         </div>
         <a class="recipe-link" data-href="href">
-            <img
-                class="recipe-card-img"
-                onerror="$(this).attr('src', 'img/main/recipe_placeholder.png');"
-                data-src="img_src"
-                alt="recipe_photo"
-            />
+            <img class="recipe-card-img" onerror="$(this).attr('src', 'img/main/recipe_placeholder.png');"
+                data-src="img_src" alt="recipe_photo" />
             <div class="recipe-card-info">
                 <div class="recipe-card-time-block">
                     <p class="recipe-card-time" data-content="time"></p>
@@ -21,16 +24,10 @@
                 <div class="recipe-card-rating-block">
                     <div class="row middle-xs">
                         <div class="col-xs">
-                            <img
-                                src="img/main/rating_icon.svg"
-                                alt="rating_icon"
-                            />
+                            <img src="img/main/rating_icon.svg" alt="rating_icon" />
                         </div>
                         <div class="col-xs">
-                            <p
-                                class="recipe-card-rating"
-                                data-content="rating"
-                            ></p>
+                            <p class="recipe-card-rating" data-content="rating"></p>
                         </div>
                     </div>
                 </div>
