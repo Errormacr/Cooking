@@ -435,10 +435,8 @@ async function post_recipe() {
             })
 
             post_steps(new_recipe_id).then(function() {
-                // $(location).attr('href', 'profile.html?tab=3');
+                $(location).attr('href', 'profile.html?tab=3');
             })
-
-            // $(location).attr('href', 'profile.html?tab=3');
         } else {
             notification('Рецепт с таким именем уже существует.', 3000);
         }
