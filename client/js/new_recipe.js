@@ -110,6 +110,12 @@ function on_add_step_click() {
                     console.log(step_media);
                     steps_files.set(new_step_id, step_media);
 
+                    console.log('\nsetten file');
+                    console.log(step_media);
+                    console.log('\nto id');
+                    console.log(new_step_id);
+
+
                     const step_media_url = URL.createObjectURL(step_media);
                     if (step_media.type.startsWith('image/')) {
                         $('#step_media_label_container_' + new_step_id).loadTemplate('templates/new_recipe/step_img_tpl.html', {
@@ -221,11 +227,19 @@ async function post_steps(recipe_id) {
             body: null
         }
 
-        const step_id = $('input[name="media"]').parents(".step-container").attr('id').split('_').pop();
+        const step_id = $('input[name="media"]:eq(' + i + ')').parents(".step-container").attr('id').split('_').pop();
 
         let body = new FormData();
         body.append('media', steps_files.get(step_id));
         fetch_params.body = body;
+
+        console.log(body);
+        console.log(steps_files.get(step_id));
+
+        console.log('\ngot');
+        console.log(steps_files.get(step_id));
+        console.log('\nfrom id');
+        console.log(step_id);
 
         const response = await fetch(query, fetch_params);
         console.log(response);
@@ -263,12 +277,6 @@ async function post_recipe() {
     const name = $('input[name="name"]').val().trim();
     const servings_cout = $('input[name="servings"]').val();
     const cook_time = $('input[name="hours"]').val() * 3600 + $('input[name="minutes"]').val() * 60;
-    const recommend = $('textarea[name="recommendations"]').val().trim();
-
-    let main_info_check = true;
-    if (!name || !cook_time) {
-        main_info_check = false;
-    }
 
     const details = {
         name: name,
@@ -276,8 +284,16 @@ async function post_recipe() {
         cook_time: cook_time,
     }
 
-    if (recommend) {
-        details.recommend = recommend;
+    if ($('textarea[name="recommendations"]').length) {
+        const recommend = $('textarea[name="recommendations"]').val().trim();
+        if (recommend) {
+            details.recommend = recommend;
+        }
+    }
+
+    let main_info_check = true;
+    if (!name || !cook_time) {
+        main_info_check = false;
     }
 
     console.log(details);
@@ -413,13 +429,13 @@ async function post_recipe() {
             console.log(recipe);
 
             const new_recipe_id = recipe[1];
-
-            // post_ingredient_recipe(new_recipe_id);
             
-            post_steps(new_recipe_id);
-
             tags_to_create.forEach(tag => {
                 post_tag(new_recipe_id, tag);
+            })
+
+            post_steps(new_recipe_id).then(function() {
+                // $(location).attr('href', 'profile.html?tab=3');
             })
 
             // $(location).attr('href', 'profile.html?tab=3');
