@@ -427,3 +427,7 @@ input[type="number"]:focus {
 .sidebar-menu ul li:last-child {
     border-bottom: none;
 }
+
+.media {
+    width: 100%;
+}

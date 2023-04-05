@@ -120,9 +120,11 @@ function on_add_step_click() {
                     if (step_media.type.startsWith('image/')) {
                         $('#step_media_label_container_' + new_step_id).loadTemplate('templates/new_recipe/step_img_tpl.html', {
                             url: step_media_url
-                        })
+                        });
                     } else if (step_media.type.startsWith('video/')) {
-                        $('#step_media_label_container_' + new_step_id).html('Видео...')
+                        $('#step_media_label_container_' + new_step_id).loadTemplate('templates/new_recipe/step_video_tpl.html', {
+                            url: step_media_url
+                        });
                     }
                 })
             })
