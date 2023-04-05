@@ -163,6 +163,7 @@ textarea {
 
 .recipe-card-img {
     object-fit: cover;
+    aspect-ratio: 9 / 7;
     width: 100%;
     max-height: 70%;
     border-radius: 36px 36px 0 0;
