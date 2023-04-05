@@ -40,7 +40,7 @@ function on_profile_btn_click() {
     }
 }
 
-function on_fav_btn_click() {
+function on_fav_recipes_btn_click() {
     if (authorized()) {
         const href = "profile.html?tab=2";
         $(location).attr('href', href);
