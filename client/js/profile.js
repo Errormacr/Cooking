@@ -240,12 +240,8 @@ function edit_recipe(element) {
     console.log('edit ', $(element).attr('alt'));
 }
 
-async function delete_recipe(element) {
+async function delete_recipe(recipe_id) {
     // окна "вы уверены..."
-    console.log('delete ', $(element).attr('alt'))
-    
-    const recipe_id = $(element).attr('alt');
-    
     const query = server_url + 'recipes/' + recipe_id;
     
     const response = await fetch(query, {
@@ -253,9 +249,22 @@ async function delete_recipe(element) {
         credentials: 'include'
     });
     console.log(response);
+}
 
-    notification('Рецепт удален.', 2500);
-    $('#users_recipes').click();
+function on_delete_recipe_click(element) {
+
+    $(element).parents('.recipe-card').animate({
+        opacity: 0
+    }, 400, function() {
+        console.log('delete ', $(element).attr('alt'))
+    
+        const recipe_id = $(element).attr('alt');
+
+        delete_recipe(recipe_id).then(function() {
+            notification('Рецепт удален.', 2500);
+            $('#users_recipes').click();
+        })
+    });    
 }
 
 function on_users_recipes_click() {

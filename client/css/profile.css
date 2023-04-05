@@ -29,12 +29,20 @@
     position: absolute;
     top: 15px;
     right: 15px;
-    padding: 9px 8px 3px;
+    padding: 6px 6px 0;
     border-radius: 15px;
     background-color: #ff2787;
     z-index: 1;
     cursor: pointer;
+    transition: 0.3s ease;
 }
+
+.favourite-btn:hover {
+    top: 12px;
+    right: 12px;
+    padding: 9px 9px 3px;
+}
+
 
 .edit-btn {
     position: absolute;
@@ -45,6 +53,13 @@
     background-color: #fff;
     z-index: 1;
     cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.edit-btn:hover {
+    top: 12px;
+    right: 82px;
+    padding: 12px 11.5px 5px;
 }
 
 .delete-btn {
@@ -56,6 +71,13 @@
     background-color: #fff;
     z-index: 1;
     cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.delete-btn:hover {
+    top: 12px;
+    right: 12px;
+    padding: 12px 11px 4px;
 }
 
 #profile_content_container {
