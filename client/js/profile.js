@@ -236,8 +236,9 @@ async function fetch_users_recipes() {
 }
 
 function edit_recipe(element) {
-    // редирект на стр редактирования рецепта + id рецепта
-    console.log('edit ', $(element).attr('alt'));
+    const recipe_id = $(element).attr('alt');
+
+    $(location).attr('href', 'edit_recipe.html?id=' + recipe_id);
 }
 
 async function delete_recipe(recipe_id) {

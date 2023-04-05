@@ -298,6 +298,11 @@ $('document').ready(function() {
         sessionStorage.removeItem('authorized');
     }
 
+    if(sessionStorage.getItem('no_rights')) {
+        notification('У вас нет прав для доступа к этой странице.', 3000);
+        sessionStorage.removeItem('no_rights');
+    }
+
     $('.modal-back').click(function(){
         $('.auth-modal').fadeOut();
         $('.modal-back').fadeOut();
