@@ -385,7 +385,7 @@ async def create_tag_recipe(recipe_id: int, tag_id: int, user: auth_user = Depen
 
 
 @router.put("/{recipe_id}", status_code=201, tags=["recipe"])
-async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(),
+async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(),recomend_to_null: bool = False,
                         photo: UploadFile = None,
                         user: auth_user = Depends(current_user),
                         session: AsyncSession = Depends(get_async_session)):
@@ -408,6 +408,8 @@ async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(),
         for key, value in recipe.__dict__.items():
             if value is not None:
                 stmt = stmt.values({key: value})
+        if recomend_to_null:
+          stmt = stmt.values(recommend = "")
         try:
             await session.execute(stmt)
             await session.commit()
@@ -415,6 +417,7 @@ async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(),
             raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
         except exc.DataError:
             raise HTTPException(status_code=400, detail={"Error": "Data error"})
+    
     if photo is not None:
         f = open(f"../photo/recipe/{recipe_id}_recipe_photo", "wb")
         cont = await photo.read()
