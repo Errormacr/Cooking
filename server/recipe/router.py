@@ -408,8 +408,7 @@ async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(),recome
         for key, value in recipe.__dict__.items():
             if value is not None:
                 stmt = stmt.values({key: value})
-        if recomend_to_null:
-          stmt = stmt.values(recommend = "")
+
         try:
             await session.execute(stmt)
             await session.commit()
@@ -417,7 +416,16 @@ async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(),recome
             raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
         except exc.DataError:
             raise HTTPException(status_code=400, detail={"Error": "Data error"})
-    
+    if recomend_to_null:
+        stmt = update(Recipe_bd).where(Recipe_bd.c.recipe_ID == recipe_id).values(recommend="")
+        recipe.recommend = ""
+        try:
+            await session.execute(stmt)
+            await session.commit()
+        except exc.IntegrityError:
+            raise HTTPException(status_code=400, detail={"Error": "Data error (Duplicate, foreign key)"})
+        except exc.DataError:
+            raise HTTPException(status_code=400, detail={"Error": "Data error"})
     if photo is not None:
         f = open(f"../photo/recipe/{recipe_id}_recipe_photo", "wb")
         cont = await photo.read()
