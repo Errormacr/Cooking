@@ -20,9 +20,9 @@ async function update_recipe() {
         const recommend = $('textarea[name="recommendations"]').val().trim();
         if (recommend) {
             details.recommend = recommend;
+        } else {
+            details.recomend_to_null = true;
         }
-    } else {
-        details.recommend = null;
     }
 
     if (!name || !cook_time) {

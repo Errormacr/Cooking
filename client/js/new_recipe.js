@@ -174,7 +174,7 @@ function on_add_tag_click() {
         complete: function() {
             $('#tag_' + curr_tag + ' input[name=tag]').focus();
 
-            limit_length('#tag_' + curr_tag + ' input[name=tag]', 15);
+            limit_length('#tag_' + curr_tag + ' input[name=tag]', 30);
             
             $('#delete_tag_' + curr_tag + ' .delete-btn').click(function() {
                 const tag_to_del = $(this).parents('.row').attr('id').split('_').pop();
