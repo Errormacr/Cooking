@@ -295,21 +295,20 @@ async function post_recipe() {
         }
     }
 
-    let main_info_check = true;
     if (!name || !cook_time) {
-        main_info_check = false;
+        notification('Укажите основную информацию о рецепте.', 3000);
+        return 0;
     }
 
     console.log(details);
 
     //получение фотографии рецепта
-    let recipe_photo_check = true;
-
     let body = new FormData();
     if (recipe_photo) {
         body.append('photo', recipe_photo);
     } else {
-        recipe_photo_check = false;
+        notification('Приложите фотографию готового блюда.', 3000);
+        return 0;
     }
     
     //проверка ингредиентов
@@ -325,7 +324,11 @@ async function post_recipe() {
         }
     })
 
-    let ingredients_exist = true;
+    if (!ingredients_check) {
+        notification('Укажите ингредиенты.', 2500);
+        return 0;
+    }
+
     let ingredients = [];
     $('#ingredients_container input[name=ingredient]').each(function(i, ingredient) {
         let ingredient_id = 0;
@@ -340,7 +343,8 @@ async function post_recipe() {
             const quantity = $('#ingredients_container input[name=quantity]:eq(' + i + ')').val().trim();
             ingredients.push(ingredient_id + '-' + quantity);
         } else {
-            ingredients_exist = false;
+            notification('Выберите ингредиенты из списка.', 3000);
+            return 0;
         }
     });
 
@@ -364,6 +368,11 @@ async function post_recipe() {
             steps_check = false;
         }
     });
+    
+    if (!steps_check) {
+        notification('Укажите шаги.', 2500);
+        return 0;
+    }
 
     //проверка тегов
     let tags_check = true;
@@ -372,6 +381,11 @@ async function post_recipe() {
             tags_check = false;
         }
     });
+
+    if (!tags_check) {
+        notification('Укажите теги.', 2500);
+        return 0;
+    }
 
     //сбор тегов
     let tags = [];
@@ -394,56 +408,41 @@ async function post_recipe() {
 
     details.tag = tags.join(',');
 
-    //проверка собранных данных
-    if (!main_info_check) {
-        notification('Укажите основную информацию о рецепте.', 3000);
-    } else if (!recipe_photo_check) {
-        notification('Приложите фотографию готового блюда.', 3000);
-    } else if (!ingredients_check) {
-        notification('Укажите ингредиенты.', 2500);
-    } else if (!steps_check) {
-        notification('Укажите шаги.', 2500);
-    } else if (!tags_check) {
-        notification('Укажите теги.', 2500);
-    } else if (!ingredients_exist) {
-        notification('Выберите ингредиенты из списка.', 3000)
+    //подготовка основной информации к отправке
+    let url_params = [];
+    for (const property in details) {
+        const encoded_key = encodeURIComponent(property);
+        const encoded_value = encodeURIComponent(details[property]);
+        url_params.push(encoded_key + '=' + encoded_value); 
+    }
+    url_params = url_params.join('&');
+
+    const fetch_params = {
+        method: 'POST',
+        credentials: 'include',
+        body: body
+    }
+
+    const query = server_url + 'recipes/?' + url_params;
+
+    const response = await fetch(query, fetch_params);
+    console.log(response);
+
+    if (response.ok) {
+        const recipe = await response.json();
+        console.log(recipe);
+
+        const new_recipe_id = recipe[1];
+        
+        tags_to_create.forEach(tag => {
+            post_tag(new_recipe_id, tag);
+        })
+
+        post_steps(new_recipe_id).then(function() {
+            // $(location).attr('href', 'profile.html?tab=3');
+        })
     } else {
-        //подготовка основной информации к отправке
-        let url_params = [];
-        for (const property in details) {
-            const encoded_key = encodeURIComponent(property);
-            const encoded_value = encodeURIComponent(details[property]);
-            url_params.push(encoded_key + '=' + encoded_value); 
-        }
-        url_params = url_params.join('&');
-
-        const fetch_params = {
-            method: 'POST',
-            credentials: 'include',
-            body: body
-        }
-
-        const query = server_url + 'recipes/?' + url_params;
-
-        const response = await fetch(query, fetch_params);
-        console.log(response);
-
-        if (response.ok) {
-            const recipe = await response.json();
-            console.log(recipe);
-
-            const new_recipe_id = recipe[1];
-            
-            tags_to_create.forEach(tag => {
-                post_tag(new_recipe_id, tag);
-            })
-
-            post_steps(new_recipe_id).then(function() {
-                $(location).attr('href', 'profile.html?tab=3');
-            })
-        } else {
-            notification('Рецепт с таким именем уже существует.', 3000);
-        }
+        notification('Рецепт с таким именем уже существует.', 3000);
     }
 }
 
