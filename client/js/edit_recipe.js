@@ -181,4 +181,6 @@ $('document').ready(function() {
             $('#recipe_photo_img').attr('src', URL.createObjectURL(recipe_photo));
         }
     });
+
+    limit_length('input[name="name"]', 100);
 });

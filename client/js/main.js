@@ -249,6 +249,13 @@ function close_menus() {
     })
 }
 
+function limit_length(selector, limit) {
+    $(selector).keyup(function() {
+        const value = $(this).val();
+        $(this).val(value.slice(0, limit))
+    });
+}
+
 $('document').ready(function() { 
     var header_container = $('header');
     header_container.loadTemplate("templates/main/header_tpl.html", null, {
@@ -269,6 +276,8 @@ $('document').ready(function() {
                     });
                 }
             })
+
+            limit_length('.searchbar', 100);
         }
     });
 
@@ -276,11 +285,21 @@ $('document').ready(function() {
     footer_container.loadTemplate("templates/main/footer_tpl.html", null);
 
     $('#modals_container').loadTemplate('templates/main/sign_up_modal_tpl.html', null, {
-        append: true
+        append: true,
+        complete: function() {
+            limit_length('#sign_up_modal input[name="login"]', 50);
+            limit_length('#sign_up_modal input[name="password"]', 255);
+            limit_length('#sign_up_modal input[name="password_confirmation"]', 255);
+            limit_length('#sign_up_modal input[name="email"]', 100);
+        }
     });
     
     $('#modals_container').loadTemplate('templates/main/sign_in_modal_tpl.html', null, {
-        append: true
+        append: true,
+        complete: function() {
+            limit_length('#sign_in_modal input[name="login"]', 50);
+            limit_length('#sign_in_modal input[name="password"]', 255);
+        }
     });
 
     if(sessionStorage.getItem('unathorized_access')) {

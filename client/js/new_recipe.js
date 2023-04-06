@@ -173,6 +173,8 @@ function on_add_tag_click() {
         append: true,
         complete: function() {
             $('#tag_' + curr_tag + ' input[name=tag]').focus();
+
+            limit_length('#tag_' + curr_tag + ' input[name=tag]', 15);
             
             $('#delete_tag_' + curr_tag + ' .delete-btn').click(function() {
                 const tag_to_del = $(this).parents('.row').attr('id').split('_').pop();
@@ -486,4 +488,6 @@ $('document').ready(function() {
             $('#recipe_photo_img').attr('src', URL.createObjectURL(recipe_photo));
         }
     });
+
+    limit_length('input[name="name"]', 100);
 });

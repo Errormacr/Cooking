@@ -104,6 +104,11 @@ function on_prof_data_click() {
                 $('#save_btn').show();
             });
             fetch_user();
+
+            limit_length('#profile_data input[name="login"]', 50);
+            limit_length('#profile_data input[name="firstname"]', 40);
+            limit_length('#profile_data input[name="lastname"]', 40);
+            limit_length('#profile_data input[name="email"]', 100);
         }
     });
 }
