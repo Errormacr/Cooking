@@ -2,14 +2,18 @@ const server_url = sessionStorage.getItem('server_url');
 
 async function update_recipe() {
     //сбор основной информации о рецепте
-    const name = $('input[name="name"]').val().trim();
     const servings_cout = $('input[name="servings"]').val();
     const cook_time = $('input[name="hours"]').val() * 3600 + $('input[name="minutes"]').val() * 60;
 
     const details = {
-        name: name,
         servings_cout: servings_cout,
         cook_time: cook_time,
+    }
+
+    const name = $('input[name="name"]').val().trim();
+
+    if (name != recipe_name) {
+        details.name = name;
     }
 
     if ($('textarea[name="recommendations"]').length) {
@@ -17,61 +21,54 @@ async function update_recipe() {
         if (recommend) {
             details.recommend = recommend;
         }
+    } else {
+        details.recommend = null;
     }
 
-    let main_info_check = true;
     if (!name || !cook_time) {
-        main_info_check = false;
+        notification('Укажите основную информацию о рецепте.', 3000);
+        return 0;
     }
 
     console.log(details);
 
-    //получение фотографии рецепта
-    let recipe_photo_check = true;
+    //подготовка основной информации к отправке
+    let url_params = [];
+    for (const property in details) {
+        const encoded_key = encodeURIComponent(property);
+        const encoded_value = encodeURIComponent(details[property]);
+        url_params.push(encoded_key + '=' + encoded_value); 
+    }
+    url_params = url_params.join('&');
 
+    const fetch_params = {
+        method: 'PUT',
+        credentials: 'include',
+    }
+
+    // получение фотографии рецепта
     let body = new FormData();
     if (recipe_photo) {
         body.append('photo', recipe_photo);
-    } else {
-        recipe_photo_check = false;
+        fetch_params.body = body;
     }
 
-    //проверка собранных данных
-    if (!main_info_check) {
-        notification('Укажите основную информацию о рецепте.', 3000);
-    } else if (!recipe_photo_check) {
-        notification('Приложите фотографию готового блюда.', 3000);
-    }  else {
-        //подготовка основной информации к отправке
-        let url_params = [];
-        for (const property in details) {
-            const encoded_key = encodeURIComponent(property);
-            const encoded_value = encodeURIComponent(details[property]);
-            url_params.push(encoded_key + '=' + encoded_value); 
-        }
-        url_params = url_params.join('&');
+    const query = server_url + 'recipes/' + $.urlParam('id') + '?' + url_params;
 
-        const fetch_params = {
-            method: 'PUT',
-            credentials: 'include',
-            body: body
-        }
+    const response = await fetch(query, fetch_params);
+    console.log(response);
 
-        const query = server_url + 'recipes/?' + url_params;
+    if (response.ok) {
+        const recipe = await response.json();
+        console.log(recipe);
 
-        const response = await fetch(query, fetch_params);
-        console.log(response);
-
-        if (response.ok) {
-            const recipe = await response.json();
-            console.log(recipe);
-
-            $(location).attr('href', 'profile.html?tab=3');
-        } else {
-            notification('Рецепт с таким именем уже существует.', 3000);
-        }
+        // $(location).attr('href', 'profile.html?tab=3');
+    } else {
+        notification('Рецепт с таким именем уже существует.', 3000);
     }
 }
+
+let recipe_name;
 
 async function fill_recipe_info() {
     const query = server_url + 'recipes/' + $.urlParam('id');
@@ -101,6 +98,8 @@ async function fill_recipe_info() {
     $('#recipe_data img').attr('src', img_src);
 
     $('input[name="name"]').val(recipe_desc['name']);
+
+    recipe_name = recipe_desc['name'];
 
     $('input[name="servings"]').val(recipe_desc['servings_cout']);
 

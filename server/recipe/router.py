@@ -404,7 +404,7 @@ async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(),
           if len(result) > 0:
               raise HTTPException(status_code=400, detail="duplicate name of recipe")
         print(recipe)
-        stmt = update(Recipe_bd).where(Recipe_bd.c.recipe_ID == recipre_id)
+        stmt = update(Recipe_bd).where(Recipe_bd.c.recipe_ID == recipe_id)
         for key, value in recipe.__dict__.items():
             if value is not None:
                 stmt = stmt.values({key: value})
