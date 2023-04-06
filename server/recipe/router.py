@@ -397,6 +397,12 @@ async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(),
     if author[0][0] != user.id:
         raise HTTPException(status_code=400, detail="User not author")
     if recipe.name or recipe.servings_cout or recipe.cook_time or recipe.recommend:
+        if recipe.name:
+          query = select(Recipe_bd).where(Recipe_bd.c.name == recipe.name)
+          result = await session.execute(query)
+          result = result.all()
+          if len(result) > 0:
+              raise HTTPException(status_code=400, detail="duplicate name of recipe")
         print(recipe)
         stmt = update(Recipe_bd).where(Recipe_bd.c.recipe_ID == recipre_id)
         for key, value in recipe.__dict__.items():
