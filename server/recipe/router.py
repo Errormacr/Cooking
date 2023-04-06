@@ -398,7 +398,7 @@ async def update_recipe(recipe_id: int, recipe: Recipe_update = Depends(),
         raise HTTPException(status_code=400, detail="User not author")
     if recipe.name or recipe.servings_cout or recipe.cook_time or recipe.recommend:
         print(recipe)
-        stmt = update(Recipe_bd)
+        stmt = update(Recipe_bd).where(Recipe_bd.c.recipe_ID == recipre_id)
         for key, value in recipe.__dict__.items():
             if value is not None:
                 stmt = stmt.values({key: value})
